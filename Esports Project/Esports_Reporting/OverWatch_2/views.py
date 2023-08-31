@@ -1,13 +1,32 @@
 from django.shortcuts import render, redirect
 from .forms import OW_Team_Form
+from .models import OW_Team, Roster
+
 
 # Create your views here.
-def Create_Team(request):
+def Create_OW_Team(request):
     if request.method == "POST":
         form = OW_Team_Form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('Rosters')
+            return redirect('rosters')
     else:
         form = OW_Team_Form()
-    return render(request, 'Create_Team.html', {'form': form})
+    return render(request, 'Create_OW_Team.html', {'form': form})
+
+def Add_Player_to_Roster(request, pk):
+    
+    
+
+def OW_Roster(request):
+    OW_Teams = OW_Team.objects.all()
+    return render(request, 'OW_Rosters.html', {"OW_Teams": OW_Teams})
+
+def OW_Roster_Players(request, pk):
+    team = OW_Team.objects.get(id=pk)
+    Rosters = Roster.objects.filter(ow_team_id=pk)
+    view = {
+        "OW_Team": team,
+        "Rosters": Rosters
+    }
+    return render(request, 'OW_Roster_Players.html', view)
