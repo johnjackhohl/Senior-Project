@@ -5,11 +5,11 @@
     <title>Overwatch 2 {{OW_Team.name}}</title>
 </head>
     <body>
-        <h1></h1>
+        <h1>{{OW_Team.name}}</h1>
         <div><a href="addPlayer/">Add a new Player</a></div>
         <ul>
-            {% for player in OW_Team_Roster %}
-            <li>{{player.name}}</li>
+            {% for player in Roster %}
+            <li>{{player.first_name}}</li>
             {%endfor%}
         </ul>
     </body>
