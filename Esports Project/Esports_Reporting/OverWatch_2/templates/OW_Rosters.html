@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overwatch 2 Rosters</title>
+</head>
+    <body>
+        <h1>Overwatch 2 Rosters</h1>
+        <div><a href="/Overwatch/createTeam/">Create a new team</a></div>
+        <ul>
+            {% for team in OW_Teams %}
+            <li><a href="/Overwatch/team/{{team.id}}">{{team.name}}</a></li>
+            {%endfor%}
+        </ul>
+    </body>
+</html>

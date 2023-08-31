@@ -4,7 +4,8 @@ from django.db import models
 class OW_Team(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    year = models.IntegerField()
+    year_fall = models.IntegerField()
+    year_spring = models.IntegerField()
     varsity = models.BooleanField()
 
 class Roster(models.Model):

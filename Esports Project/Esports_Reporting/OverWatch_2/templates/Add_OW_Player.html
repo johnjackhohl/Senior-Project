@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Player to {{OW_Team.name}}</title>
+</head>
+<body>
+    <h1>Add Player to {{OW_Team.name}}</h1>
+    <form method="post">
+        <label for="name">First Name</label>
+        <input type="text" name="first name" id="name" required>
+        <br>
+        <label for="name">Last Name</label>
+        <input type="text" name="last name" id="name" required>
+        <br>
+        <label for="role">Role</label>
+        <select name="role" id="role">
+            <option value="DPS">DPS</option>
+            <option value="Tank">Tank</option>
+            <option value="Support">Support</option>
+            <option value="Flex">Flex</option>
+        </select>
+        <br>
+        <label for="grade">Grade</label>
+        <select name="grade" id="grade">
+            <option value="Freshman">Freshman</option>
+            <option value="Sophomore">Sophomore</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+            <option value="Graduate">Graduate</option>
+        </select>
+        <br>
+        <button type="submit">Add Player</button>
+    </form>
+</body>
+</html>
