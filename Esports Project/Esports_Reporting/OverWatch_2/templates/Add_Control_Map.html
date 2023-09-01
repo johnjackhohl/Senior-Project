@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Control Map</title>
+</head>
+<body>
+    <h1>Add Control Map</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="game_id" value="{{game.id}}">
+        <label for="id_map_name">Map Name:</label>
+        <input type="text" name="map_name" id="id_map_name" required>
+        <br>
+        <label for="id_map_name">Map Name:</label>
+        <input type="text" name="map_name" id="id_map_name" required>
+        <br>
+        <label for="id_map_sub_name">Map Sub Name:</label>
+        <input type="text" name="map_sub_name" id="id_map_sub_name" required>
+        <br>
+        <label for="id_round">Round:</label>
+        <select name="round" id="id_round">
+            <option value="1">Round 1</option>
+            <option value="2">Round 2</option>
+            <option value="3">Round 3</option>
+        </select>
+        <br>
+        <label for="id_mount_tank">Mount Tank:</label>
+        <select name="mount_tank" id="id_mount_tank">
+            {% for option in tank_options %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+
+</html>

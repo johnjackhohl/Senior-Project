@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Game to Match</title>
+</head>
+<body>
+    <h1>Add Game to Match</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="match_id" value="{{match.id}}">
+        <label for="id_map_type">Map Type:</label>
+        <select name="map_type" id="id_map_type">
+            <option value="Control">Control</option>
+            <option value="Push">Push</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Escort">Escort</option>
+		    <option value="Flashpoint">Flashpoint</option>
+        </select>
+        <br>
+		<label for="id_mount_score">Mount Score:</label>
+		<input type="number" name="mount_score" id="id_mount_score" required>
+		<br>
+		<label for="id_opponent_score">Opponent Score:</label>
+		<input type="number" name="opponent_score" id="id_opponent_score" required>
+		<br>
+		<label for="id_mount_win">Mount Wins:</label>
+		<select name="mount_win" id="id_mount_win">
+			<option value=1>Mount wins</option>
+			<option value=0>Mount Loses</option>
+		</select>
+		<br>
+		<label for="id_notes">Notes:</label>
+		<textarea rows='5' cols='40' name="notes" id="id_notes">
+        <button type="submit">Add Game</button>
+    </form>
+    <a href="/Overwatch/team/{{team.id}}/match/{{match.id}}">Back to {{team.name}}'s Match</a>
