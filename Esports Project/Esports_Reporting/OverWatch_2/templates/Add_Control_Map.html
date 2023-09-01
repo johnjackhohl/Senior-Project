@@ -12,9 +12,6 @@
         <label for="id_map_name">Map Name:</label>
         <input type="text" name="map_name" id="id_map_name" required>
         <br>
-        <label for="id_map_name">Map Name:</label>
-        <input type="text" name="map_name" id="id_map_name" required>
-        <br>
         <label for="id_map_sub_name">Map Sub Name:</label>
         <input type="text" name="map_sub_name" id="id_map_sub_name" required>
         <br>
@@ -27,11 +24,79 @@
         <br>
         <label for="id_mount_tank">Mount Tank:</label>
         <select name="mount_tank" id="id_mount_tank">
-            {% for option in tank_options %}
+            {% for option in tanks %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
         </select>
         <br>
+        <label for="id_mount_dps_1">Mount DPS:</label>
+        <select name="mount_dps_1" id="id_mount_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_dps_2">Mount DPS:</label>
+        <select name="mount_dps_2" id="id_mount_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_support_1">Mount Support:</label>
+        <select name="mount_support_1" id="id_mount_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_support_2">Mount Support:</label>
+        <select name="mount_support_2" id="id_mount_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="opponent_tank">Opponent Tank:</label>
+        <select name="opponent_tank" id="id_opponent_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_dps_1">Opponent DPS:</label>
+        <select name="opponent_dps_1" id="id_opponent_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_dps_2">Opponent DPS:</label>
+        <select name="opponent_dps_2" id="id_opponent_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_support_1">Opponent Support:</label>
+        <select name="opponent_support_1" id="id_opponent_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_support_2">Opponent Support:</label>
+        <select name="opponent_support_2" id="id_opponent_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit" name='action' value='add_another'>Add Anoter Map</button>
+        <button type="submit" name='action' value='done'>Done</button>
+    </form>
+</body>
+
 
 
 </html>
