@@ -55,6 +55,7 @@ class Control_Map(models.Model):
 class Escort_Hybrid_Map(models.Model):
     id = models.BigAutoField(primary_key=True)
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+    is_Escort = models.BooleanField()
     map_name = models.CharField(max_length=100) 
     attack_first = models.BooleanField()
     mount_attack_tank = models.CharField(max_length=100)

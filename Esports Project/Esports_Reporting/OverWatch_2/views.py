@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form
+from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Flashpoint_Map_Form, Push_Map_Form
 from .models import OW_Team, Roster, Match, Game
 
 
@@ -62,11 +62,18 @@ def Add_Game(request, pk):
 			form.save()
 			if(mapType == "Control"):
 				return redirect('add-control', pk=pk)
+			if(mapType == "Escort" or mapType == "Hybrid"):
+				return redirect('add-escort-hybrid', pk=pk)
+			if(mapType=="Push"):
+				return redirect('add-push', pk=pk)
+			if(mapType=='Flashpoint'):
+				return redirect('add-flashpoint', pk=pk)
 	else:
 		form = Game_Form()
 	return render(request, 'Add_Game.html', {'form': form, 'match': match})
 
 def Add_Control(request, pk):
+	print(pk)
 	game = Game.objects.get(id=pk)
 	with open("OverWatch_2\options\Tank.txt", "r") as tank_options:
 		tanks = [line.strip() for line in tank_options]
@@ -74,16 +81,57 @@ def Add_Control(request, pk):
 		dps = [line.strip() for line in dps_options]
 	with open("OverWatch_2\options\Support.txt", "r") as support_options:
 		support = [line.strip() for line in support_options]
+	with open("OverWatch_2\options\Control_Maps.txt", "r") as map_options:
+		maps = [line.strip() for line in map_options]
+	with open("OverWatch_2\options\Control_Sub_Maps.txt", "r") as map_sub_options:
+		subMaps = [line.strip() for line in map_sub_options]
 	if request.method == "POST":
 		form = Control_Map_Form(request.POST)
 		if form.is_valid():
 			if request.POST.get('action') == "add_another":
 				form.save()
 				return redirect('add-control', pk=pk)
-			else:
+			if request.POST.get('action') == "done":
 				form.save()
-				return redirect('add-game', game.match_id.id)
+				print(game.match_id.id)
+				return redirect('add-game', pk=game.match_id.id)
 	else:
 		form = Control_Map_Form()
-	return render(request, 'Add_Control_Map.html', {'form': form, 'game': game, 'tanks': tanks, 'dps': dps, 'support': support})
+	context = {
+		'form': form,
+		'game': game,
+		'tanks': tanks,
+		'dps': dps,
+		'support': support,
+		'maps': maps,
+		'subMaps': subMaps
+	}
+	return render(request, 'Add_Control_Map.html', context)
+
+def Add_Escort_Hybrid(request, pk):
+	game = Game.objects.get(id=pk)
+	with open("OverWatch_2\options\Tank.txt", "r") as tank_options:
+		tanks = [line.strip() for line in tank_options]
+	with open("OverWatch_2\options\DPS.txt", "r") as dps_options:
+		dps = [line.strip() for line in dps_options]
+	with open("OverWatch_2\options\Support.txt", "r") as support_options:
+		support = [line.strip() for line in support_options]
+	with open("OverWatch_2\options\Escort_Hybrid_Maps.txt", "r") as map_options:
+		maps = [line.strip() for line in map_options]
+	if request.method == "POST":
+		form = Escort_Hybrid_Map_Form(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('add-game', pk=game.match_id.id)
+	else:
+		form = Escort_Hybrid_Map_Form()
+	context = {
+		'form': form,
+		'game': game,
+		'tanks': tanks,
+		'dps': dps,
+		'support': support,
+		'maps': maps
+	}
+	return render(request, 'Add_Escort_Hybrid_Map.html', context)
 
