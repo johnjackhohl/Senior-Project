@@ -58,8 +58,9 @@ def Add_Game(request, pk):
 	if request.method == "POST":
 		form = Game_Form(request.POST)
 		if form.is_valid():
+			mapType = form.cleaned_data["map_type"]
 			form.save()
-			if(match.match_type == "Control"):
+			if(mapType == "Control"):
 				return redirect('add-control', pk=pk)
 	else:
 		form = Game_Form()
@@ -67,14 +68,22 @@ def Add_Game(request, pk):
 
 def Add_Control(request, pk):
 	game = Game.objects.get(id=pk)
-	with open("Esports Project\Esports_Reporting\OverWatch_2\options\Tank.txt", "r") as tank_options:
+	with open("OverWatch_2\options\Tank.txt", "r") as tank_options:
 		tanks = [line.strip() for line in tank_options]
+	with open("OverWatch_2\options\DPS.txt", "r") as dps_options:
+		dps = [line.strip() for line in dps_options]
+	with open("OverWatch_2\options\Support.txt", "r") as support_options:
+		support = [line.strip() for line in support_options]
 	if request.method == "POST":
 		form = Control_Map_Form(request.POST)
 		if form.is_valid():
-			form.save()
-			return redirect('add-control', pk=pk)
+			if request.POST.get('action') == "add_another":
+				form.save()
+				return redirect('add-control', pk=pk)
+			else:
+				form.save()
+				return redirect('add-game', game.match_id.id)
 	else:
 		form = Control_Map_Form()
-	return render(request, 'Add_Control.html', {'form': form, 'game': game, 'tanks': tanks})
+	return render(request, 'Add_Control_Map.html', {'form': form, 'game': game, 'tanks': tanks, 'dps': dps, 'support': support})
 
