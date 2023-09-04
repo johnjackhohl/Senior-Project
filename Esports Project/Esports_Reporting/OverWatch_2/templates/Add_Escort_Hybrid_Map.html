@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add {%if is_Escort%} Escort {%else %} Hybrid {%endif%}</title>
+</head>
+<body>
+    <h1> Add Add {%if is_Escort%} Escort {%else %} Hybrid {%endif%}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="game_id" value="{{game.id}}">
+        <input type="hidden" name="is_Escort" value="{{is_Escort}}">
+        <label for="id_map_name">Map Name:</label>
+        <select name="map_name" id="id_map_name">
+            {% for option in maps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_attack_first">Attack First:</label>
+        <input type="checkbox" name="attack_first" id="id_attack_first">
+        <br>
+        <label for="id_mount_attack_tank">Mount Attack Tank:</label>
+        <select name="mount_attack_tank" id="id_mount_attack_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_attack_dps_1">Mount Attack DPS:</label>
+        <select name="mount_attack_dps_1" id="id_mount_attack_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_attack_dps_2">Mount Attack DPS:</label>
+        <select name="mount_attack_dps_2" id="id_mount_attack_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_attack_support_1">Mount Attack Support:</label>
+        <select name="mount_attack_support_1" id="id_mount_attack_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_attack_support_2">Mount Attack Support:</label>
+        <select name="mount_attack_support_2" id="id_mount_attack_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_defence_tank">Opponent Defence Tank</label>
+        <select name="opponent_defence_tank" id="id_opponent_defence_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_defence_dps_1">Opponent Defence DPS:</label>
+        <select name="opponent_defence_dps_1" id="id_opponent_defence_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_defence_dps_2">Opponent Defence DPS:</label>
+        <select name="opponent_defence_dps_2" id="id_opponent_defence_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_defence_support_1">Opponent Defence Support:</label>
+        <select name="opponent_defence_support_1" id="id_opponent_defence_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_defence_support_2">Opponent Defence Support:</label>
+        <select name="opponent_defence_support_2" id="id_opponent_defence_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_defense_tank">Mount Defense Tank:</label>
+        <select name="mount_defense_tank" id="id_mount_defense_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_defense_dps_1">Mount Defense DPS:</label>
+        <select name="mount_defense_dps_1" id="id_mount_defense_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_defense_dps_2">Mount Defense DPS:</label>
+        <select name="mount_defense_dps_2" id="id_mount_defense_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_defense_support_1">Mount Defense Support:</label>
+        <select name="mount_defense_support_1" id="id_mount_defense_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_defense_support_2">Mount Defense Support:</label>
+        <select name="mount_defense_support_2" id="id_mount_defense_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}    
+        </select>
+        <br>
+        <label for="id_opponent_attack_tank">Opponent Attack Tank:</label>
+        <select name="opponent_attack_tank" id="id_opponent_attack_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_attack_dps_1">Opponent Attack DPS:</label>
+        <select name="opponent_attack_dps_1" id="id_opponent_attack_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_attack_dps_2">Opponent Attack DPS:</label>
+        <select name="opponent_attack_dps_2" id="id_opponent_attack_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_attack_support_1">Opponent Attack Support:</label>
+        <select name="opponent_attack_support_1" id="id_opponent_attack_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_attack_support_2">Opponent Attack Support:</label>
+        <select name="opponent_attack_support_2" id="id_opponent_attack_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Add {%if is_Escort%}Escort {%else%} Hybrid {%endif%}Map</button>
+
+    </form>
+</body>
+</html>

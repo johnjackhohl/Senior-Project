@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Push</title>
+</head>
+<body>
+    <h1> Add Push Map</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="game_id" value="{{game.id}}">
+        <label for="id_map_name">Map Name:</label>
+        <select name="map_name" id="id_map_name">
+            {% for option in maps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>   
+        <br>
+        <label for="id_mount_distance">Mount Distance:</label>
+        <input type="number" name="mount_distance" id="id_mount_distance" required>
+        <br>
+        <label for="id_opponent_distance">Opponent Distance:</label>
+        <input type="number" name="opponent_distance" id="id_opponent_distance" required>
+        <br>
+        <label for="id_mount_tank">Mount Tank:</label>
+        <select name="mount_tank" id="id_mount_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_dps_1">Mount DPS:</label>
+        <select name="mount_dps_1" id="id_mount_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_dps_2">Mount DPS:</label>
+        <select name="mount_dps_2" id="id_mount_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_support_1">Mount Support:</label>
+        <select name="mount_support_1" id="id_mount_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_mount_support_2">Mount Support:</label>
+        <select name="mount_support_2" id="id_mount_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="opponent_tank">Opponent Tank:</label>
+        <select name="opponent_tank" id="id_opponent_tank">
+            {% for option in tanks %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_dps_1">Opponent DPS:</label>
+        <select name="opponent_dps_1" id="id_opponent_dps_1">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_dps_2">Opponent DPS:</label>
+        <select name="opponent_dps_2" id="id_opponent_dps_2">
+            {% for option in dps %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_support_1">Opponent Support:</label>
+        <select name="opponent_support_1" id="id_opponent_support_1">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_opponent_support_2">Opponent Support:</label>
+        <select name="opponent_support_2" id="id_opponent_support_2">
+            {% for option in support %}
+                <option value="{{option}}">{{option}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Add Push Map</button>
+    </form>
+    <a href="/Overwatch/team/{{team.id}}/match/{{match.id}}">Back to {{team.name}}'s Match</a>
+</body>
+</html>
