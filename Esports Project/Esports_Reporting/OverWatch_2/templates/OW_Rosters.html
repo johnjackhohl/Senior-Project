@@ -7,7 +7,9 @@
     <body>
         <h1>Overwatch 2 Rosters</h1>
         {%load static%}
-        <div><a href="/Overwatch/createTeam/" id = "open-popup-button">Create a new team</a></div>
+        <div><a href="/Overwatch/createTeam/">Create a new team</a></div>
+        <div><a href="/Overwatch/addHero/">Add new hero</a></div>
+        <div><a href="/Overwatch/addMap/">Add new map</div>
         <ul>
             {% for team in OW_Teams %}
             <li><a href="/Overwatch/team/{{team.id}}">{{team.name}}</a></li>

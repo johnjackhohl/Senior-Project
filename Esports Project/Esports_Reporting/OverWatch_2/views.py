@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form, Flashpoint_Map_Form, Player_Form
+from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form, Flashpoint_Map_Form, Player_Form, Add_Hero_Form, Add_Map_Form, Add_Control_Sub_Map_Form
 from .models import OW_Team, Roster, Match, Game
 
 
@@ -224,3 +224,67 @@ def getMaps(mapType):
 			subMaps = [line.strip() for line in map_sub_options]
 		return maps, subMaps
 	
+def Add_Hero(request):
+	if request.method == "POST":
+		form = Add_Hero_Form(request.POST)
+		if form.is_valid():
+			role = form.cleaned_data["role"]
+			print(role)
+			heroName = form.cleaned_data["hero_name"]
+			print(heroName)
+			if(role == "Tank"):
+				with open("OverWatch_2\options\Tank.txt", "a") as tank_options:
+					tank_options.write("\n" + heroName)
+			if(role == "DPS"):
+				with open("OverWatch_2\options\DPS.txt", "a") as dps_options:
+					dps_options.write("\n" + heroName)
+			if(role == "Support"):
+				with open("OverWatch_2\options\Support.txt", "a") as support_options:
+					support_options.write("\n" + heroName)
+			return redirect('rosters')
+	else:
+		form = Add_Hero_Form()
+	return render(request, 'Add_Hero.html', {'form': form})	
+
+def Add_Map(request):
+	if request.method == "POST":
+		form = Add_Map_Form(request.POST)
+		if form.is_valid():
+			mapType = form.cleaned_data["map_type"]
+			mapName = form.cleaned_data["map_name"]
+			if(mapType == "Escort"):
+				with open("OverWatch_2\options\Escort_Maps.txt", "a") as map_options:
+					map_options.write("\n" + mapName)
+			if(mapType == "Hybrid"):
+				with open("OverWatch_2\options\Hybrid_Maps.txt", "a") as map_options:
+					map_options.write("\n" + mapName)
+			if(mapType == "Push"):
+				with open("OverWatch_2\options\Push_Maps.txt", "a") as map_options:
+					map_options.write("\n" + mapName)
+			if(mapType == "Flashpoint"):
+				with open("OverWatch_2\options\Flashpoint_Maps.txt", "a") as map_options:
+					map_options.write("\n" + mapName)
+			if(mapType == "Control"):
+				with open("OverWatch_2\options\Control_Maps.txt", "a") as map_options:
+					map_options.write("\n" + mapName)
+				return redirect('add-sub-map', mapName)
+			return redirect('rosters')
+	else:
+		form = Add_Map_Form()
+	return render(request, 'Add_Map.html', {'form': form})
+
+def Add_Sub_Map(request, mapName):
+	if request.method == "POST":
+		form = Add_Control_Sub_Map_Form(request.POST)
+		if form.is_valid():
+			mapSubName1 = form.cleaned_data["sub_map_1"]
+			mapSubName2 = form.cleaned_data["sub_map_2"]
+			mapSubName3 = form.cleaned_data["sub_map_3"]
+			with open("OverWatch_2\options\Control_Sub_Maps.txt", "a") as map_sub_options:
+				map_sub_options.write("\n" + mapName + ": " + mapSubName1)
+				map_sub_options.write("\n" + mapName + ": " + mapSubName2)
+				map_sub_options.write("\n" + mapName + ": " + mapSubName3)
+			return redirect('rosters')
+	else:
+		form = Add_Control_Sub_Map_Form()
+	return render(request, 'Add_Sub_Map.html', {'form': form, 'mapName': mapName})

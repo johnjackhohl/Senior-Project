@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Sub Maps to {{mapName}}</title>
+</head>
+<body>
+    <h1>Add Sub Maps to {{mapName}}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_sub_map_1">Sub Map 1:</label>
+        <input type="text" name="sub_map_1" id="id_sub_map_1">
+        <br>
+        <label for="id_sub_map_2">Sub Map 2:</label>
+        <input type="text" name="sub_map_2" id="id_sub_map_2">
+        <br>
+        <label for="id_sub_map_3">Sub Map 3:</label>
+        <input type="text" name="sub_map_3" id="id_sub_map_3">
+        <br>
+        <br><br>
+        <button type="submit">Add Map</button>
+</body>
+</html>

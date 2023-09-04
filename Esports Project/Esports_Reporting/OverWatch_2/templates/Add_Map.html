@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Map</title>
+</head>
+<body>
+    <h1>Add New Map</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_map_type">Map Type:</label>
+        <select name="map_type" id="id_map_type">
+            <option value="Control">Control</option>
+            <option value="Flashpoint">Flashpoint</option>
+            <option value="Escort">Escort</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Push">Push</option>
+        </select>
+        <br>
+        <label for="id_map_name">Map Name:</label>
+        <input type="text" name="map_name" id="id_map_name" required>
+        <br><br>
+        <button type="submit">Add Map</button>
+    </form>
+    <a href="/Overwatch/rosters/">Back to Rosters</a>
+</body>

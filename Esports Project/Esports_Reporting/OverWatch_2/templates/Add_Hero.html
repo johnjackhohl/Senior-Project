@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Overwatch Hero</title>
+</head>
+<body>
+    <h1>Add New Overwatch Hero</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="id_role">Role:</label>
+        <select name="role" id="id_role">
+            <option value="DPS">DPS</option>
+            <option value="Tank">Tank</option>
+            <option value="Support">Support</option>
+        </select>
+        <br>
+        <label for="id_hero_name">Hero Name:</label>
+        <input type="text" name="hero_name" id="id_hero_name" required>
+        <br>
+        <button type="submit">Add Hero</button>
+    </form>
+    <a href="/Overwatch/rosters/">Back to Rosters</a>

@@ -15,4 +15,4 @@ Nepal: Shrine
 Nepal: Sanctum
 Oasis: City Center 
 Oasis: Gardens
-Oasis: University 
+Oasis: University
