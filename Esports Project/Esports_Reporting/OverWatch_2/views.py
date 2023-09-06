@@ -56,6 +56,7 @@ def Add_Match(request, pk):
 
 def Add_Game(request, pk):
 	match = Match.objects.get(id=pk)
+	team = OW_Team.objects.get(id=match.ow_team_id.id)
 	if request.method == "POST":
 		form = Game_Form(request.POST)
 		if form.is_valid():
@@ -71,7 +72,7 @@ def Add_Game(request, pk):
 				return redirect('add-flashpoint', pk=form.instance.id)
 	else:
 		form = Game_Form()
-	return render(request, 'Add_Game.html', {'form': form, 'match': match})
+	return render(request, 'Add_Game.html', {'form': form, 'match': match, 'team': team})
 
 def Add_Control(request, pk):
 	game = Game.objects.get(id=pk)
@@ -99,6 +100,7 @@ def Add_Escort_Hybrid(request, pk):
 	game = Game.objects.get(id=pk)
 	[tanks, dps, support] = getHeros()
 	maps = getMaps(game.map_type)
+	is_Escort = False
 	if(game.map_type == "Escort"):
 		is_Escort = True
 	if request.method == "POST":
@@ -148,7 +150,7 @@ def Add_Flashpoint(request, pk):
 		form = Flashpoint_Map_Form(request.POST)
 		if form.is_valid():
 			form.save()
-			redirect('add-player', pk=game.id)
+			return redirect('add-player', pk=game.id)
 	else:
 		form = Flashpoint_Map_Form()
 	context = {

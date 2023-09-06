@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1> Add Add {%if is_Escort%} Escort {%else %} Hybrid {%endif%}</h1>
-    <form method="post">
+    <form method="POST">
         {% csrf_token %}
         <input type="hidden" name="game_id" value="{{game.id}}">
         <input type="hidden" name="is_Escort" value="{{is_Escort}}">
@@ -55,36 +55,36 @@
             {% endfor %}
         </select>
         <br>
-        <label for="id_opponent_defence_tank">Opponent Defence Tank</label>
-        <select name="opponent_defence_tank" id="id_opponent_defence_tank">
+        <label for="id_opponent_defense_tank">Opponent defense Tank</label>
+        <select name="opponent_defense_tank" id="id_opponent_defense_tank">
             {% for option in tanks %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
         </select>
         <br>
-        <label for="id_opponent_defence_dps_1">Opponent Defence DPS:</label>
-        <select name="opponent_defence_dps_1" id="id_opponent_defence_dps_1">
+        <label for="id_opponent_defense_dps_1">Opponent defense DPS:</label>
+        <select name="opponent_defense_dps_1" id="id_opponent_defense_dps_1">
             {% for option in dps %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
         </select>
         <br>
-        <label for="id_opponent_defence_dps_2">Opponent Defence DPS:</label>
-        <select name="opponent_defence_dps_2" id="id_opponent_defence_dps_2">
+        <label for="id_opponent_defense_dps_2">Opponent defense DPS:</label>
+        <select name="opponent_defense_dps_2" id="id_opponent_defense_dps_2">
             {% for option in dps %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
         </select>
         <br>
-        <label for="id_opponent_defence_support_1">Opponent Defence Support:</label>
-        <select name="opponent_defence_support_1" id="id_opponent_defence_support_1">
+        <label for="id_opponent_defense_support_1">Opponent defense Support:</label>
+        <select name="opponent_defense_support_1" id="id_opponent_defense_support_1">
             {% for option in support %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
         </select>
         <br>
-        <label for="id_opponent_defence_support_2">Opponent Defence Support:</label>
-        <select name="opponent_defence_support_2" id="id_opponent_defence_support_2">
+        <label for="id_opponent_defense_support_2">Opponent defense Support:</label>
+        <select name="opponent_defense_support_2" id="id_opponent_defense_support_2">
             {% for option in support %}
                 <option value="{{option}}">{{option}}</option>
             {% endfor %}
@@ -160,8 +160,7 @@
             {% endfor %}
         </select>
         <br><br>
-        <button type="submit">Add {%if is_Escort%}Escort {%else%} Hybrid {%endif%}Map</button>
-
+        <button type="submit">Add Players</button>
     </form>
 </body>
 </html>
