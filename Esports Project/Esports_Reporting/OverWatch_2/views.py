@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form, Flashpoint_Map_Form, Player_Form, Add_Hero_Form, Add_Map_Form, Add_Control_Sub_Map_Form
+from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form 
+from .forms import Flashpoint_Map_Form, Player_Form, Add_Hero_Form, Add_Map_Form, Add_Control_Sub_Map_Form, Add_Hero_Form, Delete_Hero_Form, Delete_Map_Form
 from .models import OW_Team, Roster, Match, Game
 
 
@@ -200,38 +201,22 @@ def getHeros():
 	return [tanks, dps, support]
 
 def getMaps(mapType):
-	print(mapType)
-	if(mapType == "Escort"):
-		with open("OverWatch_2\options\Escort_Maps.txt", "r") as map_options:
-			maps = [line.strip() for line in map_options]
-		return maps
-	if(mapType == "Hybrid"):
-		with open("OverWatch_2\options\Hybrid_Maps.txt", "r") as map_options:
-			maps = [line.strip() for line in map_options]
-		return maps
-	if(mapType == "Push"):
-		with open("OverWatch_2\options\Push_Maps.txt", "r") as map_options:
-			maps = [line.strip() for line in map_options]
-		return maps
-	if(mapType == "Flashpoint"):
-		with open("OverWatch_2\options\Flashpoint_Maps.txt", "r") as map_options:
-			maps = [line.strip() for line in map_options]
-		return maps
+	file_path = f"Overwatch_2/options/{mapType}_Maps.txt"
+	with open(file_path, "r") as map_options:
+		maps = [line.strip() for line in map_options]
 	if(mapType == "Control"):
-		with open("OverWatch_2\options\Control_Maps.txt", "r") as map_options:
-			maps = [line.strip() for line in map_options]
 		with open("OverWatch_2\options\Control_Sub_Maps.txt", "r") as map_sub_options:
 			subMaps = [line.strip() for line in map_sub_options]
 		return maps, subMaps
-	
+	else:
+		return maps
+
 def Add_Hero(request):
 	if request.method == "POST":
 		form = Add_Hero_Form(request.POST)
 		if form.is_valid():
 			role = form.cleaned_data["role"]
-			print(role)
 			heroName = form.cleaned_data["hero_name"]
-			print(heroName)
 			if(role == "Tank"):
 				with open("OverWatch_2\options\Tank.txt", "a") as tank_options:
 					tank_options.write("\n" + heroName)
@@ -288,3 +273,73 @@ def Add_Sub_Map(request, mapName):
 	else:
 		form = Add_Control_Sub_Map_Form()
 	return render(request, 'Add_Sub_Map.html', {'form': form, 'mapName': mapName})
+
+def Delete_Hero(request):
+	if request.method == "POST":
+		form = Delete_Hero_Form(request.POST)
+		if form.is_valid():
+			role = form.cleaned_data["role"]
+			heroName = form.cleaned_data["hero_name"]
+			file_path = f"Overwatch_2/options/{role}.txt"
+			with open(file_path, "r") as hero_options:
+				heros = [line.strip() for line in hero_options]
+			heros.remove(heroName)
+			with open(file_path, "w") as hero_options:
+				for cnt, hero in enumerate(heros):
+					if cnt > 0:
+						hero_options.write("\n")
+					hero_options.write(hero)
+			return redirect('rosters')
+	else:
+		form = Delete_Hero_Form()
+		[tanks, dps, support] = getHeros()
+		heroes = tanks + dps + support
+		context = {
+			'form': form,
+			'heroes': heroes
+		}
+		return render(request, 'Delete_Hero.html', context)
+
+def Delete_Map(request):
+	if request.method == "POST":
+		form = Delete_Map_Form(request.POST)
+		if form.is_valid():
+			mapType = form.cleaned_data["map_type"]
+			mapName = form.cleaned_data["map_name"]
+			file_path = f"Overwatch_2/options/{mapType}_Maps.txt"
+			with open(file_path, "r") as map_options:
+				maps = [line.strip() for line in map_options]
+			maps.remove(mapName)
+			with open(file_path, "w") as map_options:
+				for cnt, map in enumerate(maps):
+					if cnt > 0:
+						map_options.write("\n")
+					map_options.write(map)
+			if(mapType == "Control"):
+				with open("OverWatch_2\options\Control_Sub_Maps.txt", "r") as map_sub_options:
+					subMaps = [line.strip() for line in map_sub_options]
+				for subMap in subMaps:
+					if(mapName in subMap):
+						subMaps.remove(subMap)
+				with open("OverWatch_2\options\Control_Sub_Maps.txt", "w") as map_sub_options:
+					for cnt, subMap in enumerate(subMaps):
+						if cnt > 0:
+							map_sub_options.write("\n")
+						map_sub_options.write(subMap)
+			
+			return redirect('rosters')
+	else:
+		form = Delete_Map_Form()
+		mapTypes = ["Escort", "Hybrid", "Push", "Flashpoint", "Control"]
+		escortMaps = getMaps("Escort")
+		hybridMaps = getMaps("Hybrid")
+		pushMaps = getMaps("Push")
+		flashpointMaps = getMaps("Flashpoint")
+		controlMaps, controlSubMaps = getMaps("Control")
+		maps = escortMaps + hybridMaps + pushMaps + flashpointMaps + controlMaps
+		context = {
+			'form': form,
+			'mapTypes': mapTypes,
+			'maps' : maps
+		}
+	return render(request, 'Delete_Map.html', context)

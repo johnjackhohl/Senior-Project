@@ -66,6 +66,14 @@ class Add_Map_Form(forms.Form):
     map_name = forms.CharField(max_length=100, required=True)
 
 class Add_Control_Sub_Map_Form(forms.Form):
-    sub_map_1 = forms.CharField(max_length=100, required=True)
-    sub_map_2 = forms.CharField(max_length=100, required=True)
-    sub_map_3 = forms.CharField(max_length=100, required=True)
+    sub_map_1 = forms.CharField(max_length=100)
+    sub_map_2 = forms.CharField(max_length=100)
+    sub_map_3 = forms.CharField(max_length=100)
+
+class Delete_Map_Form(forms.Form):
+    map_type = forms.CharField(max_length=100)
+    map_name = forms.CharField(max_length=100)
+
+class Delete_Hero_Form(forms.Form):
+    role = forms.CharField(max_length=20)
+    hero_name = forms.CharField(max_length=100)

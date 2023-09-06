@@ -5,7 +5,6 @@
 </head>
 <body>
     <h1>Add Player to {{team.name}}</h1>
-    <p>{{team.id}}</p>
     <form method="post">
         {% csrf_token %}
         <input type="hidden" name="ow_team_id" value="{{team.id}}">

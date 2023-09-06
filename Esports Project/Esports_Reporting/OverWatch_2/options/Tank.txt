@@ -1,9 +1,9 @@
-D.VA
+D.Va
 Doomfist
 JunkerQueen
 Orisa
 Ramattra
-Reinhardt  
+Reinhardt
 Roadhog
 Sigma
 Winston

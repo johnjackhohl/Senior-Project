@@ -13,6 +13,6 @@ Lijang Tower: Control Center
 Nepal: Village
 Nepal: Shrine
 Nepal: Sanctum
-Oasis: City Center 
 Oasis: Gardens
+Oasis: City Center
 Oasis: University
