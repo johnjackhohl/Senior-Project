@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form 
 from .forms import Flashpoint_Map_Form, Player_Form, Add_Hero_Form, Add_Map_Form, Add_Control_Sub_Map_Form, Add_Hero_Form, Delete_Hero_Form, Delete_Map_Form
+from .forms import Delete_Match_Type_Form, Add_Match_Type_Form
 from .models import OW_Team, Roster, Match, Game
 
 
@@ -318,11 +319,14 @@ def Delete_Map(request):
 						map_options.write("\n")
 					map_options.write(map)
 			if(mapType == "Control"):
+				removeArray = []
 				with open("OverWatch_2\options\Control_Sub_Maps.txt", "r") as map_sub_options:
 					subMaps = [line.strip() for line in map_sub_options]
 				for subMap in subMaps:
 					if(mapName in subMap):
-						subMaps.remove(subMap)
+						removeArray.append(subMap)
+				for subMap in removeArray:
+					subMaps.remove(subMap)
 				with open("OverWatch_2\options\Control_Sub_Maps.txt", "w") as map_sub_options:
 					for cnt, subMap in enumerate(subMaps):
 						if cnt > 0:
@@ -345,3 +349,39 @@ def Delete_Map(request):
 			'maps' : maps
 		}
 	return render(request, 'Delete_Map.html', context)
+
+def Delete_Match_Type(request):
+	if request.method == "POST":
+		form = Delete_Match_Type_Form(request.POST)
+		if form.is_valid():
+			matchType = form.cleaned_data["match_type"]
+			with open("OverWatch_2\options\Match_Type.txt", "r") as match_options:
+				matchTypes = [line.strip() for line in match_options]
+			matchTypes.remove(matchType)
+			with open("OverWatch_2\options\Match_Type.txt", "w") as match_options:
+				for cnt, match in enumerate(matchTypes):
+					if cnt > 0:
+						match_options.write("\n")
+					match_options.write(match)
+			return redirect('rosters')
+	else:
+		form = Delete_Match_Type_Form()
+		with open("OverWatch_2\options\Match_Type.txt", "r") as match_options:
+			matchTypes = [line.strip() for line in match_options]
+		context = {
+			'form': form,
+			'matchTypes': matchTypes
+		}
+	return render(request, 'Delete_Match_Type.html', context)
+
+def Add_Match_Type(request):
+	if request.method == "POST":
+		form = Add_Match_Type_Form(request.POST)
+		if form.is_valid():
+			matchType = form.cleaned_data["match_type"]
+			with open("OverWatch_2\options\Match_Type.txt", "a") as match_options:
+				match_options.write("\n" + matchType)
+			return redirect('rosters')
+	else:
+		form = Add_Match_Type_Form()
+	return render(request, 'Add_Match_Type.html', {'form': form})
