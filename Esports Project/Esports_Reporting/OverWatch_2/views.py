@@ -220,15 +220,9 @@ def Add_Hero(request):
 		if form.is_valid():
 			role = form.cleaned_data["role"]
 			heroName = form.cleaned_data["hero_name"]
-			if(role == "Tank"):
-				with open("OverWatch_2\options\Tank.txt", "a") as tank_options:
-					tank_options.write("\n" + heroName)
-			if(role == "DPS"):
-				with open("OverWatch_2\options\DPS.txt", "a") as dps_options:
-					dps_options.write("\n" + heroName)
-			if(role == "Support"):
-				with open("OverWatch_2\options\Support.txt", "a") as support_options:
-					support_options.write("\n" + heroName)
+			filePath = f"Overwatch_2/options/{role}.txt"
+			with open(filePath, "a") as support_options:
+				support_options.write("\n" + heroName)
 			return redirect('rosters')
 	else:
 		form = Add_Hero_Form()
@@ -240,23 +234,13 @@ def Add_Map(request):
 		if form.is_valid():
 			mapType = form.cleaned_data["map_type"]
 			mapName = form.cleaned_data["map_name"]
-			if(mapType == "Escort"):
-				with open("OverWatch_2\options\Escort_Maps.txt", "a") as map_options:
-					map_options.write("\n" + mapName)
-			if(mapType == "Hybrid"):
-				with open("OverWatch_2\options\Hybrid_Maps.txt", "a") as map_options:
-					map_options.write("\n" + mapName)
-			if(mapType == "Push"):
-				with open("OverWatch_2\options\Push_Maps.txt", "a") as map_options:
-					map_options.write("\n" + mapName)
-			if(mapType == "Flashpoint"):
-				with open("OverWatch_2\options\Flashpoint_Maps.txt", "a") as map_options:
+			filePath = f"Overwatch_2/options/{mapType}_Maps.txt"
+			with open(filePath, "a") as map_options:
 					map_options.write("\n" + mapName)
 			if(mapType == "Control"):
-				with open("OverWatch_2\options\Control_Maps.txt", "a") as map_options:
-					map_options.write("\n" + mapName)
 				return redirect('add-sub-map', mapName)
-			return redirect('rosters')
+			else:
+				return redirect('rosters')
 	else:
 		form = Add_Map_Form()
 	return render(request, 'Add_Map.html', {'form': form})
