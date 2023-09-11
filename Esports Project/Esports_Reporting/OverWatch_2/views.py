@@ -1,9 +1,6 @@
 from django.shortcuts import render, redirect
-from datetime import datetime
-from .forms import OW_Team_Form, Roster_Form, Match_Form, Game_Form, Control_Map_Form, Escort_Hybrid_Map_Form, Push_Map_Form 
-from .forms import Flashpoint_Map_Form, Player_Form, Add_Hero_Form, Add_Map_Form, Add_Control_Sub_Map_Form, Add_Hero_Form, Delete_Hero_Form, Delete_Map_Form
-from .forms import Delete_Match_Type_Form, Add_Match_Type_Form
-from .models import OW_Team, Roster, Match, Game
+from .forms import *
+from .models import OW_Team, Roster, Match, Game, Control_Map, Escort_Hybrid_Map, Flashpoint_Map, Push_Map, Player
 
 
 # Create your views here.
@@ -36,9 +33,27 @@ def OW_Roster(request):
 def OW_Roster_Players(request, pk):
 	team = OW_Team.objects.get(id=pk)
 	players = Roster.objects.filter(ow_team_id=pk)
+	owMatches = Match.objects.filter(ow_team_id=pk)
+	for match in owMatches:
+		games_related_to_match = Game.objects.filter(match_id=match.id)
+		match.games = games_related_to_match
+    	
+		for game in games_related_to_match:
+			game.players = Player.objects.filter(game_id=game.id)
+
+			if game.map_type == "Control":
+				game.maps = Control_Map.objects.filter(game_id=game.id)
+			elif game.map_type in ["Escort", "Hybrid"]:
+				game.maps = Escort_Hybrid_Map.objects.filter(game_id=game.id)
+			elif game.map_type == "Push":
+				game.maps = Push_Map.objects.filter(game_id=game.id)
+			else:
+				game.maps = Flashpoint_Map.objects.filter(game_id=game.id)
+
 	view = {
 		"OW_Team": team,
-		"Roster": players
+		"Roster": players,
+		"Matches": owMatches
 	}
 	return render(request, 'OW_Roster_Players.html', view)
 
@@ -369,3 +384,22 @@ def Add_Match_Type(request):
 	else:
 		form = Add_Match_Type_Form()
 	return render(request, 'Add_Match_Type.html', {'form': form})
+
+def Delete_Roster_Player(request, pk):
+	if request.method == "POST":
+		form = Delete_Roster_Player_Form(request.POST)
+		if form.is_valid():
+			playerId = form.cleaned_data["player_id"]
+			player = Roster.objects.get(id=playerId, ow_team_id=pk)
+			print(player)
+			player.delete()
+			return redirect('roster-players', pk=pk)
+	else:
+		form = Delete_Roster_Player_Form()
+		roster = Roster.objects.filter(ow_team_id=pk)
+		context = {
+			'form': form,
+			'roster': roster,
+			'pk': pk
+		}
+	return render(request, 'Delete_Roster_Player.html', context)

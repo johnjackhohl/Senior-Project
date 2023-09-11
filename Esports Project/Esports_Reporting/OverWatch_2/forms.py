@@ -83,3 +83,6 @@ class Delete_Match_Type_Form(forms.Form):
 
 class Add_Match_Type_Form(forms.Form):
     match_type = forms.CharField(max_length=100)
+
+class Delete_Roster_Player_Form(forms.Form):
+    player_id = forms.IntegerField()

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Roster Player</title>
+</head>
+<body>
+    <h1>Delete Roster Player</h1>
+    {% if roster == None %}
+    <p>No Players on Roster</p>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_player">Player:</label>
+        <select name="player_id" id="id_player">
+            {% for player in roster %}
+            <option value="{{player.id}}">{{player.first_name}} {{player.last_name}}: {{player.role}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Delete Player</button>
+    </form>
+    {% endif %}
+    <a href="/Overwatch/team/{{pk}}/">Back to Overwatch Teams</a>
+</html>

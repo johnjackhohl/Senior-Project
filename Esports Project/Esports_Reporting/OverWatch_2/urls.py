@@ -1,8 +1,5 @@
 from django.urls import path
-from .views import Create_OW_Team, OW_Roster, OW_Roster_Players, Add_Player_to_Roster, Add_Match, Add_Game, Add_Control 
-from .views import Add_Escort_Hybrid, Add_Push, Add_Flashpoint, Add_Player, Add_Hero, Add_Map, Add_Sub_Map, Delete_Hero, Delete_Map
-from .views import Add_Match_Type, Delete_Match_Type
-
+from .views import *
 urlpatterns = [
     path('createTeam/', Create_OW_Team, name='create-team'),
     path('rosters/', OW_Roster, name='rosters'),
@@ -22,4 +19,5 @@ urlpatterns = [
     path('deleteMap/', Delete_Map, name='delete-map'),
     path('addMatchType/', Add_Match_Type, name='add-match-type'),
     path('deleteMatchType/', Delete_Match_Type, name='delete-match-type'),
+    path('team/<int:pk>/deleteRosterPlayer/', Delete_Roster_Player, name='delete-roster-player'),
 ]
