@@ -1,0 +1,41 @@
+ <div id="matches">
+            {%if Matches %}
+            <h4>Matches</h4>
+                {% for match in Matches %}
+                    <p>Match Opponent: {{match.opponent}}</p>
+                    {% for game in match.games.all %}
+    <ul>
+        <li>Map Type: {{ game.map_type }}</li>
+        <li>Mount Score: {{ game.mount_score }}</li>
+        <li>Opponent Score: {{ game.opponent_score }}</li>
+        <li>Maps:</li>
+        <ul>
+            {% if game.map_type == "Control" %}
+                {% for map in game.control_map_set.all %}
+                    <li>Map Name: {{ map.map_name }}</li>
+                    <!-- Add other Control map details here -->
+                {% endfor %}
+            {% elif game.map_type == "Escort" or game.map_type == "Hybrid" %}
+                {% for map in game.escort_hybrid_map_set.all %}
+                    <li>Map Name: {{ map.map_name }}</li>
+                    <!-- Add other Escort/Hybrid map details here -->
+                {% endfor %}
+            {% elif game.map_type == "Push" %}
+                {% for map in game.push_map_set.all %}
+                    <li>Map Name: {{ map.map_name }}</li>
+                    <!-- Add other Push map details here -->
+                {% endfor %}
+            {% elif game.map_type == "Flashpoint" %}
+                {% for map in game.flashpoint_map_set.all %}
+                    <li>Map Name: {{ map.map_name }}</li>
+                    <!-- Add other Flashpoint map details here -->
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </ul>
+{% endfor %}
+                {%endfor%}
+            {%else%}
+                <p>No Matches</p>
+            {%endif%}
+            </div>

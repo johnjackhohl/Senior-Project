@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overwatch 2 {{OW_Team.name}}</title>
+</head>
+    <body>
+        <h1>{{OW_Team.name}}</h1
+        <div><a href="addPlayer/">Add a new Player</a></div>
+        <div><a href="addMatch/">Add a new Match</a></div>
+        <div><a href="deleteRosterPlayer/">Remove Player</a></div>
+            {%if Roster %}
+            <h4>Roster</h4>
+                <ul>
+                {% for player in Roster %}
+                    <li>{{player.first_name}} {{player.last_name}}: {{player.role}}</li>
+                {%endfor%}
+                </ul>
+            {%else%}
+                <p>No Players on Roster</p>
+            {%endif%}
+        <a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
+    </body>
+</html>
