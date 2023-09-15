@@ -9,6 +9,15 @@ def OW_Rosters(request):
 	return render(request, 'team_templates/OW_Rosters.html', {"OW_Teams": OW_Teams})
 
 def OW_Team_Roster(request, pk):
+    team, players, owMatches = Match_History(pk)
+    view = {
+		"OW_Team": team,
+		"Roster": players,
+		"Matches": owMatches
+	}
+    return render(request, 'team_templates/OW_Roster_Players.html', view)
+
+def Match_History(pk):
 	team = models.OW_Team.objects.get(id=pk)
 	players = models.Roster.objects.filter(ow_team_id=pk)
 	owMatches = models.Match.objects.filter(ow_team_id=pk)
@@ -27,15 +36,7 @@ def OW_Team_Roster(request, pk):
 				game.maps = models.Push_Map.objects.filter(game_id=game.id)
 			else:
 				game.maps = models.Flashpoint_Map.objects.filter(game_id=game.id)
-
-	view = {
-		"OW_Team": team,
-		"Roster": players,
-		"Matches": owMatches
-	}
-	return render(request, 'team_templates/OW_Roster_Players.html', view)
-
-
+	return team, players, owMatches
 
 
 

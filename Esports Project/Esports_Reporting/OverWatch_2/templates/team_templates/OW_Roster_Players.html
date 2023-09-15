@@ -19,6 +19,7 @@
             {%else%}
                 <p>No Players on Roster</p>
             {%endif%}
+        {% include "team_templates/match_history.html" with Matches=Matches %}
         <a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
     </body>
 </html>
