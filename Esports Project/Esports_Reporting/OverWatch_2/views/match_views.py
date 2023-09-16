@@ -44,7 +44,7 @@ def Add_Control(request, pk):
 		form = forms.Control_Map_Form(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('add-player', pk=game.id)
+			return redirect('add-player',  mapType=game.map_type, pk=form.instance.id)
 	else:
 		form = forms.Control_Map_Form()
 	context = {
@@ -69,7 +69,7 @@ def Add_Escort_Hybrid(request, pk):
 		form = forms.Escort_Hybrid_Map_Form(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('add-player', pk=game.id)
+			return redirect('add-player', pk=form.instance.id, mapType=game.map_type)
 	else:
 		form = forms.Escort_Hybrid_Map_Form()
 	context = {
@@ -91,7 +91,7 @@ def Add_Push(request, pk):
 		form = forms.Push_Map_Form(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('add-player', pk=game.id)
+			return redirect('add-player', pk=form.instance.id, mapType=game.map_type)
 	else:
 		form = forms.Push_Map_Form()
 	context = {
@@ -112,7 +112,7 @@ def Add_Flashpoint(request, pk):
 		form = forms.Flashpoint_Map_Form(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('add-player', pk=game.id)
+			return redirect('add-player', pk=form.instance.id, mapType=game.map_type)
 	else:
 		form = forms.Flashpoint_Map_Form()
 	context = {
@@ -125,8 +125,16 @@ def Add_Flashpoint(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
-def Add_Player(request, pk):
-	game = models.Game.objects.get(id=pk)
+def Add_Player(request, pk, mapType):
+	if mapType == "Control":
+		map = models.Control_Map.objects.get(id=pk)
+	elif mapType in ["Escort", "Hybrid"]:
+		map = models.Escort_Hybrid_Map.objects.get(id=pk)
+	elif mapType == "Push":
+		map = models.Push_Map.objects.get(id=pk)
+	elif mapType == "Flashpoint":
+		map = models.Flashpoint_Map.objects.get(id=pk)
+	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
 	[tanks, dps, support] = getHeros()
 	heroes = tanks + dps + support
@@ -135,13 +143,13 @@ def Add_Player(request, pk):
 		if form.is_valid():
 			if request.POST.get('action') == "add_another_player":
 				form.save()
-				return redirect('add-player', pk=pk)
+				return redirect('add-player', pk=pk, mapType=mapType)
 			if request.POST.get('action') == "add_control":
 				form.save()
-				return redirect('add-control', pk=pk)
+				return redirect('add-control', pk=game.id)
 			if request.POST.get('action') == "add_flashpoint":
 				form.save()
-				return redirect('add-flashpoint', pk=pk)
+				return redirect('add-flashpoint', pk=game.id)
 			else:
 				form.save()
 				return redirect('add-game', pk=game.match_id.id)
@@ -149,8 +157,9 @@ def Add_Player(request, pk):
 		form = forms.Player_Form()
 	context = {
 		'form': form,
-		'game': game,
+		'map': map,
 		'roster': roster,
-		'heroes': heroes
+		'heroes': heroes,
+		'game': game
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)

@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Overwatch 2 Rosters</title>
+	<meta charset="UTF-8">
+	<title>Overwatch 2 Rosters</title>
 </head>
-    <body>
-        <h1>Overwatch 2 Rosters</h1>
-        {%load static%}
-        <div><a href="/Overwatch/createTeam/">Create a new team</a></div>
-        <div><a href="/Overwatch/addHero/">Add new hero</a></div>
-        <div><a href="/Overwatch/addMap/">Add new map</div>
-        <div><a href="/Overwatch/deleteMap/">Delete map</a></div>
-        <div><a href="/Overwatch/deleteHero/">Delete hero</a></div>
-        <div><a href="/Overwatch/deleteMatchType/">Delete Match Type</a></div>
-        <div><a href="/Overwatch/addMatchType/">Add Match Type</a></div>
-        <ul>
-            {% for team in OW_Teams %}
-            <li><a href="/Overwatch/team/{{team.id}}">{{team.name}}</a></li>
-            {%endfor%}
-        </ul>
-    </body>
+	<body>
+		<h1>Overwatch 2 Rosters</h1>
+		{%load static%}
+		<div><a href="/Overwatch/createTeam/">Create a new team</a></div>
+		<div><a href="/Overwatch/addHero/">Add new hero</a></div>
+		<div><a href="/Overwatch/addMap/">Add new map</div>
+		<div><a href="/Overwatch/deleteMap/">Delete map</a></div>
+		<div><a href="/Overwatch/deleteHero/">Delete hero</a></div>
+		<div><a href="/Overwatch/deleteMatchType/">Delete Match Type</a></div>
+		<div><a href="/Overwatch/addMatchType/">Add Match Type</a></div>
+		<ul>
+			{% for team in OW_Teams %}
+			<li>
+				<div>
+					<a href="/Overwatch/team/{{team.id}}">{{team.name}}</a>
+					<form method="POST" action="{% url 'delete-team' team.id %}">
+						{% csrf_token %}
+						<button type="submit">Delete Team</button>
+			</div>
+			</li>
+			{%endfor%}
+		</ul>
+	</body>
 </html>

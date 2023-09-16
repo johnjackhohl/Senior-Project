@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
 from OverWatch_2.helpers.input_helpers import getHeros, getMaps
+from OverWatch_2.helpers.delete_helpers import deleteTeam
 
 def Delete_Hero(request):
 	if request.method == "POST":
@@ -118,3 +119,7 @@ def Delete_Roster_Player(request, pk):
 			'pk': pk
 		}
 	return render(request, 'delete_templates/Delete_Roster_Player.html', context)
+
+def delete_team_info(request, pk):
+	deleteTeam(pk)
+	return redirect('rosters')
