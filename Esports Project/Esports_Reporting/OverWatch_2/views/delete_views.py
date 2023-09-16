@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
 from OverWatch_2.helpers.input_helpers import getHeros, getMaps
-from OverWatch_2.helpers.delete_helpers import deleteTeam
 
 def Delete_Hero(request):
 	if request.method == "POST":
@@ -102,24 +101,46 @@ def Delete_Match_Type(request):
 	return render(request, 'delete_templates/Delete_Match_Type.html', context)
 
 def Delete_Roster_Player(request, pk):
-	if request.method == "POST":
-		form = forms.Delete_Roster_Player_Form(request.POST)
-		if form.is_valid():
-			playerId = form.cleaned_data["player_id"]
-			player = models.Roster.objects.get(id=playerId, ow_team_id=pk)
-			print(player)
-			player.delete()
-			return redirect('team-roster', pk=pk)
-	else:
-		form = forms.Delete_Roster_Player_Form()
-		roster = models.Roster.objects.filter(ow_team_id=pk)
-		context = {
-			'form': form,
-			'roster': roster,
-			'pk': pk
-		}
-	return render(request, 'delete_templates/Delete_Roster_Player.html', context)
+	player = models.Roster.objects.get(id=pk)
+	team = models.OW_Team.objects.get(id=player.ow_team_id.id)
+	player.delete()
+	return redirect('team-roster', pk=team.id)
 
 def delete_team_info(request, pk):
-	deleteTeam(pk)
+	team = models.OW_Team.objects.get(id=pk)
+	team.delete()
 	return redirect('rosters')
+
+def delete_match(request, pk):
+    match = models.Match.objects.get(id=pk)
+    team = models.OW_Team.objects.get(id=match.ow_team_id.id)
+    match.delete()
+    return redirect('team-roster', pk=team.id)
+
+def delete_game(request, pk):
+    game = models.Game.objects.get(id=pk)
+    team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
+    game.delete()
+    return redirect('team-roster', pk = team.id)
+
+def delete_map(request, mapType, pk):
+    if mapType in ['Escort', 'Hybrid']:
+        if mapType == 'Escort':
+            map = models.Escort_Hybrid_Map.objects.get(id=pk)
+        else:
+            map = models.Escort_Hybrid_Map.objects.get(id=pk)
+    elif mapType == 'Control':
+        map = models.Control_Map.objects.get(id=pk)
+    elif mapType == 'Push':
+        map = models.Push_Map.objects.get(id=pk)
+    else:
+        map = models.Flashpoint_Map.objects.get(id=pk) 
+    team = models.OW_Team.objects.get(id=map.game_id.match_id.ow_team_id.id) 
+    map.delete()
+    return redirect('team-roster', pk=team.id)
+
+def delete_player(request, pk):
+    player = models.Player.objects.get(id=pk)
+    team = models.OW_Team.objects.get(id=player.roster_id.ow_team_id.id)
+    player.delete()
+    return redirect('team-roster', pk=team.id)

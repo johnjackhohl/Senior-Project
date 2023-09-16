@@ -21,4 +21,8 @@ urlpatterns = [
 	path('deleteMatchType/', delete_views.Delete_Match_Type, name='delete-match-type'),
 	path('team/<int:pk>/deleteRosterPlayer/', delete_views.Delete_Roster_Player, name='delete-roster-player'),
 	path('team/<int:pk>/deleteTeam/', delete_views.delete_team_info, name='delete-team'),
+	path('team/<int:pk>/deleteMatch/', delete_views.delete_match, name='delete-match'),
+	path('team/<int:pk>/deleteGame/', delete_views.delete_game, name='delete-game'),
+	path('team/<str:mapType>/<int:pk>/deleteMap/', delete_views.delete_map, name='delete-map'),
+	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
 ]

@@ -28,7 +28,8 @@ def Match_History(pk):
 
 			if game.map_type == "Control":
 				game.maps = models.Control_Map.objects.filter(game_id=game.id)
-				game.players = models.Player.objects.filter(control_id=game.id)
+				for map in game.maps:
+					map.players = models.Player.objects.filter(control_id=map.id)
 			elif game.map_type in ["Escort", "Hybrid"]:
 				game.maps = models.Escort_Hybrid_Map.objects.filter(game_id=game.id)
 				game.players = models.Player.objects.filter(escort_hybrid_id=game.id)
@@ -37,7 +38,8 @@ def Match_History(pk):
 				game.players = models.Player.objects.filter(push_id=game.id)
 			else:
 				game.maps = models.Flashpoint_Map.objects.filter(game_id=game.id)
-				game.players = models.Player.objects.filter(flashpoint_id=game.id)
+				for map in game.maps:
+					map.players = models.Player.objects.filter(flashpoint_id=map.id)
 	return team, players, owMatches
 
 
