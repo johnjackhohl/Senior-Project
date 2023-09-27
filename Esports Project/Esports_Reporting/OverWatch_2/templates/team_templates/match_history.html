@@ -38,6 +38,10 @@
                         {% elif game.map_type == "Escort" or game.map_type == "Hybrid" %}
                             {% for map in game.escort_hybrid_map_set.all %}
                                 <p>Map Name: {{ map.map_name }}</p>
+                                <form method="POST" action="{% url 'delete-map' game.map_type map.id%}">
+                        			{% csrf_token %}
+                       				<button type="submit">Delete Map</button>
+                    			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
 										<form method="POST" action="{% url 'delete-player' player.id %}">
@@ -52,6 +56,10 @@
                         {% elif game.map_type == "Push" %}
                             {% for map in game.push_map_set.all %}
                                 <p>Map Name: {{ map.map_name }}</p>
+                                <form method="POST" action="{% url 'delete-map' game.map_type map.id%}">
+                        			{% csrf_token %}
+                       				<button type="submit">Delete Map</button>
+                    			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
 										<form method="POST" action="{% url 'delete-player' player.id %}">
@@ -66,6 +74,10 @@
                         {% elif game.map_type == "Flashpoint" %}
                             {% for map in game.flashpoint_map_set.all %}
                                 <p>Map Name: {{ map.map_name }}</p>
+                                <form method="POST" action="{% url 'delete-map' game.map_type map.id%}">
+                        			{% csrf_token %}
+                       				<button type="submit">Delete Map</button>
+                    			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
 										<form method="POST" action="{% url 'delete-player' player.id %}">
