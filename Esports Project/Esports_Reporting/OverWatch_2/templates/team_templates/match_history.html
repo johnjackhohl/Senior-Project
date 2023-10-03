@@ -2,6 +2,7 @@
     {% if Matches %}
         <h4>Matches</h4>
         {% for match in Matches %}
+            <a href="{% url 'add-game' match.id %}">Add new Game to this Match</a>
             <form method="POST" action="{% url 'delete-match' match.id %}">
                 {% csrf_token %}
                 <button type="submit">Delete Match</button>
@@ -9,6 +10,15 @@
             <p>Match Opponent: {{ match.opponent }}</p>
             <div id="game">
                 {% for game in match.games.all %}
+                    {% if game.map_type == "Control"%}
+                    <a href = "{% url 'add-control' game.id %}">Add a new control map to this game</a>
+                    {% elif game.map_type == "Escort" or game.map_type == "Hybrid" %}
+                    <a href = "{% url 'add-escort-hybrid' game.id %}">Add a new escort/hybrid map to this game</a>
+                    {% elif game.map_type == "Push" %}
+                    <a href = "{% url 'add-push' game.id %}">Add a new push map to this game</a>
+                    {% elif game.map_type == "Flashpoint" %}
+                    <a href = "{% url 'add-flashpoint' game.id %}">Add a new flashpoint map to this game</a>
+                    {% endif %}
                     <form method="POST" action="{% url 'delete-game' game.id %}">
                         {% csrf_token %}
                         <button type="submit">Delete Game</button>
@@ -26,6 +36,7 @@
                                 <p>{{ map.map_sub_name }}: {{ map.round }}</p>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
+                                        <a href = "{% url 'add-player' player.control_id.game_id.map_type player.control_id.id %}">Add a new player to this map</a>
 										<form method="POST" action="{% url 'delete-player' player.id %}">
                         					{% csrf_token %}
                        						<button type="submit">Delete Player</button>
@@ -44,6 +55,7 @@
                     			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
+                                        <a href = "{% url 'add-player' player.escort_hybrid_id.game_id.map_typeplayer.escort_hybrid_id.id %}">Add a new player to this map</a>
 										<form method="POST" action="{% url 'delete-player' player.id %}">
                         					{% csrf_token %}
                        						<button type="submit">Delete Player</button>
@@ -62,6 +74,7 @@
                     			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
+                                        <a href = "{% url 'add-player' player.push_id.game_id.map_type player.push_id.id %}">Add a new player to this map</a>
 										<form method="POST" action="{% url 'delete-player' player.id %}">
                         					{% csrf_token %}
                        						<button type="submit">Delete Player</button>
@@ -80,6 +93,7 @@
                     			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
+                                        <a href = "{% url 'add-player' player.flashpoint_id.game_id.map_type player.flashpoint_id.id %}">Add a new player to this map</a>
 										<form method="POST" action="{% url 'delete-player' player.id %}">
                         					{% csrf_token %}
                        						<button type="submit">Delete Player</button>

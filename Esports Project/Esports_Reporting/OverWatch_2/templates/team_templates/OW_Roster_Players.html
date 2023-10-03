@@ -12,13 +12,17 @@
 			<h4>Roster</h4>
 				<ul>
 				{% for player in Roster %}
-					<li>{{player.first_name}} {{player.last_name}}: {{player.role}}
-						<form method="POST" action="{% url 'delete-roster-player' player.id %}">
-                        	{% csrf_token %}
-                       		<button type="submit">Delete Player</button>
-                    	</form>
+					<li>
+						<div style="display: flex; align-items: center;">
+							<span>{{ player.first_name }} {{ player.last_name }}:</span>
+							<span style="margin-right: 10px;">{{ player.role }}</span>
+							<form method="POST" action="{% url 'delete-roster-player' player.id %}">
+								{% csrf_token %}
+								<button type="submit">Delete Player</button>
+							</form>
+						</div>
 					</li>
-				{%endfor%}
+				{% endfor %}
 				</ul>
 			{%else%}
 				<p>No Players on Roster</p>
