@@ -55,7 +55,7 @@ class Flashpoint_Map_Form(forms.ModelForm):
 class Player_Form(forms.ModelForm):
 	class Meta:
 		model = Player
-		fields = ['roster_id', 'control_id', 'push_id', 'flashpoint_id', 'escort_hybrid_id', 'hero', 'role', 'kills', 'deaths', 'assists', 'damage', 'healing']
+		fields = ['roster_id', 'control_id', 'push_id', 'flashpoint_id', 'escort_hybrid_id', 'hero', 'role', 'is_defense', 'kills', 'deaths', 'assists', 'damage', 'healing']
 
 class Add_Hero_Form(forms.Form):
 	role = forms.CharField(max_length=20)

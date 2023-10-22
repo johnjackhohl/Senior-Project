@@ -123,6 +123,7 @@ class Player(models.Model):
 	escort_hybrid_id = models.ForeignKey(Escort_Hybrid_Map, on_delete=models.CASCADE, null=True, blank=True)
 	role = models.CharField(max_length=100)
 	hero = models.CharField(max_length=100)
+	is_defense = models.BooleanField(default=False)
 	kills = models.IntegerField(null=True, blank=True)
 	deaths = models.IntegerField(null=True, blank=True)
 	assists = models.IntegerField(null=True, blank=True)

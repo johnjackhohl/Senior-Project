@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
 from OverWatch_2.helpers.input_helpers import getHeros, getMaps
+from django.forms import formset_factory
 
 def Add_Match(request, pk):
 	team = models.OW_Team.objects.get(id=pk)
@@ -126,6 +127,7 @@ def Add_Flashpoint(request, pk):
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
 def Add_Player(request, pk, mapType):
+	PlayerFormSet = formset_factory(forms.Player_Form, extra=0)
 	if mapType == "Control":
 		map = models.Control_Map.objects.get(id=pk)
 	elif mapType in ["Escort", "Hybrid"]:
@@ -138,25 +140,28 @@ def Add_Player(request, pk, mapType):
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
 	[tanks, dps, support] = getHeros()
 	heroes = tanks + dps + support
-	if request.method == "POST":
-		form = forms.Player_Form(request.POST)
-		if form.is_valid():
-			if request.POST.get('action') == "add_another_player":
-				form.save()
-				return redirect('add-player', pk=pk, mapType=mapType)
-			if request.POST.get('action') == "add_control":
-				form.save()
-				return redirect('add-control', pk=game.id)
-			if request.POST.get('action') == "add_flashpoint":
-				form.save()
-				return redirect('add-flashpoint', pk=game.id)
-			else:
-				form.save()
-				return redirect('add-game', pk=game.match_id.id)
+	if game.map_type in ['Escort', 'Hybrid']:
+		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
 	else:
-		form = forms.Player_Form()
+		initial_data = [{'is_defense': False} for _ in range(5)]
+	if request.method == "POST":
+		formset = PlayerFormSet(request.POST, prefix='player', initial=initial_data)
+		if formset.is_valid():
+			for form in formset:
+				form.save()
+				if request.POST.get('action') == "add_control":
+					form.save()
+					return redirect('add-control', pk=game.id)
+				if request.POST.get('action') == "add_flashpoint":
+					form.save()
+					return redirect('add-flashpoint', pk=game.id)
+				else:
+					form.save()
+					return redirect('add-game', pk=game.match_id.id)
+	else:
+		formset = PlayerFormSet(prefix='player', initial=initial_data)
 	context = {
-		'form': form,
+		'formset': formset,
 		'map': map,
 		'roster': roster,
 		'heroes': heroes,
