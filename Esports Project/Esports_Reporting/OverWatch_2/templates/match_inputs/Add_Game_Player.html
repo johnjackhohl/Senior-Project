@@ -1,70 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Add Game Player</title>
+    <meta charset="UTF-8">
+    <title>Add Game Player</title>
+    <!-- Add any additional CSS or JS here if required -->
 </head>
 
 <body>
-	<h1>Add Player</h1>
-	<form method="POST">
-		{% csrf_token %}
-        {{formset.management_form}}
+    <h1>Add Player</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ formset.management_form }}
 
-        {%for form in formset%}
-            <input type='hidden' name='{{form.is_defense.name}}' value='{{form.is_defense.value}}'>
-            {%if form.is_defense.value == True%}
-            <h4>Defense</h4>
-            {%endif%}
-            {% if game.map_type == 'Escort' or game.map_type == 'Hybrid' %}
-                <input type="hidden" name="escort_hybrid_id" value="{{map.id}}">
-            {% else %}
-                <input type="hidden" name="{{game.map_type|lower}}_id" value="{{map.id}}">
-            {% endif %}
-            <label for="id_roster_id">Player Name:</label>
-            <select name="roster_id" id="id_roster_id">
-                {% for option in roster %}
-                    <option value="{{option.id}}">{{option.first_name}} {{option.last_name}}</option>
-                {% endfor %}
-            </select>
-            <br>
-            <label for="id_role">Role:</label>
-            <select name="role" id="id_role">
-                <option value="DPS">DPS</option>
-                <option value="Tank">Tank</option>
-                <option value="Support">Support</option>
-                <option value="Flex">Flex</option>
-            </select>
-            <br>
-            <label for="id_hero">Hero:</label>
-            <select name="hero" id="id_hero">
-                {% for option in heroes %}
-                    <option value="{{option}}">{{option}}</option>
-                {% endfor %}
-            </select>
-            <br>
-            <label for="id_kills">Kills:</label>
-            <input type="number" name="kills" id="id_kills">
-            <br>
-            <label for="id_deaths">Deaths:</label>
-            <input type="number" name="deaths" id="id_deaths">
-            <br>
-            <label for="id_assists">Assists:</label>
-            <input type="number" name="assists" id="id_assists">
-            <br>
-            <label for="id_damage">Damage:</label>
-            <input type="number" name="damage" id="id_damage">
-            <br>
-            <label for="id_healing">Healing:</label>
-            <input type="number" name="healing" id="id_healing">
-            <br><br>
+        {% for form in formset %}
+            <div class="form-group">
+                {% if form.is_defense.value %}
+                    <h4>Defense</h4>
+                {% endif %}
+
+                <!-- Dynamically setting the map type input based on game's map type -->
+                <input type="hidden" name="{{ form.get_map_type_field_name }}" value="{{ map.id }}">
+
+                {{ form.is_defense.as_hidden }}
+
+                <div>
+                    <label for="{{ form.roster_id.id_for_label }}">Player Name:</label>
+                    <select name="{{ form.roster_id.name }}" id="{{ form.roster_id.id_for_label }}">
+                        {% for option in roster %}
+                            <option value="{{ option.id }}" {% if option.id == form.roster_id.value %}selected{% endif %}>{{ option.first_name }} {{ option.last_name }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div>
+                    <label for="{{ form.role.id_for_label }}">Role:</label>
+                    <select name="{{ form.role.name }}" id="{{ form.role.id_for_label }}">
+                        <option value="Tank" {% if form.role.value == "Tank" %}selected{% endif %}>Tank</option>
+                        <option value="DPS" {% if form.role.value == "DPS" %}selected{% endif %}>DPS</option>
+                        <option value="Support" {% if form.role.value == "Support" %}selected{% endif %}>Support</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="{{ form.hero.id_for_label }}">Hero:</label>
+                    <select name="{{ form.hero.name }}" id="{{ form.hero.id_for_label }}">
+                        {% for option in heroes %}
+                            <option value="{{ option }}" {% if option == form.hero.value %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div>
+                    <label>{{ form.kills.label }}</label>
+                    {{ form.kills }}
+                </div>
+
+                <div>
+                    <label>{{ form.deaths.label }}</label>
+                    {{ form.deaths }}
+                </div>
+
+                <div>
+                    <label>{{ form.assists.label }}</label>
+                    {{ form.assists }}
+                </div>
+
+                <div>
+                    <label>{{ form.damage.label }}</label>
+                    {{ form.damage }}
+                </div>
+
+                <div>
+                    <label>{{ form.healing.label }}</label>
+                    {{ form.healing }}
+                </div>
+            </div>
         {% endfor %}
-		{%if game.map_type == "Control"%}
-			<button type="submit" name='action' value='add_control'>Add Another Control Round</button>
-		{%elif game.map_type == "Flashpoint"%}
-			<button type="submit" name='action' value='add_flashpoint'>Add Another Flashpoint Point</button>
-		{%endif%}
-		<br><br>
-		<button type="submit">Done</button>
-	</form>
+
+        <div>
+            <!-- Conditional buttons based on game's map type -->
+            {% if game.map_type == "Control" %}
+                <button type="submit" name='action' value='add_control'>Add Another Control Round</button>
+            {% elif game.map_type == "Flashpoint" %}
+                <button type="submit" name='action' value='add_flashpoint'>Add Another Flashpoint Point</button>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button type="submit">Done</button>
+        </div>
+    </form>
 </body>
+</html>

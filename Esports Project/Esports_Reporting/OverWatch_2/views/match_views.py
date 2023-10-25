@@ -147,17 +147,15 @@ def Add_Player(request, pk, mapType):
 	if request.method == "POST":
 		formset = PlayerFormSet(request.POST, prefix='player', initial=initial_data)
 		if formset.is_valid():
-			for form in formset:
-				form.save()
-				if request.POST.get('action') == "add_control":
-					form.save()
-					return redirect('add-control', pk=game.id)
-				if request.POST.get('action') == "add_flashpoint":
-					form.save()
-					return redirect('add-flashpoint', pk=game.id)
-				else:
-					form.save()
-					return redirect('add-game', pk=game.match_id.id)
+			formset.save()
+			if request.POST.get('action') == "add_control":
+				return redirect('add-control', pk=game.id)
+			if request.POST.get('action') == "add_flashpoint":
+				return redirect('add-flashpoint', pk=game.id)
+			else:
+				return redirect('add-game', pk=game.match_id.id)
+		else:
+			print(formset.errors)
 	else:
 		formset = PlayerFormSet(prefix='player', initial=initial_data)
 	context = {
