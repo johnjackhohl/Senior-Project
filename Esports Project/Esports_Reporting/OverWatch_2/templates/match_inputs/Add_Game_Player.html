@@ -20,38 +20,42 @@
                 {% endif %}
 
                 <!-- Dynamically setting the map type input based on game's map type -->
-                <input type="hidden" name="{{ form.get_map_type_field_name }}" value="{{ map.id }}">
+                {%if game.map_type == "Hybrid" or game.map_type == "Escort"%}
+                    <input type="hidden" name="player-{{forloop.counter0}}-escort_hybrid_id" value="{{ map.id }}">
+                {%else%}
+                    <input type="hidden" name="player-{{forloop.counter0}}-{{game.map_type|lower}}_id" value="{{ game.map_type }}">
+                {%endif%}
+
 
                 {{ form.is_defense.as_hidden }}
 
                 <div>
                     <label for="{{ form.roster_id.id_for_label }}">Player Name:</label>
-                    <select name="{{ form.roster_id.name }}" id="{{ form.roster_id.id_for_label }}">
+                    <select name="player-{{ forloop.counter0 }}-roster_id" id="{{ form.roster_id.id_for_label }}">
                         {% for option in roster %}
                             <option value="{{ option.id }}" {% if option.id == form.roster_id.value %}selected{% endif %}>{{ option.first_name }} {{ option.last_name }}</option>
                         {% endfor %}
                     </select>
-
-                </div>
+                </div>                
 
                 <div>
                     <label for="{{ form.role.id_for_label }}">Role:</label>
-                    <select name="{{ form.role.name }}" id="{{ form.role.id_for_label }}">
+                    <select name="player-{{ forloop.counter0 }}-role" id="{{ form.role.id_for_label }}">
                         <option value="Tank" {% if form.role.value == "Tank" %}selected{% endif %}>Tank</option>
                         <option value="DPS" {% if form.role.value == "DPS" %}selected{% endif %}>DPS</option>
                         <option value="Support" {% if form.role.value == "Support" %}selected{% endif %}>Support</option>
                     </select>
                 </div>
-
+                
                 <div>
                     <label for="{{ form.hero.id_for_label }}">Hero:</label>
-                    <select name="{{ form.hero.name }}" id="{{ form.hero.id_for_label }}">
+                    <select name="player-{{ forloop.counter0 }}-hero" id="{{ form.hero.id_for_label }}">
                         {% for option in heroes %}
                             <option value="{{ option }}" {% if option == form.hero.value %}selected{% endif %}>{{ option }}</option>
                         {% endfor %}
                     </select>
-
                 </div>
+                
 
                 <div>
                     <label>{{ form.kills.label }}</label>

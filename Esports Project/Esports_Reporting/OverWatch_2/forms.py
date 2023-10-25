@@ -51,7 +51,7 @@ class Flashpoint_Map_Form(forms.ModelForm):
 		fields = ['game_id', 'map_name', 'point_number', 'mount_percent','opponent_percent', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 
 				  'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
 					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2']
-		
+
 class Player_Form(forms.ModelForm):
 	class Meta:
 		model = Player

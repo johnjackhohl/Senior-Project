@@ -3,6 +3,7 @@ from OverWatch_2 import forms
 from OverWatch_2 import models
 from OverWatch_2.helpers.input_helpers import getHeros, getMaps
 from django.forms import formset_factory
+import json
 
 def Add_Match(request, pk):
 	team = models.OW_Team.objects.get(id=pk)
@@ -140,6 +141,11 @@ def Add_Player(request, pk, mapType):
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
 	[tanks, dps, support] = getHeros()
 	heroes = tanks + dps + support
+	""" heroes = {
+		"Tank": tanks,
+		"DPS": dps,
+		"Support": support
+	} """
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
 	else:
@@ -147,7 +153,8 @@ def Add_Player(request, pk, mapType):
 	if request.method == "POST":
 		formset = PlayerFormSet(request.POST, prefix='player', initial=initial_data)
 		if formset.is_valid():
-			formset.save()
+			for form in formset:
+				form.save()
 			if request.POST.get('action') == "add_control":
 				return redirect('add-control', pk=game.id)
 			if request.POST.get('action') == "add_flashpoint":
