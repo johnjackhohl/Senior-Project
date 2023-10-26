@@ -13,18 +13,18 @@
         {% csrf_token %}
         {{ formset.management_form }}
 
+        {% with displayed_attack_header=False displayed_defence_header=False %}
         {% for form in formset %}
             <div class="form-group">
-                {% if form.is_defense.value %}
-                    <h4>Defense</h4>
+                {% if form.is_defense.value and not displayed_defence_header %}
+                    <h4>Defence</h4>
+                    {% with displayed_defence_header=True %}{% endwith %}
                 {% endif %}
-
-                <!-- Dynamically setting the map type input based on game's map type -->
-                {%if game.map_type == "Hybrid" or game.map_type == "Escort"%}
-                    <input type="hidden" name="player-{{forloop.counter0}}-escort_hybrid_id" value="{{ map.id }}">
-                {%else%}
-                    <input type="hidden" name="player-{{forloop.counter0}}-{{game.map_type|lower}}_id" value="{{ game.map_type }}">
-                {%endif%}
+                
+                {% if not form.is_defense.value and not displayed_attack_header %}
+                    <h4>Attack</h4>
+                    {% with displayed_attack_header=True %}{% endwith %}
+                {% endif %}
 
 
                 {{ form.is_defense.as_hidden }}
@@ -83,7 +83,7 @@
                 </div>
             </div>
         {% endfor %}
-
+        {% endwith %}
         <div>
             <!-- Conditional buttons based on game's map type -->
             {% if game.map_type == "Control" %}

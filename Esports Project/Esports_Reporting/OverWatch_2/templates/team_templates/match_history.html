@@ -55,7 +55,7 @@
                     			</form>
                                 <div id="player">
                                     {% for player in map.player_set.all %}
-                                        <a href = "{% url 'add-player' player.escort_hybrid_id.game_id.map_typeplayer.escort_hybrid_id.id %}">Add a new player to this map</a>
+                                        <a href = "{% url 'add-player' player.escort_hybrid_id.game_id.map_type player.escort_hybrid_id.id %}">Add a new player to this map</a>
 										<form method="POST" action="{% url 'delete-player' player.id %}">
                         					{% csrf_token %}
                        						<button type="submit">Delete Player</button>
