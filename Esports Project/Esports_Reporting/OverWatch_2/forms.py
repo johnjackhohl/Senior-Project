@@ -1,5 +1,5 @@
 from django import forms
-from .models import OW_Team, Roster, Match, Game, Control_Map, Escort_Hybrid_Map, Flashpoint_Map, Push_Map, Player
+from .models import *
 
 class OW_Team_Form(forms.ModelForm):
 	class Meta:
@@ -57,18 +57,21 @@ class Player_Form(forms.ModelForm):
 		model = Player
 		fields = ['roster_id', 'control_id', 'push_id', 'flashpoint_id', 'escort_hybrid_id', 'hero', 'role', 'is_defense', 'kills', 'deaths', 'assists', 'damage', 'healing']
 
-class Add_Hero_Form(forms.Form):
-	role = forms.CharField(max_length=20)
-	hero_name = forms.CharField(max_length=100)
+class Add_Hero_Form(forms.ModelForm):
+	class Meta:
+		model = Hero
+		fields = ['hero_name', 'role', 'hero_image']
 
-class Add_Map_Form(forms.Form):
-	map_type = forms.CharField(max_length=100, required=True)
-	map_name = forms.CharField(max_length=100, required=True)
+class Add_Map_Form(forms.ModelForm):
+	class Meta:
+		model = Map
+		fields = ['map_name', 'map_type', 'map_image']
 
-class Add_Control_Sub_Map_Form(forms.Form):
-	sub_map_1 = forms.CharField(max_length=100)
-	sub_map_2 = forms.CharField(max_length=100)
-	sub_map_3 = forms.CharField(max_length=100)
+class Add_Sub_Map(forms.ModelForm):
+	class Meta:
+		model = Sub_Map
+		fields = ['map_id', 'sub_map_name', 'sub_map_image']
+	
 
 class Delete_Map_Form(forms.Form):
 	map_type = forms.CharField(max_length=100)
@@ -81,8 +84,10 @@ class Delete_Hero_Form(forms.Form):
 class Delete_Match_Type_Form(forms.Form):
 	match_type = forms.CharField(max_length=100)
 
-class Add_Match_Type_Form(forms.Form):
-	match_type = forms.CharField(max_length=100)
+class Add_Match_Type_Form(forms.ModelForm):
+	class Meta:
+		model = Match_Type
+		fields = ['match_type']
 
 class Delete_Roster_Player_Form(forms.Form):
 	player_id = forms.IntegerField()

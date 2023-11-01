@@ -141,11 +141,6 @@ def Add_Player(request, pk, mapType):
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
 	[tanks, dps, support] = getHeros()
 	heroes = tanks + dps + support
-	""" heroes = {
-		"Tank": tanks,
-		"DPS": dps,
-		"Support": support
-	} """
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
 	else:

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
+from django.forms import formset_factory
 
 def Add_Player_to_Roster(request, pk):
 	team = models.OW_Team.objects.get(id=pk)
@@ -25,13 +26,10 @@ def Create_OW_Team(request):
 
 def Add_Hero(request):
 	if request.method == "POST":
-		form = forms.Add_Hero_Form(request.POST)
+		form = forms.Add_Hero_Form(request.POST, request.FILES)
+		print(form)
 		if form.is_valid():
-			role = form.cleaned_data["role"]
-			heroName = form.cleaned_data["hero_name"]
-			filePath = f"Overwatch_2/options/{role}.txt"
-			with open(filePath, "a") as support_options:
-				support_options.write("\n" + heroName)
+			form.save()
 			return redirect('rosters')
 	else:
 		form = forms.Add_Hero_Form()
@@ -39,36 +37,31 @@ def Add_Hero(request):
 
 def Add_Map(request):
 	if request.method == "POST":
-		form = forms.Add_Map_Form(request.POST)
+		form = forms.Add_Map_Form(request.POST, request.FILES)
+		print(form)
 		if form.is_valid():
+			form.save()
 			mapType = form.cleaned_data["map_type"]
-			mapName = form.cleaned_data["map_name"]
-			filePath = f"Overwatch_2/options/{mapType}_Maps.txt"
-			with open(filePath, "a") as map_options:
-					map_options.write("\n" + mapName)
 			if(mapType == "Control"):
-				return redirect('add-sub-map', mapName)
+				return redirect('add-sub-map', pk=form.instance.id)
 			else:
 				return redirect('rosters')
 	else:
 		form = forms.Add_Map_Form()
 	return render(request, 'add_templates/Add_Map.html', {'form': form})
 
-def Add_Sub_Map(request, mapName):
+def Add_Sub_Map(request, pk):
+	mapName = models.Map.objects.get(id=pk)
+	subMapFormset = formset_factory(forms.Player_Form, extra=3)    
 	if request.method == "POST":
-		form = forms.Add_Control_Sub_Map_Form(request.POST)
-		if form.is_valid():
-			mapSubName1 = form.cleaned_data["sub_map_1"]
-			mapSubName2 = form.cleaned_data["sub_map_2"]
-			mapSubName3 = form.cleaned_data["sub_map_3"]
-			with open("OverWatch_2\options\Control_Sub_Maps.txt", "a") as map_sub_options:
-				map_sub_options.write("\n" + mapName + ": " + mapSubName1)
-				map_sub_options.write("\n" + mapName + ": " + mapSubName2)
-				map_sub_options.write("\n" + mapName + ": " + mapSubName3)
+		formset = subMapFormset(request.POST, request.FILES, prefix='subMap')
+		if formset.is_valid():
+			for form in formset:
+				form.save()
 			return redirect('rosters')
 	else:
-		form = forms.Add_Control_Sub_Map_Form()
-	return render(request, 'add_templates/Add_Sub_Map.html', {'form': form, 'mapName': mapName})
+		subMapFormset = formset_factory(forms.Player_Form, extra=3)
+	return render(request, 'add_templates/Add_Sub_Map.html', {'formset': formset, 'mapName': mapName})
 
 def Add_Match_Type(request):
 	if request.method == "POST":

@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import team_views, add_views, data_views, match_views, delete_views
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
 	path('createTeam/', add_views.Create_OW_Team, name='create-team'),
 	path('rosters/', team_views.OW_Rosters, name='rosters'),
@@ -14,7 +17,7 @@ urlpatterns = [
 	path('game/<str:mapType>/<int:pk>/addPlayer/', match_views.Add_Player, name='add-player'),
 	path('addHero/', add_views.Add_Hero, name='add-hero'),
 	path('addMap/', add_views.Add_Map, name='add-map'),
-	path('<str:mapName>/addSubMap/', add_views.Add_Sub_Map, name='add-sub-map'),
+	path('<int:pk>/addSubMap/', add_views.Add_Sub_Map, name='add-sub-map'),
 	path('deleteHero/', delete_views.Delete_Hero, name='delete-hero'),
 	path('deleteMap/', delete_views.Delete_Map, name='delete-map'),
 	path('addMatchType/', add_views.Add_Match_Type, name='add-match-type'),
@@ -26,3 +29,5 @@ urlpatterns = [
 	path('team/<str:mapType>/<int:pk>/deleteMap/', delete_views.delete_map, name='delete-map'),
 	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
 ]
+if settings.DEBUG:
+	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

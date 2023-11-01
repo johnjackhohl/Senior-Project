@@ -6,8 +6,11 @@
 </head>
 <body>
     <h1>Add New Overwatch Hero</h1>
-    <form method="POST">
+    <form method="POST" enctype = "multipart/form-data">
         {% csrf_token %}
+        <label for="id_hero_name">Hero Name:</label>
+        <input type="text" name="hero_name" id="id_hero_name" required>
+        <br>
         <label for="id_role">Role:</label>
         <select name="role" id="id_role">
             <option value="DPS">DPS</option>
@@ -15,8 +18,8 @@
             <option value="Support">Support</option>
         </select>
         <br>
-        <label for="id_hero_name">Hero Name:</label>
-        <input type="text" name="hero_name" id="id_hero_name" required>
+        {{ form.hero_image.label_tag }}
+        {{ form.hero_image }}
         <br>
         <button type="submit">Add Hero</button>
     </form>

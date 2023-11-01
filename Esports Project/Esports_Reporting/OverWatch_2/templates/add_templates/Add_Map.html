@@ -19,7 +19,10 @@
         <br>
         <label for="id_map_name">Map Name:</label>
         <input type="text" name="map_name" id="id_map_name" required>
-        <br><br>
+        <br>
+        {{ form.map_image.label_tag }}
+        {{ form.map_image }}
+        <br>
         <button type="submit">Add Map</button>
     </form>
     <a href="/Overwatch/rosters/">Back to Rosters</a>

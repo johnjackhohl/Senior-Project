@@ -129,3 +129,25 @@ class Player(models.Model):
 	assists = models.IntegerField(null=True, blank=True)
 	damage = models.IntegerField(null=True, blank=True)
 	healing = models.IntegerField(null=True, blank=True)
+ 
+class Map(models.Model):
+	id = models.BigAutoField(primary_key=True)
+	map_name = models.CharField(max_length=100)
+	map_type = models.CharField(max_length=100)
+	map_image = models.ImageField(upload_to='images/')
+
+class Sub_Map(models.Model):
+	id = models.BigAutoField(primary_key=True)
+	map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
+	sub_map_name = models.CharField(max_length=100)
+	sub_map_image = models.ImageField(upload_to='images/')
+
+class Hero(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    hero_name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    hero_image = models.ImageField(upload_to='images/')
+
+class Match_Type(models.Model):
+	id = models.BigAutoField(primary_key=True)
+	match_type = models.CharField(max_length=100)
