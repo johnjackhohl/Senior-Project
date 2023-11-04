@@ -38,7 +38,6 @@ def Add_Hero(request):
 def Add_Map(request):
 	if request.method == "POST":
 		form = forms.Add_Map_Form(request.POST, request.FILES)
-		print(form)
 		if form.is_valid():
 			form.save()
 			mapType = form.cleaned_data["map_type"]
@@ -46,6 +45,9 @@ def Add_Map(request):
 				return redirect('add-sub-map', pk=form.instance.id)
 			else:
 				return redirect('rosters')
+		if form.errors:
+			print(form.errors)
+			return redirect('rosters')
 	else:
 		form = forms.Add_Map_Form()
 	return render(request, 'add_templates/Add_Map.html', {'form': form})

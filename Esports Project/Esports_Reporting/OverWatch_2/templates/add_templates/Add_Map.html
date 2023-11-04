@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Add New Map</h1>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="id_map_type">Map Type:</label>
         <select name="map_type" id="id_map_type">
