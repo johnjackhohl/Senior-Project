@@ -25,45 +25,20 @@ def Delete_Map(request):
 	if request.method == "POST":
 		form = forms.Delete_Map_Form(request.POST)
 		if form.is_valid():
-			mapType = form.cleaned_data["map_type"]
-			mapName = form.cleaned_data["map_name"]
-			file_path = f"Overwatch_2/options/{mapType}_Maps.txt"
-			with open(file_path, "r") as map_options:
-				maps = [line.strip() for line in map_options]
-			maps.remove(mapName)
-			with open(file_path, "w") as map_options:
-				for cnt, map in enumerate(maps):
-					if cnt > 0:
-						map_options.write("\n")
-					map_options.write(map)
-			if(mapType == "Control"):
-				removeArray = []
-				with open("OverWatch_2\options\Control_Sub_Maps.txt", "r") as map_sub_options:
-					subMaps = [line.strip() for line in map_sub_options]
+			map = models.Map.objects.get(map_name=form.cleaned_data["map_name"])
+			if map.map_type == "Control":
+				subMaps = models.Sub_Map.objects.filter(map_id=map.id)
 				for subMap in subMaps:
-					if(mapName in subMap):
-						removeArray.append(subMap)
-				for subMap in removeArray:
-					subMaps.remove(subMap)
-				with open("OverWatch_2\options\Control_Sub_Maps.txt", "w") as map_sub_options:
-					for cnt, subMap in enumerate(subMaps):
-						if cnt > 0:
-							map_sub_options.write("\n")
-						map_sub_options.write(subMap)
-			
+					subMap.sub_map_image.delete()
+					subMap.delete()
+			map.map_image.delete()
+			map.delete()
 			return redirect('rosters')
 	else:
 		form = forms.Delete_Map_Form()
-		mapTypes = ["Escort", "Hybrid", "Push", "Flashpoint", "Control"]
-		escortMaps = getMaps("Escort")
-		hybridMaps = getMaps("Hybrid")
-		pushMaps = getMaps("Push")
-		flashpointMaps = getMaps("Flashpoint")
-		controlMaps, controlSubMaps = getMaps("Control")
-		maps = escortMaps + hybridMaps + pushMaps + flashpointMaps + controlMaps
+		maps = models.Map.objects.all()
 		context = {
 			'form': form,
-			'mapTypes': mapTypes,
 			'maps' : maps
 		}
 	return render(request, 'delete_templates/Delete_Map.html', context)
@@ -72,20 +47,11 @@ def Delete_Match_Type(request):
 	if request.method == "POST":
 		form = forms.Delete_Match_Type_Form(request.POST)
 		if form.is_valid():
-			matchType = form.cleaned_data["match_type"]
-			with open("OverWatch_2\options\Match_Type.txt", "r") as match_options:
-				matchTypes = [line.strip() for line in match_options]
-			matchTypes.remove(matchType)
-			with open("OverWatch_2\options\Match_Type.txt", "w") as match_options:
-				for cnt, match in enumerate(matchTypes):
-					if cnt > 0:
-						match_options.write("\n")
-					match_options.write(match)
+			matchType = models.Match_Type.objects.get(match_type=form.cleaned_data["match_type"]).delete()
 			return redirect('rosters')
 	else:
 		form = forms.Delete_Match_Type_Form()
-		with open("OverWatch_2\options\Match_Type.txt", "r") as match_options:
-			matchTypes = [line.strip() for line in match_options]
+		matchTypes = models.Match_Type.objects.all()
 		context = {
 			'form': form,
 			'matchTypes': matchTypes

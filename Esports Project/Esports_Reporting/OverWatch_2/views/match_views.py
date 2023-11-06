@@ -40,7 +40,9 @@ def Add_Game(request, pk):
 
 def Add_Control(request, pk):
 	game = models.Game.objects.get(id=pk)
-	[tanks, dps, support] = getHeros()
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
 	maps, subMaps = getMaps(game.map_type)
 	if request.method == "POST":
 		form = forms.Control_Map_Form(request.POST)
@@ -62,7 +64,9 @@ def Add_Control(request, pk):
 
 def Add_Escort_Hybrid(request, pk):
 	game = models.Game.objects.get(id=pk)
-	[tanks, dps, support] = getHeros()
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
 	maps = getMaps(game.map_type)
 	is_Escort = False
 	if(game.map_type == "Escort"):
@@ -87,7 +91,9 @@ def Add_Escort_Hybrid(request, pk):
 
 def Add_Push(request, pk):
 	game = models.Game.objects.get(id=pk)
-	[tanks, dps, support] = getHeros()
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
 	maps = getMaps(game.map_type)
 	if request.method == "POST":
 		form = forms.Push_Map_Form(request.POST)
@@ -108,7 +114,9 @@ def Add_Push(request, pk):
 
 def Add_Flashpoint(request, pk):
 	game = models.Game.objects.get(id=pk)
-	[tanks, dps, support] = getHeros()
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
 	maps = getMaps(game.map_type)
 	if request.method == "POST":
 		form = forms.Flashpoint_Map_Form(request.POST)
@@ -139,8 +147,9 @@ def Add_Player(request, pk, mapType):
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
-	[tanks, dps, support] = getHeros()
-	heroes = tanks + dps + support
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
 	else:
@@ -164,7 +173,9 @@ def Add_Player(request, pk, mapType):
 		'formset': formset,
 		'map': map,
 		'roster': roster,
-		'heroes': heroes,
+		'tanks': tanks,
+		'dps': dps,
+		'support': support,
 		'game': game
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)

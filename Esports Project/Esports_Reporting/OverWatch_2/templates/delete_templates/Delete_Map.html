@@ -7,17 +7,10 @@
 <h1>Delete Map</h1>
 <form method = "POST">
     {% csrf_token %}
-    <label for="id_map_type">Map Type</label>
-    <select name="map_type" id="id_map_type">
-        {% for mapType in mapTypes %}
-        <option value="{{mapType}}">{{mapType}}</option>
-        {% endfor %}
-    </select>
-    <br>
     <label for="id_map_name">Map Name</label>
     <select name="map_name" id="id_map_name">
         {% for map in maps %}
-        <option value="{{map}}">{{map}}</option>
+        <option value="{{map.map_name}}">{{map.map_name}}</option>
         {% endfor %}
     </select> 
     <br>
