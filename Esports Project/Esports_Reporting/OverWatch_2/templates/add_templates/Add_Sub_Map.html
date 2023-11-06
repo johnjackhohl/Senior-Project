@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Add Sub Maps to {{mapName}}</title>
+	<meta charset="UTF-8">
+	<title>Add Sub Maps to {{mapName}}</title>
 </head>
 <body>
-    <h1>Add Sub Maps to {{mapName}}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form }}
-        {% endfor %}
-    </form>
+	<h1>Add Sub Maps to {{mapName}}</h1>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ formset.management_form }}
+
+		{% for form in formset %}
+			{{ form.map_id }}
+			<br>
+			{{ form.sub_map_name.label_tag }} {{ form.sub_map_name }}
+			<br>
+			{{ form.sub_map_image.label_tag }} {{ form.sub_map_image }}
+			<br>
+		{% endfor %}
+		<br>
+		<button type="submit">Add Sub Maps to {{mapName}}</button>
+	</form>
 </body>
 </html>

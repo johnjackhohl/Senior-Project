@@ -53,25 +53,34 @@ def Add_Map(request):
 	return render(request, 'add_templates/Add_Map.html', {'form': form})
 
 def Add_Sub_Map(request, pk):
-	mapName = models.Map.objects.get(id=pk)
-	subMapFormset = formset_factory(forms.Player_Form, extra=3)    
+	map_instance = models.Map.objects.get(id=pk)
+	subMapFormset = formset_factory(forms.Add_Sub_Map, extra=0)
+	
 	if request.method == "POST":
 		formset = subMapFormset(request.POST, request.FILES, prefix='subMap')
 		if formset.is_valid():
 			for form in formset:
 				form.save()
 			return redirect('rosters')
+		if formset.errors:
+			print(formset.errors)
 	else:
-		subMapFormset = formset_factory(forms.Player_Form, extra=3)
-	return render(request, 'add_templates/Add_Sub_Map.html', {'formset': formset, 'mapName': mapName})
+		initial_data = [{'map_id': map_instance.id} for _ in range(3)]
+		formset = subMapFormset(prefix='subMap', initial=initial_data) 
+
+	
+	context = {
+		'formset': formset,
+		'mapName': map_instance.map_name,
+	}
+	return render(request, 'add_templates/Add_Sub_Map.html', context)
+
 
 def Add_Match_Type(request):
 	if request.method == "POST":
 		form = forms.Add_Match_Type_Form(request.POST)
 		if form.is_valid():
-			matchType = form.cleaned_data["match_type"]
-			with open("OverWatch_2\options\Match_Type.txt", "a") as match_options:
-				match_options.write("\n" + matchType)
+			form.save()
 			return redirect('rosters')
 	else:
 		form = forms.Add_Match_Type_Form()

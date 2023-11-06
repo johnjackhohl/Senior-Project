@@ -68,10 +68,17 @@ class Add_Map_Form(forms.ModelForm):
 		fields = ['map_name', 'map_type', 'map_image']
 
 class Add_Sub_Map(forms.ModelForm):
+    class Meta:
+        model = Sub_Map
+        fields = ['map_id', 'sub_map_name', 'sub_map_image']
+        widgets = {
+            'map_id': forms.HiddenInput(),
+        }
+
+class Add_Match_Type_Form(forms.ModelForm):
 	class Meta:
-		model = Sub_Map
-		fields = ['map_id', 'sub_map_name', 'sub_map_image']
-	
+		model = Match_Type
+		fields = ['match_type']
 
 class Delete_Map_Form(forms.Form):
 	map_type = forms.CharField(max_length=100)
@@ -83,11 +90,6 @@ class Delete_Hero_Form(forms.Form):
 
 class Delete_Match_Type_Form(forms.Form):
 	match_type = forms.CharField(max_length=100)
-
-class Add_Match_Type_Form(forms.ModelForm):
-	class Meta:
-		model = Match_Type
-		fields = ['match_type']
 
 class Delete_Roster_Player_Form(forms.Form):
 	player_id = forms.IntegerField()
