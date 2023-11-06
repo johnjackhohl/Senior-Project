@@ -85,7 +85,6 @@ class Delete_Map_Form(forms.Form):
 	map_name = forms.CharField(max_length=100)
 
 class Delete_Hero_Form(forms.Form):
-	role = forms.CharField(max_length=20)
 	hero_name = forms.CharField(max_length=100)
 
 class Delete_Match_Type_Form(forms.Form):

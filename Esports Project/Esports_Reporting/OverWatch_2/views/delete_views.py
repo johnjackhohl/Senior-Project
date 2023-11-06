@@ -7,22 +7,14 @@ def Delete_Hero(request):
 	if request.method == "POST":
 		form = forms.Delete_Hero_Form(request.POST)
 		if form.is_valid():
-			role = form.cleaned_data["role"]
-			heroName = form.cleaned_data["hero_name"]
-			file_path = f"Overwatch_2/options/{role}.txt"
-			with open(file_path, "r") as hero_options:
-				heros = [line.strip() for line in hero_options]
-			heros.remove(heroName)
-			with open(file_path, "w") as hero_options:
-				for cnt, hero in enumerate(heros):
-					if cnt > 0:
-						hero_options.write("\n")
-					hero_options.write(hero)
+			hero = models.Hero.objects.get(hero_name=form.cleaned_data["hero_name"])
+			hero.hero_image.delete()
+			hero.delete()
 			return redirect('rosters')
 	else:
 		form = forms.Delete_Hero_Form()
-		[tanks, dps, support] = getHeros()
-		heroes = tanks + dps + support
+		heroes = models.Hero.objects.all()
+		heroes = [hero.hero_name for hero in heroes]
 		context = {
 			'form': form,
 			'heroes': heroes

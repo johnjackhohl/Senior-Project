@@ -7,12 +7,6 @@
 <h1>Delete Hero</h1>
 <form method = "POST">
     {% csrf_token %}
-    <label for="id_role">Role</label>
-    <select name="role" id="id_role">
-        <option value="Tank">Tank</option>
-        <option value="DPS">DPS</option>
-        <option value="Support">Support</option>
-    </select>
     <label for="id_hero_name">Hero Name</label>
     <select name="hero_name" id="id_hero_name">
         {% for hero in heroes %}
