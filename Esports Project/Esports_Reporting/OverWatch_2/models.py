@@ -34,7 +34,6 @@ class Game(models.Model):
 	notes = models.TextField(null=True, blank=True)
 
 	def get_maps(self):
-		print("Getting maps for game:", self.id)
 		if self.map_type == "Control":
 			return self.control_map_set.all()
 		elif self.map_type in ["Escort", "Hybrid"]:
@@ -43,24 +42,6 @@ class Game(models.Model):
 			return self.push_map_set.all()
 		else:
 			return self.flashpoint_map_set.all()
-
-	def get_players(self):
-		players = []
-		print("Getting players for game:", self.id)
-		if self.map_type == "Control":
-			for map in self.control_map_set.all():
-				players.extend(map.control_players.all())
-		elif self.map_type in ["Escort", "Hybrid"]:
-			for map in self.escort_hybrid_map_set.all():
-				players.extend(map.escort_hybrid_players.all())
-		elif self.map_type == "Push":
-			for map in self.push_map_set.all():
-				players.extend(map.push_players.all())
-		else:  # Assuming this is for "Flashpoint"
-			for map in self.flashpoint_map_set.all():
-				players.extend(map.flashpoint_players.all())
-
-		return players
 
 class Control_Map(models.Model):
 	id = models.BigAutoField(primary_key=True)

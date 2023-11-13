@@ -11,9 +11,6 @@ def OW_Team_Roster(request, pk):
 	team, owMatches = Match_History(pk)
 	players = models.Roster.objects.filter(ow_team_id=team.id)
 	heroPictures = models.Hero.objects.all()
-	for match in owMatches:
-		for game in match.game_set.all():
-			print(game.id)
       
 	view = {
 		"OW_Team": team,
