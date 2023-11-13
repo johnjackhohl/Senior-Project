@@ -37,12 +37,23 @@
                                 {% else %}
                                     <h5>Map Name: {{ map_info.map.map_name }}</h5>
                                 {% endif %}
+                                    {% for map in mapPictures %}
+                                        {%if map.map_name == map_info.map.map_name%}
+                                            <img src="{{ map_info.map.map_image.url }}" alt="Map Image">
+                                            <p>{{ map_info.map.map_image.url }} </p>
+                                        {% endif %}
+                                    {% endfor %}
                                 <div class="players">
                                     <h6>Players</h6>
                                     {% for player in map_info.players %}
                                         <div class="player">
                                             <p>Player Name: {{ player.roster_id.first_name }} {{ player.roster_id.last_name }}</p>
                                             <p>Hero: {{ player.hero }}</p>
+                                            {% for hero in Hero_Pictures %}
+                                                {% if hero.hero_name == player.hero %}
+                                                    <img src="{{ hero.hero_image.url }}" alt="{{ hero.hero_name }}" id = "hero_image">
+                                                {% endif %}
+                                            {% endfor %}
                                             <!-- Player stats like kills, deaths, assists, etc. -->
                                             <form method="POST" action="{% url 'delete-player' player.id %}">
                                                 {% csrf_token %}

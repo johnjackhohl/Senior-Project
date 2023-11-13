@@ -30,4 +30,5 @@ urlpatterns = [
 	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
 ]
 if settings.DEBUG:
-	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
