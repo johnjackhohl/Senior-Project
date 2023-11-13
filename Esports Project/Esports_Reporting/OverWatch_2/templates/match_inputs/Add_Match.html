@@ -13,7 +13,7 @@
         <label for="id_match_type">Match Type:</label>
         <select name="match_type" id="id_match_type">
             {% for option in matchTypes %}
-                <option value="{{option}}">{{option}}</option>
+                <option value="{{option.match_type}}">{{option.match_type}}</option>
             {% endfor %}
         </select>
         <br>

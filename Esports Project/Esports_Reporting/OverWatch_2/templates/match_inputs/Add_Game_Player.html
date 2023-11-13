@@ -51,7 +51,7 @@
                     <label for="{{ form.hero.id_for_label }}">Hero:</label>
                     <select name="player-{{ forloop.counter0 }}-hero" id="{{ form.hero.id_for_label }}">
                         {% for option in heroes %}
-                            <option value="{{ option }}" {% if option == form.hero.value %}selected{% endif %}>{{ option }}</option>
+                            <option value="{{ option.hero_name }}" {% if option == form.hero.value %}selected{% endif %}>{{ option.hero_name }}</option>
                         {% endfor %}
                     </select>
                 </div>

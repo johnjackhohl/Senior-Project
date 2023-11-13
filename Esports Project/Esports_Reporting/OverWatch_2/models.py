@@ -33,6 +33,35 @@ class Game(models.Model):
 	mount_win = models.BooleanField()
 	notes = models.TextField(null=True, blank=True)
 
+	def get_maps(self):
+		print("Getting maps for game:", self.id)
+		if self.map_type == "Control":
+			return self.control_map_set.all()
+		elif self.map_type in ["Escort", "Hybrid"]:
+			return self.escort_hybrid_map_set.all()
+		elif self.map_type == "Push":
+			return self.push_map_set.all()
+		else:
+			return self.flashpoint_map_set.all()
+
+	def get_players(self):
+		players = []
+		print("Getting players for game:", self.id)
+		if self.map_type == "Control":
+			for map in self.control_map_set.all():
+				players.extend(map.control_players.all())
+		elif self.map_type in ["Escort", "Hybrid"]:
+			for map in self.escort_hybrid_map_set.all():
+				players.extend(map.escort_hybrid_players.all())
+		elif self.map_type == "Push":
+			for map in self.push_map_set.all():
+				players.extend(map.push_players.all())
+		else:  # Assuming this is for "Flashpoint"
+			for map in self.flashpoint_map_set.all():
+				players.extend(map.flashpoint_players.all())
+
+		return players
+
 class Control_Map(models.Model):
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -117,10 +146,10 @@ class Flashpoint_Map(models.Model):
 class Player(models.Model):
 	id = models.BigAutoField(primary_key=True)
 	roster_id = models.ForeignKey(Roster, on_delete=models.CASCADE)
-	control_id = models.ForeignKey(Control_Map, on_delete=models.CASCADE, null=True, blank=True)
-	push_id = models.ForeignKey(Push_Map, on_delete=models.CASCADE, null=True, blank=True)
-	flashpoint_id = models.ForeignKey(Flashpoint_Map, on_delete=models.CASCADE, null=True, blank=True)
-	escort_hybrid_id = models.ForeignKey(Escort_Hybrid_Map, on_delete=models.CASCADE, null=True, blank=True)
+	control_id = models.ForeignKey(Control_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="control_players")
+	push_id = models.ForeignKey(Push_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="push_players")
+	flashpoint_id = models.ForeignKey(Flashpoint_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="flashpoint_players")
+	escort_hybrid_id = models.ForeignKey(Escort_Hybrid_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="escort_hybrid_players")
 	role = models.CharField(max_length=100)
 	hero = models.CharField(max_length=100)
 	is_defense = models.BooleanField(default=False)
@@ -140,13 +169,12 @@ class Sub_Map(models.Model):
 	id = models.BigAutoField(primary_key=True)
 	map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
 	sub_map_name = models.CharField(max_length=100)
-	sub_map_image = models.ImageField(upload_to='images/')
 
 class Hero(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    hero_name = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    hero_image = models.ImageField(upload_to='images/')
+	id = models.BigAutoField(primary_key=True)
+	hero_name = models.CharField(max_length=100)
+	role = models.CharField(max_length=100)
+	hero_image = models.ImageField(upload_to='images/')
 
 class Match_Type(models.Model):
 	id = models.BigAutoField(primary_key=True)

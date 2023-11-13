@@ -7,8 +7,7 @@ import json
 
 def Add_Match(request, pk):
 	team = models.OW_Team.objects.get(id=pk)
-	with open("OverWatch_2\options\Match_Type.txt", "r") as matchOptions:
-		matchTypes = [line.strip() for line in matchOptions]
+	matchTypes = models.Match_Type.objects.all()
 	if request.method == "POST":
 		form = forms.Match_Form(request.POST)
 		if form.is_valid():
@@ -43,7 +42,8 @@ def Add_Control(request, pk):
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
-	maps, subMaps = getMaps(game.map_type)
+	maps = models.Map.objects.filter(map_type="Control")
+	subMaps = models.Sub_Map.objects.all()
 	if request.method == "POST":
 		form = forms.Control_Map_Form(request.POST)
 		if form.is_valid():
@@ -67,10 +67,13 @@ def Add_Escort_Hybrid(request, pk):
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
-	maps = getMaps(game.map_type)
 	is_Escort = False
 	if(game.map_type == "Escort"):
 		is_Escort = True
+		maps = models.Map.objects.filter(map_type="Escort")
+	elif(game.map_type == "Hybrid"):
+		maps = models.Map.objects.filter(map_type="Hybrid")
+	
 	if request.method == "POST":
 		form = forms.Escort_Hybrid_Map_Form(request.POST)
 		if form.is_valid():
@@ -94,7 +97,7 @@ def Add_Push(request, pk):
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
-	maps = getMaps(game.map_type)
+	maps = models.Map.objects.filter(map_type="Push")
 	if request.method == "POST":
 		form = forms.Push_Map_Form(request.POST)
 		if form.is_valid():
@@ -117,7 +120,7 @@ def Add_Flashpoint(request, pk):
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
-	maps = getMaps(game.map_type)
+	maps = models.Map.objects.filter(map_type="Flashpoint")
 	if request.method == "POST":
 		form = forms.Flashpoint_Map_Form(request.POST)
 		if form.is_valid():
@@ -150,6 +153,8 @@ def Add_Player(request, pk, mapType):
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
+	# take out when js is put in
+	heroes = tanks | dps | support
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
 	else:
@@ -158,10 +163,20 @@ def Add_Player(request, pk, mapType):
 		formset = PlayerFormSet(request.POST, prefix='player', initial=initial_data)
 		if formset.is_valid():
 			for form in formset:
-				form.save()
+				player = form.save(commit=False)
+				if mapType == "Control":
+					player.control_id = map
+				elif mapType in ["Escort", "Hybrid"]:
+					player.escort_hybrid_id = map
+				elif mapType == "Push":
+					player.push_id = map
+				elif mapType == "Flashpoint":
+					player.flashpoint_id = map
+				player.save()
+
 			if request.POST.get('action') == "add_control":
 				return redirect('add-control', pk=game.id)
-			if request.POST.get('action') == "add_flashpoint":
+			elif request.POST.get('action') == "add_flashpoint":
 				return redirect('add-flashpoint', pk=game.id)
 			else:
 				return redirect('add-game', pk=game.match_id.id)
@@ -169,6 +184,7 @@ def Add_Player(request, pk, mapType):
 			print(formset.errors)
 	else:
 		formset = PlayerFormSet(prefix='player', initial=initial_data)
+
 	context = {
 		'formset': formset,
 		'map': map,
@@ -176,6 +192,7 @@ def Add_Player(request, pk, mapType):
 		'tanks': tanks,
 		'dps': dps,
 		'support': support,
-		'game': game
+		'game': game,
+		'heroes': heroes,
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)

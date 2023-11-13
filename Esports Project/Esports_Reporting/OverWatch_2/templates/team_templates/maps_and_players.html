@@ -1,0 +1,39 @@
+<!-- maps_and_players.html -->
+{% comment %} {% for map in Maps %}
+    <div class="map">
+        <p>Map Name: {{ map.map_name }}</p>
+        <!-- Additional map details -->
+
+        <div class="players">
+            {% for player in map.players %}
+                <div class="player">
+                    <p>Player Name: {{ player.roster_id.first_name }} {{ player.roster_id.last_name }}</p>
+                    <p>Hero: {{ player.hero }}</p>
+                    <!-- Player stats like kills, deaths, assists, etc. -->
+                    <form method="POST" action="{% url 'delete-player' player.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Delete Player</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %} {% endcomment %}
+
+{% for map in game.get_maps %}
+    <div class="map">
+        {% if game.map_type == "Control"%}
+            <p>Map Name: {{ map.map_name }}</p>
+            <p>Sub Map name: {{ map.map_sub_name }}</p>
+        {% else %}
+        <p>Map Name: {{ map.map_name }}</p>
+        <p>Num of players: {{ map.players.count }}</p>
+        {% endif %}
+        <div class="players">
+            {% for player in map.players %}
+                <p> I got here </p>
+                <p>Debug: Player - {{ player.roster_id.first_name }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}

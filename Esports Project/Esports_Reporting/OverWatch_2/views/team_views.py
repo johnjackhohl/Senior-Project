@@ -8,39 +8,51 @@ def OW_Rosters(request):
 	return render(request, 'team_templates/OW_Rosters.html', {"OW_Teams": OW_Teams})
 
 def OW_Team_Roster(request, pk):
-	team, players, owMatches = Match_History(pk)
+	team, owMatches = Match_History(pk)
+	players = models.Roster.objects.filter(ow_team_id=team.id)
+	heroPictures = models.Hero.objects.all()
+	for match in owMatches:
+		for game in match.game_set.all():
+			print(game.id)
+      
 	view = {
 		"OW_Team": team,
 		"Roster": players,
+		"Hero_Pictures": heroPictures,
 		"Matches": owMatches
 	}
 	return render(request, 'team_templates/OW_Roster_Players.html', view)
 
 def Match_History(pk):
-	team = models.OW_Team.objects.get(id=pk)
-	players = models.Roster.objects.filter(ow_team_id=pk)
-	owMatches = models.Match.objects.filter(ow_team_id=pk)
-	for match in owMatches:
-		games_related_to_match = models.Game.objects.filter(match_id=match.id)
-		match.games = games_related_to_match
-		
-		for game in games_related_to_match:
+    team = models.OW_Team.objects.get(id=pk)
+    owMatches = models.Match.objects.filter(ow_team_id=pk).prefetch_related('game_set')
 
-			if game.map_type == "Control":
-				game.maps = models.Control_Map.objects.filter(game_id=game.id)
-				for map in game.maps:
-					map.players = models.Player.objects.filter(control_id=map.id)
-			elif game.map_type in ["Escort", "Hybrid"]:
-				game.maps = models.Escort_Hybrid_Map.objects.filter(game_id=game.id)
-				game.players = models.Player.objects.filter(escort_hybrid_id=game.id)
-			elif game.map_type == "Push":
-				game.maps = models.Push_Map.objects.filter(game_id=game.id)
-				game.players = models.Player.objects.filter(push_id=game.id)
-			else:
-				game.maps = models.Flashpoint_Map.objects.filter(game_id=game.id)
-				for map in game.maps:
-					map.players = models.Player.objects.filter(flashpoint_id=map.id)
-	return team, players, owMatches
+    for match in owMatches:
+        for game in match.game_set.all():
+            game_maps_with_players = []  # List to hold maps and their players
+            maps = game.get_maps()
+            for map in maps:
+                if game.map_type == "Control":
+                    players = map.control_players.all()
+                elif game.map_type in ["Escort", "Hybrid"]:
+                    players = map.escort_hybrid_players.all()
+                elif game.map_type == "Push":
+                    players = map.push_players.all()
+                elif game.map_type == "Flashpoint":
+                    players = map.flashpoint_players.all()
+                
+                game_maps_with_players.append({
+                    'map': map,
+                    'players': players
+                })
+
+            # Attach this list to the game object
+            game.maps_with_players = game_maps_with_players
+
+    return team, owMatches
+
+
+
 
 
 

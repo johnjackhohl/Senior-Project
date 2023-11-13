@@ -70,7 +70,7 @@ class Add_Map_Form(forms.ModelForm):
 class Add_Sub_Map(forms.ModelForm):
     class Meta:
         model = Sub_Map
-        fields = ['map_id', 'sub_map_name', 'sub_map_image']
+        fields = ['map_id', 'sub_map_name']
         widgets = {
             'map_id': forms.HiddenInput(),
         }
