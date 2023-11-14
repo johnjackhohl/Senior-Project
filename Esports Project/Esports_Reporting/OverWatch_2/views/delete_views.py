@@ -29,7 +29,6 @@ def Delete_Map(request):
 			if map.map_type == "Control":
 				subMaps = models.Sub_Map.objects.filter(map_id=map.id)
 				for subMap in subMaps:
-					subMap.sub_map_image.delete()
 					subMap.delete()
 			map.map_image.delete()
 			map.delete()

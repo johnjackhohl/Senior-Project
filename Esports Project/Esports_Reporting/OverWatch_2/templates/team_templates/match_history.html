@@ -37,12 +37,14 @@
                                 {% else %}
                                     <h5>Map Name: {{ map_info.map.map_name }}</h5>
                                 {% endif %}
-                                    {% for map in mapPictures %}
+                                    {% for map in Map_Pictures %}
                                         {%if map.map_name == map_info.map.map_name%}
-                                            <img src="{{ map_info.map.map_image.url }}" alt="Map Image">
+                                            <img src="{{ map.map_image.url }}" alt="Map Image">
                                             <p>{{ map_info.map.map_image.url }} </p>
                                         {% endif %}
                                     {% endfor %}
+                                
+                                
                                 <div class="players">
                                     <h6>Players</h6>
                                     {% for player in map_info.players %}
@@ -62,6 +64,7 @@
                                         </div>
                                     {% endfor %}
                                 </div>
+                                
                             </div>
                         {% endfor %}
                     </div>
