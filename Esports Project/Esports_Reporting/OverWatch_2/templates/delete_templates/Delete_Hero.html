@@ -5,16 +5,20 @@
     <title>Delete Hero</title>
 </head>
 <h1>Delete Hero</h1>
+{% if heroes%}
 <form method = "POST">
     {% csrf_token %}
-    <label for="id_hero_name">Hero Name</label>
-    <select name="hero_name" id="id_hero_name">
-        {% for hero in heroes %}
-        <option value="{{hero}}">{{hero}}</option>
+    <label for="id_map_name">Map Name</label>
+    <select name="map_name" id="id_map_name">
+        {% for map in maps %}
+        <option value="{{map.map_name}}">{{map.map_name}}</option>
         {% endfor %}
     </select> 
     <br>
-    <button type="submit">Delete Hero</button>
+    <button type="submit">Delete Map</button>
 </form>
+{% else %}
+    <p>There are no heroes to delete</p>
+{% endif %}
 <a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
 </html>

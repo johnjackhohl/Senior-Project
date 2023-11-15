@@ -5,16 +5,20 @@
     <title>Delete Map</title>
 </head>
 <h1>Delete Map</h1>
-<form method = "POST">
-    {% csrf_token %}
-    <label for="id_map_name">Map Name</label>
-    <select name="map_name" id="id_map_name">
-        {% for map in maps %}
-        <option value="{{map.map_name}}">{{map.map_name}}</option>
-        {% endfor %}
-    </select> 
-    <br>
-    <button type="submit">Delete Map</button>
-</form>
+{% if maps %}
+    <form method = "POST">
+        {% csrf_token %}
+        <label for="id_map_name">Map Name</label>
+        <select name="map_name" id="id_map_name">
+            {% for map in maps %}
+            <option value="{{map.map_name}}">{{map.map_name}}</option>
+            {% endfor %}
+        </select> 
+        <br>
+        <button type="submit">Delete Map</button>
+    </form>
+{% else %}
+    <p>There are no maps in the database.</p>
+{% endif %}
 <a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
 </html>

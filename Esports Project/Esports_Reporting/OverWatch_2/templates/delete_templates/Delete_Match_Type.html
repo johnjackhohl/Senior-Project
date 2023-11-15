@@ -6,17 +6,21 @@
 </head>
 <body>
     <h1>Delete Match Type</h1>
-    <form method='post'>
-        {% csrf_token %}
-        <label for='id_match_type'>Match Type</label>
-        <select name='match_type' id='id_match_type'>
-            {% for match_type in matchTypes %}
-                <option value='{{ match_type.match_type }}'>{{ match_type.match_type}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <button type='submit'>Delete</button>
-    </form>
+    {% if matchTypes %}
+        <form method='post'>
+            {% csrf_token %}
+            <label for='id_match_type'>Match Type</label>
+            <select name='match_type' id='id_match_type'>
+                {% for match_type in matchTypes %}
+                    <option value='{{ match_type.match_type }}'>{{ match_type.match_type}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type='submit'>Delete</button>
+        </form>
+    {% else %}
+        <p>No Match Types to delete</p>
+    {% endif %}
     <a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
 </body>
 </html>
