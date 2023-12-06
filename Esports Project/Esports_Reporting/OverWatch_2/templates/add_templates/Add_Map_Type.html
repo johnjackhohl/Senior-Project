@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Map Type</title>
+</head>
+<body>
+    <h1>Add New Map Type</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="map_type">Map Type</label>
+        <input type="text" name="map_type" id="map_type">
+        <button type="submit">Add</button>
+    </form>
+</body>

@@ -160,3 +160,7 @@ class Hero(models.Model):
 class Match_Type(models.Model):
 	id = models.BigAutoField(primary_key=True)
 	match_type = models.CharField(max_length=100)
+
+class Map_Type(models.Model):
+	id = models.BigAutoField(primary_key=True)
+	map_type = models.CharField(max_length=100)

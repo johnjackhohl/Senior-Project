@@ -28,6 +28,7 @@ urlpatterns = [
 	path('team/<int:pk>/deleteGame/', delete_views.delete_game, name='delete-game'),
 	path('team/<str:mapType>/<int:pk>/deleteMap/', delete_views.delete_map, name='delete-map'),
 	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
+	path('addMapType/', add_views.Add_Map_Type, name='add-map-type'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

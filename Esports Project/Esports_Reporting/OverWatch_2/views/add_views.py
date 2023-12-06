@@ -85,3 +85,13 @@ def Add_Match_Type(request):
 	else:
 		form = forms.Add_Match_Type_Form()
 	return render(request, 'add_templates/Add_Match_Type.html', {'form': form})
+
+def Add_Map_Type(request):
+	if request.method == "POST":
+		form = forms.Add_Map_Type_Form(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('rosters')
+	else:
+		form = forms.Add_Map_Type_Form()
+	return render(request, 'add_templates/Add_Map_Type.html', {'form': form})

@@ -91,3 +91,8 @@ class Delete_Match_Type_Form(forms.Form):
 
 class Delete_Roster_Player_Form(forms.Form):
 	player_id = forms.IntegerField()
+
+class Add_Map_Type_Form(forms.ModelForm):
+	class Meta:
+		model = Map_Type
+		fields = ['map_type']
