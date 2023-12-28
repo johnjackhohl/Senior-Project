@@ -23,6 +23,7 @@ class Match(models.Model):
 	mount_score = models.IntegerField()
 	opponent_score = models.IntegerField()
 	mount_win = models.BooleanField()
+	match_date = models.DateField()
 
 class Game(models.Model):
 	id = models.BigAutoField(primary_key=True)

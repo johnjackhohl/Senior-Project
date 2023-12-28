@@ -14,7 +14,7 @@ class Roster_Form(forms.ModelForm):
 class Match_Form(forms.ModelForm):
 	class Meta:
 		model = Match
-		fields = ['ow_team_id', 'match_type','opponent', 'mount_score', 'opponent_score', 'mount_win']
+		fields = ['ow_team_id', 'match_type','opponent', 'mount_score', 'opponent_score', 'mount_win', 'match_date']
 
 class Game_Form(forms.ModelForm):
 	class Meta:

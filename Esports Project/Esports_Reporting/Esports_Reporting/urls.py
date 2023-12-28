@@ -24,7 +24,7 @@ from authentication.views import CustomLoginView
 
 urlpatterns = [
     path('', CustomLoginView.as_view(), name='login'),
-    path('authentication/', include('authentication.urls')),
+    path('', include('authentication.urls')),
     path('admin/', admin.site.urls),
     path('Overwatch/', include('OverWatch_2.urls')),
 ]
