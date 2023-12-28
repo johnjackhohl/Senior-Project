@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from authentication.views import CustomLoginView
 
 
 
 urlpatterns = [
+    path('', CustomLoginView.as_view(), name='login'),
+    path('authentication/', include('authentication.urls')),
     path('admin/', admin.site.urls),
     path('Overwatch/', include('OverWatch_2.urls')),
 ]

@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path,include
 from .views import team_views, add_views, data_views, match_views, delete_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
 	path('createTeam/', add_views.Create_OW_Team, name='create-team'),
@@ -29,6 +30,7 @@ urlpatterns = [
 	path('team/<str:mapType>/<int:pk>/deleteMap/', delete_views.delete_map, name='delete-map'),
 	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
 	path('addMapType/', add_views.Add_Map_Type, name='add-map-type'),
+	 path('logout/', LogoutView.as_view(), name='logout'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
