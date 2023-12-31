@@ -1,0 +1,18 @@
+<button class="accordion">Players</button>
+<div class="panel">
+    {% for player in map_info.players %}
+        <div class="player">
+            <p>Player Name: {{ player.roster_id.first_name }} {{ player.roster_id.last_name }}</p>
+            <p>Hero: {{ player.hero }}</p>
+            {% for hero in Hero_Pictures %}
+                {% if hero.hero_name == player.hero %}
+                    <img src="{{ hero.hero_image.url }}" alt="{{ hero.hero_name }}" id="hero_image">
+                {% endif %}
+            {% endfor %}
+            <form method="POST" action="{% url 'delete-player' player.id %}">
+            {% csrf_token %}
+                <button type="submit">Delete Player</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>

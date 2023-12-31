@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
-from OverWatch_2.helpers.input_helpers import getHeros, getMaps
 
 def Delete_Hero(request):
 	if request.method == "POST":

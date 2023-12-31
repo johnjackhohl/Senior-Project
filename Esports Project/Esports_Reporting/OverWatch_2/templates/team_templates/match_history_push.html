@@ -1,0 +1,9 @@
+<div class="push_map">
+    {% for map in Map_Pictures %}
+        {% if map.map_name == map_info.map.map_name %}
+            <img src="{{ map.map_image.url }}" alt="Map Image">
+            <p>{{ map_info.map.map_name }}</p>
+        {% endif %}
+    {% endfor %}
+    {% include "team_templates/match_history_players.html" with map_info=map_info%}
+</div>

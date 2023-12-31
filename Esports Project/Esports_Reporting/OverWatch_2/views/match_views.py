@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
-from OverWatch_2.helpers.input_helpers import getHeros, getMaps
 from django.forms import formset_factory
-import json
 
 def Add_Match(request, pk):
 	team = models.OW_Team.objects.get(id=pk)
