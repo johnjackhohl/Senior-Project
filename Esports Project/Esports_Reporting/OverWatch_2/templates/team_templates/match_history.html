@@ -16,17 +16,27 @@
                 <div class="panel">
                     <div class="match">
                         <h3>Match Details</h3>
-                        <p>Match Type: {{ match.match_type|capfirst }}</p>
-                        <p>Opponent: {{ match.opponent|capfirst }}</p>
-                        <p>Mount Score: {{ match.mount_score }}</p>
-                        <p>Opponent Score: {{ match.opponent_score }}</p>
-                        <p>Date: {{ match.match_date|date:"F d, Y" }}</p>
+                            <p>
+                                {% if "scrim" in match.match_type|lower %}
+                                    {{match.match_type|capfirst}} 
+                                {%else%}
+                                    {{match.match_type}} game
+                                {% endif %}
+                                vs {{match.opponent|capfirst}} on {{match.match_date|date:"F d, Y"}}
+                            </p>
+                            <p> {{match.mount_score}} - {{match.opponent_score}} in favor of 
+                                {% if match.mount_score > match.opponent_score %}
+                                    Mount
+                                {% else %}
+                                    {{match.opponent|capfirst}}
+                                {% endif %}
+                            </p>
                         <form method="POST" action="{% url 'delete-match' match.id %}">
                             {% csrf_token %}
                             <button type="submit">Delete Match</button>
                         </form>
                         <br>
-                        
+
                         {% for game in match.game_set.all %}
                             <button class="accordion">Game: {{ game.map_type }}</button>
                             <div class="panel">
@@ -40,26 +50,25 @@
                                         <button type="submit">Delete Game</button>
                                     </form>
                                     <br>
-                                    
+
                                     <!-- Control map -->
                                     {% if game.map_type == "Control" %}
                                         {% for map_info in game.maps_with_players %}
                                             {% include "team_templates/match_history_control.html" with map_info=map_info%}
                                         {% endfor %}
-                                    
-                                    
+
                                     <!-- Flashpoint maps-->
                                     {% elif game.map_type == "Flashpoint" %}
                                         {% for map_info in game.maps_with_players %}
                                             {% include "team_templates/match_history_flashpoint.html" with map_info=map_info%}
                                         {% endfor %}
-                                    
+
                                     <!--push map-->
                                     {% elif game.map_type == "Push" %}
                                         {% for map_info in game.maps_with_players %}
                                             {% include "team_templates/match_history_push.html" with map_info=map_info%}
                                         {% endfor %}
-                                    
+
                                     <!--Escort Hybrid map-->
                                     {% else %}
                                         {% for map_info in game.maps_with_players %}

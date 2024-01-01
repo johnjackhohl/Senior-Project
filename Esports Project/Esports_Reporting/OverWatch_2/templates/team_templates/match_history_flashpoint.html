@@ -7,6 +7,37 @@
                 <p>{{ map_info.map.map_name }}</p>
             {% endif %}
         {% endfor %}
+        
+        {% if map_info.map.point_number == 1 %}
+            <h3>1st Point<h3>
+        {% elif map_info.map.point_number == 2 %}
+            <h3>2nd Point<h3>
+        {% elif map_info.map.point_number == 3 %}
+            <h3>3rd Point<h3>
+        {% else %}
+            <h3>{{map_info.map.point_number}}th Point<h3>
+        {% endif %}
+
+        <p>Mount Percent: {{map_info.map.mount_percent}}</p>
+        <p>Opponent Percent: {{map_info.map.opponent_percent}}</p>
+        <div class="heroes">
+            <div class="mount_heroes">
+                <h4>Mount Heroes</h4>
+                    <p>Tank: {{ map_info.map.mount_tank }}</p>
+                    <p>DPS: {{ map_info.map.mount_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.mount_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.mount_support_1 }}</p>
+                    <p>Support: {{ map_info.map.mount_support_2 }}</p>
+            </div>
+            <div class="opponent_heroes">
+                <h4>Opponent Heroes</h4>
+                    <p>Tank: {{ map_info.map.opponent_tank }}</p>
+                    <p>DPS: {{ map_info.map.opponent_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.opponent_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.opponent_support_1 }}</p>
+                    <p>Support: {{ map_info.map.opponent_support_2 }}</p>
+            </div> 
+        </div>
         {% include "team_templates/match_history_players.html" with map_info=map_info%}
     </div>
 </div>

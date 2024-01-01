@@ -10,5 +10,82 @@
     {% else %}
         <p>Hybrid</p>
     {% endif %}
+    <div class="heroes">
+        {% if map_info.map.attack_first%}
+            <div class="mount_attack_first"> 
+                <div class="mount_attack_heroes">
+                    <h4>Mount Attack Heroes</h4>
+                        <p>Tank: {{ map_info.map.mount_attack_tank }}</p>
+                        <p>DPS: {{ map_info.map.mount_attack_dps_1 }}</p>
+                        <p>DPS: {{ map_info.map.mount_attack_dps_2 }}</p>
+                        <p>Support: {{ map_info.map.mount_attack_support_1 }}</p>
+                        <p>Support: {{ map_info.map.mount_attack_support_2 }}</p>
+                </div>
+                <div class="opponent_defense_heroes">
+                    <h4>Opponent Defense Heroes</h4>
+                        <p>Tank: {{ map_info.map.opponent_defense_tank }}</p>
+                        <p>DPS: {{ map_info.map.opponent_defense_dps_1 }}</p>
+                        <p>DPS: {{ map_info.map.opponent_defense_dps_2 }}</p>
+                        <p>Support: {{ map_info.map.opponent_defense_support_1 }}</p>
+                        <p>Support: {{ map_info.map.opponent_defense_support_2 }}</p>
+                </div>
+            </div>
+            <div class="mount_defence_second">
+                <div class="opponent_attack_heroes">
+                    <h4>Opponent Attack Heroes</h4>
+                        <p>Tank: {{ map_info.map.opponent_attack_tank }}</p>
+                        <p>DPS: {{ map_info.map.opponent_attack_dps_1 }}</p>
+                        <p>DPS: {{ map_info.map.opponent_attack_dps_2 }}</p>
+                        <p>Support: {{ map_info.map.opponent_attack_support_1 }}</p>
+                        <p>Support: {{ map_info.map.opponent_attack_support_2 }}</p>
+                </div>
+                <div class="mount_defense_heroes">
+                    <h4>Mount Defense Heroes</h4>
+                        <p>Tank: {{ map_info.map.mount_defense_tank }}</p>
+                        <p>DPS: {{ map_info.map.mount_defense_dps_1 }}</p>
+                        <p>DPS: {{ map_info.map.mount_defense_dps_2 }}</p>
+                        <p>Support: {{ map_info.map.mount_defense_support_1 }}</p>
+                        <p>Support: {{ map_info.map.mount_defense_support_2 }}</p>
+                </div>
+            </div>
+        {% else %}
+        <div class = "opponent_attack_first">
+            <div class="opponent_attack_heroes">
+                <h4>Opponent Attack Heroes</h4>
+                    <p>Tank: {{ map_info.map.opponent_attack_tank }}</p>
+                    <p>DPS: {{ map_info.map.opponent_attack_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.opponent_attack_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.opponent_attack_support_1 }}</p>
+                    <p>Support: {{ map_info.map.opponent_attack_support_2 }}</p>
+            </div>
+            <div class="mount_defense_heroes">
+                <h4>Mount Defense Heroes</h4>
+                    <p>Tank: {{ map_info.map.mount_defense_tank }}</p>
+                    <p>DPS: {{ map_info.map.mount_defense_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.mount_defense_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.mount_defense_support_1 }}</p>
+                    <p>Support: {{ map_info.map.mount_defense_support_2 }}</p>
+            </div>
+        </div>
+        <div class = "opponent_defense_second">
+            <div class="mount_attack_heroes">
+                <h4>Mount Attack Heroes</h4>
+                    <p>Tank: {{ map_info.map.mount_attack_tank }}</p>
+                    <p>DPS: {{ map_info.map.mount_attack_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.mount_attack_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.mount_attack_support_1 }}</p>
+                    <p>Support: {{ map_info.map.mount_attack_support_2 }}</p>
+            </div>
+            <div class="opponent_defense_heroes">
+                <h4>Opponent Defense Heroes</h4>
+                    <p>Tank: {{ map_info.map.opponent_defense_tank }}</p>
+                    <p>DPS: {{ map_info.map.opponent_defense_dps_1 }}</p>
+                    <p>DPS: {{ map_info.map.opponent_defense_dps_2 }}</p>
+                    <p>Support: {{ map_info.map.opponent_defense_support_1 }}</p>
+                    <p>Support: {{ map_info.map.opponent_defense_support_2 }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
     {% include "team_templates/match_history_players.html" with map_info=map_info%}
 </div>
