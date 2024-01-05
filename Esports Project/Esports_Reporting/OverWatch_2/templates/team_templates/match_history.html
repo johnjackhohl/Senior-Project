@@ -31,10 +31,16 @@
                                     {{match.opponent|capfirst}}
                                 {% endif %}
                             </p>
-                        <form method="POST" action="{% url 'delete-match' match.id %}">
-                            {% csrf_token %}
-                            <button type="submit">Delete Match</button>
-                        </form>
+                        <div class="match-buttons">
+                            <form method="POST" action="{% url 'add-game' match.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="add-button">Add Game</button>
+                            </form>
+                            <form method="POST" action="{% url 'delete-match' match.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button">Delete Match</button>
+                            </form>
+                        </div>
                         <br>
 
                         {% for game in match.game_set.all %}
@@ -45,20 +51,25 @@
                                     <p>Map Type: {{ game.map_type }}</p>
                                     <p>Mount Score: {{ game.mount_score }}</p>
                                     <p>Opponent Score: {{ game.opponent_score }}</p>
-                                    <form method="POST" action="{% url 'delete-game' game.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit">Delete Game</button>
-                                    </form>
+                                    
                                     <br>
 
                                     <!-- Control map -->
                                     {% if game.map_type == "Control" %}
+                                    <form method="POST" action="{% url 'delete-game' game.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Delete Game</button>
+                                    </form>
                                         {% for map_info in game.maps_with_players %}
                                             {% include "team_templates/match_history_control.html" with map_info=map_info%}
                                         {% endfor %}
 
                                     <!-- Flashpoint maps-->
                                     {% elif game.map_type == "Flashpoint" %}
+                                    <form method="POST" action="{% url 'delete-game' game.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Delete Game</button>
+                                    </form>
                                         {% for map_info in game.maps_with_players %}
                                             {% include "team_templates/match_history_flashpoint.html" with map_info=map_info%}
                                         {% endfor %}

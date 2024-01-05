@@ -1,10 +1,7 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/match_history_maps.css' %}">
+
 <div class="escort_hybrid_map">
-    {% for map in Map_Pictures %}
-        {% if map.map_name == map_info.map.map_name %}
-            <img src="{{ map.map_image.url }}" alt="Map Image">
-            <p>{{ map_info.map.map_name }}</p>
-        {% endif %}
-    {% endfor %}
     {% if map_info.map.is_Escort == True%}
         <p>Escort</p>
     {% else %}
@@ -12,8 +9,8 @@
     {% endif %}
     <div class="heroes">
         {% if map_info.map.attack_first%}
-            <div class="mount_attack_first"> 
-                <div class="mount_attack_heroes">
+            <div class="heroes"> 
+                <div class="mount_heroes">
                     <h4>Mount Attack Heroes</h4>
                         <p>Tank: {{ map_info.map.mount_attack_tank }}</p>
                         <p>DPS: {{ map_info.map.mount_attack_dps_1 }}</p>
@@ -21,7 +18,7 @@
                         <p>Support: {{ map_info.map.mount_attack_support_1 }}</p>
                         <p>Support: {{ map_info.map.mount_attack_support_2 }}</p>
                 </div>
-                <div class="opponent_defense_heroes">
+                <div class="opponent_heroes">
                     <h4>Opponent Defense Heroes</h4>
                         <p>Tank: {{ map_info.map.opponent_defense_tank }}</p>
                         <p>DPS: {{ map_info.map.opponent_defense_dps_1 }}</p>
@@ -30,8 +27,8 @@
                         <p>Support: {{ map_info.map.opponent_defense_support_2 }}</p>
                 </div>
             </div>
-            <div class="mount_defence_second">
-                <div class="opponent_attack_heroes">
+            <div class="heroes">
+                <div class="opponent_heroes">
                     <h4>Opponent Attack Heroes</h4>
                         <p>Tank: {{ map_info.map.opponent_attack_tank }}</p>
                         <p>DPS: {{ map_info.map.opponent_attack_dps_1 }}</p>
@@ -39,7 +36,7 @@
                         <p>Support: {{ map_info.map.opponent_attack_support_1 }}</p>
                         <p>Support: {{ map_info.map.opponent_attack_support_2 }}</p>
                 </div>
-                <div class="mount_defense_heroes">
+                <div class="mount_heroes">
                     <h4>Mount Defense Heroes</h4>
                         <p>Tank: {{ map_info.map.mount_defense_tank }}</p>
                         <p>DPS: {{ map_info.map.mount_defense_dps_1 }}</p>
@@ -49,8 +46,8 @@
                 </div>
             </div>
         {% else %}
-        <div class = "opponent_attack_first">
-            <div class="opponent_attack_heroes">
+        <div class = "heroes">
+            <div class="opponent_heroes">
                 <h4>Opponent Attack Heroes</h4>
                     <p>Tank: {{ map_info.map.opponent_attack_tank }}</p>
                     <p>DPS: {{ map_info.map.opponent_attack_dps_1 }}</p>
@@ -58,7 +55,7 @@
                     <p>Support: {{ map_info.map.opponent_attack_support_1 }}</p>
                     <p>Support: {{ map_info.map.opponent_attack_support_2 }}</p>
             </div>
-            <div class="mount_defense_heroes">
+            <div class="mount_heroes">
                 <h4>Mount Defense Heroes</h4>
                     <p>Tank: {{ map_info.map.mount_defense_tank }}</p>
                     <p>DPS: {{ map_info.map.mount_defense_dps_1 }}</p>
@@ -67,8 +64,8 @@
                     <p>Support: {{ map_info.map.mount_defense_support_2 }}</p>
             </div>
         </div>
-        <div class = "opponent_defense_second">
-            <div class="mount_attack_heroes">
+        <div class = "heroes">
+            <div class="mount_heroes">
                 <h4>Mount Attack Heroes</h4>
                     <p>Tank: {{ map_info.map.mount_attack_tank }}</p>
                     <p>DPS: {{ map_info.map.mount_attack_dps_1 }}</p>
@@ -76,7 +73,7 @@
                     <p>Support: {{ map_info.map.mount_attack_support_1 }}</p>
                     <p>Support: {{ map_info.map.mount_attack_support_2 }}</p>
             </div>
-            <div class="opponent_defense_heroes">
+            <div class="opponent_heroes">
                 <h4>Opponent Defense Heroes</h4>
                     <p>Tank: {{ map_info.map.opponent_defense_tank }}</p>
                     <p>DPS: {{ map_info.map.opponent_defense_dps_1 }}</p>
@@ -86,6 +83,16 @@
             </div>
         </div>
         {% endif %}
+    </div>
+    <div class='delete-buttons'>
+        <form method="POST" action="{% url 'delete-game' game.id %}">
+            {% csrf_token %}
+            <button type="submit">Delete Game</button>
+        </form>
+        <form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
+            {% csrf_token %}
+            <button type="submit">Delete Map</button>
+        </form>
     </div>
     {% include "team_templates/match_history_players.html" with map_info=map_info%}
 </div>

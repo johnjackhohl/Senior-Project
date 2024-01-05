@@ -15,3 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// when add-game button is clicked, go to add-game page
+function addGame() {
+    window.location.href = "add-game.html";
+}

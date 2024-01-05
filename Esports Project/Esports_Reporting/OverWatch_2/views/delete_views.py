@@ -20,7 +20,7 @@ def Delete_Hero(request):
 		}
 		return render(request, 'delete_templates/Delete_Hero.html', context)
 
-def Delete_Map(request):
+def Delete_Map_Name(request):
 	if request.method == "POST":
 		form = forms.Delete_Map_Form(request.POST)
 		if form.is_valid():

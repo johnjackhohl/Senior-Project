@@ -47,7 +47,7 @@
 }
 
 /* Styles for the delete button inside the panel */
-.panel form button {
+.panel form .delete-button {
     background-color: #d9534f; 
     color: white; 
     padding: 4px 10px;
@@ -60,7 +60,7 @@
 
 }
 
-.panel form button:hover {
+.panel form .delete-button:hover {
     background-color: #c9302c; 
 }
 
@@ -73,4 +73,25 @@
   color:#666;
   margin-bottom: 8px;
   margin-left: 10px;
+}
+
+/* Styles for the Add Game button inside the panel */
+.panel .match .add-button {
+  background-color: #5cb85c; /* Green background color */
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 10px;
+}
+
+.panel .match .add-button:hover {
+  background-color: #4cae4c; /* Darker shade of green on hover */
+}
+
+.panel .match .match-buttons{
+  display: flex;
 }

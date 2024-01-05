@@ -24,7 +24,7 @@ def OW_Team_Roster(request, pk):
 
 def Match_History(pk):
 	team = models.OW_Team.objects.get(id=pk)
-	owMatches = models.Match.objects.filter(ow_team_id=pk).prefetch_related('game_set')
+	owMatches = models.Match.objects.filter(ow_team_id=pk).prefetch_related('game_set').order_by('-id')
 
 	for match in owMatches:
 		for game in match.game_set.all():
