@@ -1,11 +1,12 @@
 .heroes {
     display: flex;
-    justify-content: space-around; /* Adjusts the space between the two divs */
+    align-items: top; /* Aligns items to the top */
 }
 
 .mount_heroes, .opponent_heroes {
-    flex: 1; /* Each div takes up equal space */
-    padding: 10px; /* Add some padding around the content */
+    flex: 1; /* Allows the divs to grow and fill the container */
+    max-width: 10%; /* Sets a maximum width for each column */
+    padding: 20px; /* Add some padding around the content */
 }
 
 /* Optional: Add some additional styling to make it look nicer */
@@ -16,3 +17,8 @@
 .mount_heroes p, .opponent_heroes p {
     margin-bottom: 5px; /* Space below each paragraph */
 }
+
+.add-delete-buttons{
+    padding-bottom: 10px;
+}
+

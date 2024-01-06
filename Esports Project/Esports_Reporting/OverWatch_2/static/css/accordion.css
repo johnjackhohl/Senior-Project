@@ -92,6 +92,6 @@
   background-color: #4cae4c; /* Darker shade of green on hover */
 }
 
-.panel .match .match-buttons{
+.panel .match .add-delete-buttons{
   display: flex;
 }

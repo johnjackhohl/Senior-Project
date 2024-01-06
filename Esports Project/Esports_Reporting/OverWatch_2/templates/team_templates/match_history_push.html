@@ -22,14 +22,18 @@
                 <p>Support: {{ map_info.map.opponent_support_2 }}</p>
         </div>
     </div>
-    <div class='delete-buttons'>
+    <div class='add-delete-buttons'>
+        <form method='POST' action="{% url 'add-push' game.id %}">
+            {% csrf_token %}
+            <button class = 'add-button' type="submit">Add Push Map</button>
+        </form>
         <form method="POST" action="{% url 'delete-game' game.id %}">
             {% csrf_token %}
-            <button type="submit">Delete Game</button>
+            <button class = 'delete-button' type="submit">Delete Game</button>
         </form>
         <form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
             {% csrf_token %}
-            <button type="submit">Delete Map</button>
+            <button class = 'delete-button' type="submit">Delete Push Map</button>
         </form>
     </div>
     {% include "team_templates/match_history_players.html" with map_info=map_info%}
