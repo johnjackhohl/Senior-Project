@@ -194,3 +194,50 @@ def Add_Player(request, pk, mapType):
 		'heroes': heroes,
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)
+
+def add_single_player(request, mapType, pk):
+	if mapType == "Control":
+		map = models.Control_Map.objects.get(id=pk)
+	elif mapType in ["Escort", "Hybrid"]:
+		map = models.Escort_Hybrid_Map.objects.get(id=pk)
+	elif mapType == "Push":
+		map = models.Push_Map.objects.get(id=pk)
+	elif mapType == "Flashpoint":
+		map = models.Flashpoint_Map.objects.get(id=pk)
+	game = models.Game.objects.get(id=map.game_id.id)
+	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
+	# take out when js is put in
+	heroes = tanks | dps | support
+	if request.method == "POST":
+		form = forms.Player_Form(request.POST)
+		if form.is_valid():
+			player = form.save(commit=False)
+			if mapType == "Control":
+				player.control_id = map
+			elif mapType in ["Escort", "Hybrid"]:
+				player.escort_hybrid_id = map
+			elif mapType == "Push":
+				player.push_id = map
+			elif mapType == "Flashpoint":
+				player.flashpoint_id = map
+			player.save()
+			return redirect('team-roster', pk=map.game_id.match_id.ow_team_id.id)
+		else:
+			print(form.errors)
+	else:
+		form = forms.Player_Form()
+	context = {
+		'form': form,
+		'map': map,
+		'roster': roster,
+		'tanks': tanks,
+		'dps': dps,
+		'support': support,
+		'game': game,
+		'heroes': heroes,
+	}
+	return render(request, 'match_inputs/Add_Single_Player.html', context)
+  

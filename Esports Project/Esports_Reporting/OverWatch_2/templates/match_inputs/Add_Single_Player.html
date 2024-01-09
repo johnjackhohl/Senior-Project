@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Game Player</title>
+</head>
+
+<body>
+    <h1>Add Player</h1>
+    <form method="post">
+        {% csrf_token %}
+		<label for="id_roster_id">Player Name:</label>
+		<select name="roster_id" id="id_roster_id">
+			{% for option in roster %}
+				<option value="{{option.id}}">{{option.first_name}} {{option.last_name}}</option>
+			{% endfor %}
+		</select>
+		<br>
+		<label for="id_role">Role:</label>
+		<select name="role" id="id_role">
+			<option value="Tank">Tank</option>
+			<option value="DPS">DPS</option>
+			<option value="Support">Support</option>
+		</select>
+		<br>
+		<label for="id_hero">Hero:</label>
+		<select name="hero" id="id_hero">
+			{% for option in heroes %}
+				<option value="{{option.hero_name}}">{{option.hero_name}}</option>
+			{% endfor %}
+		</select>
+		<br>
+        {% if game.map_type == 'Escort' or game.map_type == 'Hybrid' %}
+            <label for='id_is_defense'>Defense:</label>
+            <input type='checkbox' name='is_defense' id='id_is_defense'>
+            <br>
+        {% else %}
+            <input type="hidden" name="is_defense" value="False">
+        {% endif %}
+		<label for="id_kills">Kills:</label>
+		<input type="number" name="kills" id="id_kills">
+		<br>
+		<label for="id_deaths">Deaths:</label>
+		<input type="number" name="deaths" id="id_deaths">
+		<br>
+		<label for="id_assists">Assists:</label>
+		<input type="number" name="assists" id="id_assists">
+		<br>
+		<label for="id_damage">Damage:</label>
+		<input type="number" name="damage" id="id_damage">
+		<br>
+		<label for="id_healing">Healing:</label>
+		<input type="number" name="healing" id="id_healing">
+		<br><br>
+        <button type="submit">Add Player</button>
+    </form>
+</body>
+</html>

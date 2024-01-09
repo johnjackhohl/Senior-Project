@@ -35,6 +35,10 @@
             </div> 
         </div>
         <div class='add-delete-buttons'>
+            <form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
+                {% csrf_token %}
+                <button class = 'add-button' type="submit">Add Player to Control Map</button>
+            </form>
             <form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
                 {% csrf_token %}
                 <button class= "delete-button" type="submit">Delete Map</button>
