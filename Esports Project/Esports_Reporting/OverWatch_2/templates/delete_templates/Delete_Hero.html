@@ -10,12 +10,12 @@
     {% csrf_token %}
     <label for="id_map_name">Map Name</label>
     <select name="map_name" id="id_map_name">
-        {% for map in maps %}
-        <option value="{{map.map_name}}">{{map.map_name}}</option>
+        {% for option in heroes %}
+        <option value="{{option}}">{{option}}</option>
         {% endfor %}
     </select> 
     <br>
-    <button type="submit">Delete Map</button>
+    <button type="submit">Delete Hero</button>
 </form>
 {% else %}
     <p>There are no heroes to delete</p>

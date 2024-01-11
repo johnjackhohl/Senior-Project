@@ -1,0 +1,41 @@
+form .delete-button {
+    background-color: #d9534f; 
+    color: white; 
+    padding: 4px 10px;
+    font-size: 12px; 
+    border: none; 
+    border-radius: 0px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    margin-left: 10px;
+
+}
+
+form .delete-button:hover {
+    background-color: #c9302c; 
+}
+
+.add-button {
+    background-color: #5cb85c; /* Green background color */
+    color: white;
+    padding: 4px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 0px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+  }
+  
+.add-button:hover {
+    background-color: #4cae4c; /* Darker shade of green on hover */
+  }
+  
+.add-delete-buttons{
+    display: flex;
+    padding-bottom: 10px;
+  }
+
+.teams {
+    display: flex;
+}

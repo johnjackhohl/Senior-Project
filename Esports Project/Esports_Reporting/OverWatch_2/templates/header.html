@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Mount Esports</title>
+        {% load static%}
+        <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

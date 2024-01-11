@@ -1,3 +1,7 @@
+{% extends "header.html" %}
+{% block content %}
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/rosters.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,27 +10,62 @@
 </head>
 	<body>
 		<h1>Overwatch 2 Rosters</h1>
-		{%load static%}
-		<div><a href="/Overwatch/createTeam/">Create a new team</a></div>
-		<div><a href="/Overwatch/addHero/">Add new hero</a></div>
-		<div><a href="/Overwatch/addMap/">Add new map</div>
-		<div><a href="/Overwatch/deleteMap/">Delete map</a></div>
-		<div><a href="/Overwatch/deleteHero/">Delete hero</a></div>
-		<div><a href="/Overwatch/deleteMatchType/">Delete Match Type</a></div>
-		<div><a href="/Overwatch/addMatchType/">Add Match Type</a></div>
-		<div><a href="/Overwatch/addMapType/">Add Map Type</a></div>
+		<div class="add-delete-buttons">
+			<form method="GET" action="{% url 'create-team' %}">
+				{% csrf_token %}
+				<button type="submit" class='add-button'>Create Team</button>
+			</form>
+		</div>
+		<div class="add-delete-buttons">
+			<form method="GET" action="{% url 'add-hero' %}">
+				{% csrf_token %}
+				<button type="submit" class='add-button'>Add Hero</button>
+			</form>
+			<form method="GET" action="{% url 'delete-hero' %}">
+				{% csrf_token %}
+				<button type="submit" class='delete-button'>Delete Hero</button>
+			</form>
+		</div>
+		<div class="add-delete-buttons">
+			<form method="GET" action="{% url 'add-map' %}">
+				{% csrf_token %}
+				<button type="submit" class='add-button'>Add Map</button>
+			</form>
+			<form method="GET" action="{% url 'delete-map-name' %}">
+				{% csrf_token %}
+				<button type="submit" class='delete-button'>Delete Map</button>
+			</form>
+		</div>
+		<div class="add-delete-buttons">
+			<form method="GET" action="{% url 'add-match-type' %}">
+				{% csrf_token %}
+				<button type="submit" class='add-button'>Add Match Type</button>
+			</form>
+			<form method="GET" action="{% url 'delete-match-type' %}">
+				{% csrf_token %}
+				<button type="submit" class='delete-button'>Delete Match Type</button>
+			</form>
+		</div>
 		<ul>
 			{% for team in OW_Teams %}
 			<li>
-				<div>
-					<a href="/Overwatch/team/{{team.id}}">{{team.name}}</a>
+				<div class='teams'>
+					<form method='GET' action="{% url 'team-roster' team.id %}">
+						{% csrf_token %}
+						<button type="submit">{{team.name}}</button>
+					</form>
 					<form method="POST" action="{% url 'delete-team' team.id %}">
 						{% csrf_token %}
-						<button type="submit">Delete Team</button>
-			</div>
+						<button type="submit" class='delete-button'>Delete Team</button>
+					</form>
+				</div>
 			</li>
 			{%endfor%}
 		</ul>
 	</body>
-	<a href="{% url 'logout' %}">Logout</a>
+	<form method='GET' action="{% url 'logout' %}">
+		{% csrf_token %}
+		<button class='logout' type="submit">Logout</button>
+	</form>
 </html>
+{% endblock %}

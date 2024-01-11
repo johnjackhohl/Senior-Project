@@ -1,13 +1,23 @@
 <!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/rosters.css' %}">
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Overwatch 2 {{OW_Team.name}}</title>
 </head>
 	<body>
-		<h1>{{OW_Team.name}}</h1
-		<div><a href="addPlayer/">Add a new Player</a></div>
-		<div><a href="addMatch/">Add a new Match</a></div>
+		<h1>{{OW_Team.name}}</h1>
+		<div class='add-delete-buttons'>
+			<form method="GET" action="{% url 'add-roster-player' OW_Team.id %}">
+				{% csrf_token %}
+				<button class='add-button' type="submit">Add Player</button>
+			</form>
+			<form method="GET" action="{% url 'add-match' OW_Team.id %}">
+				{% csrf_token %}
+				<button class='add-button' type="submit">Add Match</button>
+			</form>
+		</div>
 			{%if Roster %}
 			<h4>Roster</h4>
 				<ul>
@@ -18,7 +28,7 @@
 							<span style="margin-right: 10px;">{{ player.role }}</span>
 							<form method="POST" action="{% url 'delete-roster-player' player.id %}">
 								{% csrf_token %}
-								<button type="submit">Delete Player</button>
+								<button class = 'delete-button' type="submit">Delete Player</button>
 							</form>
 						</div>
 					</li>
