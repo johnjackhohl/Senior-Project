@@ -14,6 +14,7 @@ class Roster(models.Model):
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	role = models.CharField(max_length=100)
+	is_active = models.BooleanField(default=True)
 
 class Match(models.Model):
 	id = models.BigAutoField(primary_key=True)

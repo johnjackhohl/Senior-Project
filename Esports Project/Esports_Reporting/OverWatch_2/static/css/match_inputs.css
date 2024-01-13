@@ -1,0 +1,85 @@
+.add-button {
+    background-color: #5cb85c; /* Green background color */
+    color: white;
+    padding: 4px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 0px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 10%;
+    box-sizing: border-box;
+  }
+  
+.add-button:hover {
+    background-color: #4cae4c; /* Darker shade of green on hover */
+  }
+
+select{
+    width: 10%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.map-name{
+    width: 10%;
+    padding: 6px 10px;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+input[type=number] {
+    width: 10%;
+    padding: 6px 10px;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+input[type=date], input[type=text] {
+    width: 15%;
+    padding: 6px 10px;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.heroes{
+    columns: 2;
+    flex-wrap: wrap;
+    align-items: top;
+    width: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.heroes-escort-hybrid{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: top;
+    width: 40%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.heroes > div {
+    flex-grow: 1; /* Adjust this value as needed */
+}
+
+.heroes label {
+    white-space: nowrap; /* Prevents labels from wrapping */
+    margin-right: 10px; /* Adjust space between label and select */
+}
+
+.select-heros {
+    padding: 6px 10px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    width: auto; /* Adjust width to take up available space */
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.column {
+    flex: 2;  /* Each column takes up an equal amount of space */
+    padding: 20px; /* Optional spacing */
+}

@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
@@ -42,6 +43,8 @@ def Add_Control(request, pk):
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Control")
 	subMaps = models.Sub_Map.objects.all()
+	sub_maps = {map.map_name: list(map.sub_map_set.values('sub_map_name')) for map in maps}
+
 	if request.method == "POST":
 		form = forms.Control_Map_Form(request.POST)
 		if form.is_valid():
@@ -56,7 +59,7 @@ def Add_Control(request, pk):
 		'dps': dps,
 		'support': support,
 		'maps': maps,
-		'subMaps': subMaps
+		'subMaps': json.dumps(sub_maps),
 	}
 	return render(request, 'match_inputs/Add_Control_Map.html', context)
 
@@ -96,6 +99,7 @@ def Add_Push(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Push")
+	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Push_Map_Form(request.POST)
 		if form.is_valid():
@@ -109,7 +113,8 @@ def Add_Push(request, pk):
 		'tanks': tanks,
 		'dps': dps,
 		'support': support,
-		'maps': maps
+		'maps': maps,
+		'team': team
 	}
 	return render(request, 'match_inputs/Add_Push_Map.html', context)
 
@@ -119,6 +124,7 @@ def Add_Flashpoint(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Flashpoint")
+	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Flashpoint_Map_Form(request.POST)
 		if form.is_valid():
@@ -132,7 +138,8 @@ def Add_Flashpoint(request, pk):
 		'tanks': tanks,
 		'dps': dps,
 		'support': support,
-		'maps': maps
+		'maps': maps,
+		'team': team
 	}
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
@@ -147,7 +154,7 @@ def Add_Player(request, pk, mapType):
 	elif mapType == "Flashpoint":
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
-	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
+	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id, is_active=True)
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Activate Player</title>
+</head>
+<h1>Activate Player</h1>
+{% if roster%}
+    <form method = "POST">
+        {% csrf_token %}
+        <label for="id_player_id">Map Name</label>
+        <select name="player_id" id="id_player_id">
+            {% for option in roster %}
+            <option value="{{option.id}}">{{option.first_name}} {{option.last_name}}</option>
+            {% endfor %}
+        </select> 
+        <br>
+        <button type="submit">Activate Player</button>
+    </form>
+{% else %}
+    <p>There are no players to activate</p>
+{% endif %}
+<a href="/Overwatch/team/{{team_id}}">Back to Overwatch Team</a>
+</html>

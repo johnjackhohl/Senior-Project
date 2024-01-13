@@ -32,6 +32,7 @@ urlpatterns = [
 	path('team/<int:pk>/deletePlayer/', delete_views.delete_player, name='delete-player'),
 	path('addMapType/', add_views.Add_Map_Type, name='add-map-type'),
 	path('logout/', LogoutView.as_view(), name='logout'),
+	path('team/<int:pk>/ActivePlayer/', team_views.activate_player, name='active-player'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

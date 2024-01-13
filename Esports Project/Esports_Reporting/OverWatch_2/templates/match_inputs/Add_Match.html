@@ -1,3 +1,7 @@
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/match_inputs.css' %}">
+<script src="{% static 'js/match_inputs.js' %}"></script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,11 +32,9 @@
         <br>
         <label for="id_match_date">Match Date:</label>
         <input type="date" name="match_date" id="id_match_date" required>
+        <input hidden type="checkbox" name="mount_win" id="id_mount_win" value="1">
         <br>
-        <label for="id_mount_win">Mount Wins:</label>
-        <input type="checkbox" name="mount_win" id="id_mount_win" value="1">
-        <br>
-        <button type="submit">Add Match</button>
+        <button class='add-button' type="submit">Add Match</button>
     </form>
     <a href="/Overwatch/team/{{team.id}}">Back to {{team.name}}</a>
 </body>

@@ -58,8 +58,9 @@ def Delete_Match_Type(request):
 
 def Delete_Roster_Player(request, pk):
 	player = models.Roster.objects.get(id=pk)
+	player.is_active = False
+	player.save()
 	team = models.OW_Team.objects.get(id=player.ow_team_id.id)
-	player.delete()
 	return redirect('team-roster', pk=team.id)
 
 def delete_team_info(request, pk):

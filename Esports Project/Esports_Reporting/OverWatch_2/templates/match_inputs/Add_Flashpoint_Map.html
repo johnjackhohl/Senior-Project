@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/match_inputs.css' %}">
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,78 +34,82 @@
         <label for="id_opponent_percent">Opponent Percent:</label>
         <input type="number" name="opponent_percent" id="id_opponent_percent" required>
         <br>
-        <label for="id_mount_tank">Mount Tank:</label>
-        <select name="mount_tank" id="id_mount_tank">
-            {% for option in tanks %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_mount_dps_1">Mount DPS:</label>
-        <select name="mount_dps_1" id="id_mount_dps_1">
-            {% for option in dps %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_mount_dps_2">Mount DPS:</label>
-        <select name="mount_dps_2" id="id_mount_dps_2">
-            {% for option in dps %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_mount_support_1">Mount Support:</label>
-        <select name="mount_support_1" id="id_mount_support_1">
-            {% for option in support %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_mount_support_2">Mount Support:</label>
-        <select name="mount_support_2" id="id_mount_support_2">
-            {% for option in support %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-        <label for="opponent_tank">Opponent Tank:</label>
-        <select name="opponent_tank" id="id_opponent_tank">
-            {% for option in tanks %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_opponent_dps_1">Opponent DPS:</label>
-        <select name="opponent_dps_1" id="id_opponent_dps_1">
-            {% for option in dps %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_opponent_dps_2">Opponent DPS:</label>
-        <select name="opponent_dps_2" id="id_opponent_dps_2">
-            {% for option in dps %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_opponent_support_1">Opponent Support:</label>
-        <select name="opponent_support_1" id="id_opponent_support_1">
-            {% for option in support %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="id_opponent_support_2">Opponent Support:</label>
-        <select name="opponent_support_2" id="id_opponent_support_2">
-            {% for option in support %}
-                <option value="{{option.hero_name}}">{{option.hero_name}}</option>
-            {% endfor %}
-        </select>
-        <br>
+        <div class='heroes'>
+            <div class='column'>
+                <label for="id_mount_tank">Mount Tank:</label>
+                <select class ='select-heros'name="mount_tank" id="id_mount_tank">
+                    {% for option in tanks %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_mount_dps_1">Mount DPS:</label>
+                <select class ='select-heros' name="mount_dps_1" id="id_mount_dps_1">
+                    {% for option in dps %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_mount_dps_2">Mount DPS:</label>
+                <select class ='select-heros' name="mount_dps_2" id="id_mount_dps_2">
+                    {% for option in dps %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_mount_support_1">Mount Support:</label>
+                <select class ='select-heros' name="mount_support_1" id="id_mount_support_1">
+                    {% for option in support %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_mount_support_2">Mount Support:</label>
+                <select class ='select-heros' name="mount_support_2" id="id_mount_support_2">
+                    {% for option in support %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class='column'>
+                <label for="opponent_tank">Opponent Tank:</label>
+                <select class ='select-heros' name="opponent_tank" id="id_opponent_tank">
+                    {% for option in tanks %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_opponent_dps_1">Opponent DPS:</label>
+                <select class ='select-heros' name="opponent_dps_1" id="id_opponent_dps_1">
+                    {% for option in dps %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_opponent_dps_2">Opponent DPS:</label>
+                <select class ='select-heros' name="opponent_dps_2" id="id_opponent_dps_2">
+                    {% for option in dps %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_opponent_support_1">Opponent Support:</label>
+                <select class ='select-heros' name="opponent_support_1" id="id_opponent_support_1">
+                    {% for option in support %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="id_opponent_support_2">Opponent Support:</label>
+                <select class ='select-heros' name="opponent_support_2" id="id_opponent_support_2">
+                    {% for option in support %}
+                        <option value="{{option.hero_name}}">{{option.hero_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <button type="submit">Done</button>
     </form>
-    <a href="/Overwatch/team/{{team.id}}/match/{{match.id}}">Back to {{team.name}}'s Match</a>
+    <a href="/Overwatch/team/{{team.id}}">Back to {{team.name}}'s Page</a>
 </body>
 </html>

@@ -1,3 +1,7 @@
+{%load static%}
+<link rel="stylesheet" href="{% static 'css/match_inputs.css' %}">
+<script src="{% static 'js/match_inputs.js' %}"></script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,13 +28,12 @@
 		<label for="id_opponent_score">Opponent Score:</label>
 		<input type="number" name="opponent_score" id="id_opponent_score" required>
 		<br>
-		<label for="id_mount_win">Mount Wins:</label>
-		<input type="checkbox" name="mount_win" id="id_mount_win">
+		<input hidden type="checkbox" name="mount_win" id="id_mount_win">
 		<br>
 		<label for="id_notes">Notes:</label>
 		<textarea rows='5' cols='40' name="notes" id="id_notes">
         </textarea>
         <br>
-        <button type="submit">Add Game</button>
+        <button class = 'add-button' type="submit">Add Game</button>
     </form>
     <a href="/Overwatch/team/{{team.id}}">Back to {{team.name}}'s Page</a>

@@ -17,6 +17,10 @@
 				{% csrf_token %}
 				<button class='add-button' type="submit">Add Match</button>
 			</form>
+			<form method="GET" action="{% url 'active-player' OW_Team.id %}">
+				{% csrf_token %}
+				<button class='add-button' type="submit">Activate Player</button>
+			</form>
 		</div>
 			{%if Roster %}
 			<h4>Roster</h4>

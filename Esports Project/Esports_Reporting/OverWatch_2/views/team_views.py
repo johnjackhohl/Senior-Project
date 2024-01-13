@@ -9,7 +9,8 @@ def OW_Rosters(request):
 
 def OW_Team_Roster(request, pk):
 	team, owMatches = Match_History(pk)
-	players = models.Roster.objects.filter(ow_team_id=team.id)
+	# get only players who is_active is True
+	players = models.Roster.objects.filter(ow_team_id=team.id, is_active=True)
 	heroPictures = models.Hero.objects.all()
 	mapPictures = models.Map.objects.all()
 
@@ -49,3 +50,23 @@ def Match_History(pk):
 			game.maps_with_players = game_maps_with_players
 
 	return team, owMatches
+
+def activate_player(request, pk):
+	team = models.OW_Team.objects.get(id=pk)
+	roster = models.Roster.objects.filter(ow_team_id=pk, is_active=False)
+	if request.method == "POST":
+		form = forms.Activate_Player_Form(request.POST)
+		if form.is_valid():
+			player = models.Roster.objects.get(id=form.cleaned_data["player_id"])
+			player.is_active = True
+			player.save()
+			team = models.OW_Team.objects.get(id=player.ow_team_id.id)
+			return redirect('team-roster', pk=team.id)
+	else:
+		form = forms.Activate_Player_Form()
+	context = {
+		'form': form,
+		'roster': roster,
+		'team_id': team.id
+	}
+	return render(request, 'team_templates/activate_player.html', context)

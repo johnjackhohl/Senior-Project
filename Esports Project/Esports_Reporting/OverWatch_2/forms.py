@@ -91,3 +91,6 @@ class Delete_Match_Type_Form(forms.Form):
 
 class Delete_Roster_Player_Form(forms.Form):
 	player_id = forms.IntegerField()
+
+class Activate_Player_Form(forms.Form):
+	player_id = forms.IntegerField()
