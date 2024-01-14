@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/match_inputs.css' %}">
+<script src="{% static 'js/player_input.js' %}"></script>
+
+<script type="text/javascript">
+	var rosterData = {{ rosterData|safe }};
+</script>
+
 <html lang="en">
 
 <head>
@@ -19,9 +28,6 @@
 		<br>
 		<label for="id_role">Role:</label>
 		<select name="role" id="id_role">
-			<option value="Tank">Tank</option>
-			<option value="DPS">DPS</option>
-			<option value="Support">Support</option>
 		</select>
 		<br>
 		<label for="id_hero">Hero:</label>
