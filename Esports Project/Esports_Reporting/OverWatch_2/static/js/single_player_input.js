@@ -1,7 +1,6 @@
 
 function updateRole() {
 	var rosterSelect = document.getElementById('id_roster_id');
-	console.log(rosterSelect);
     var selectedRosterId = rosterSelect.value;
 	var roles = rosterData[selectedRosterId];
 
@@ -53,7 +52,7 @@ function updateHeroes() {
 	
 	var heroSelect = document.getElementById('id_hero');
 	heroSelect.innerHTML = ''; // Clear existing options
-	console.log(role);
+	
 	
 	if (role.toLowerCase() == "tank") {
 		heroes = tankData;
@@ -63,10 +62,11 @@ function updateHeroes() {
 		heroes = dpsData;
 	}
 	
+	
 	heroes.forEach(function(hero) {
 		var opt = document.createElement('option');
-		opt.value = hero.hero_name;
-		opt.textContent = hero.hero_name;
+		opt.value = hero;
+		opt.textContent = hero;
 		heroSelect.appendChild(opt);
 	});
 	

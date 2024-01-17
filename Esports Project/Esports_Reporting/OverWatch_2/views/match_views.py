@@ -155,9 +155,7 @@ def Add_Player(request, pk, mapType):
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id, is_active=True)
-	tanks = models.Hero.objects.filter(role="Tank")
-	dps = models.Hero.objects.filter(role="DPS")
-	support = models.Hero.objects.filter(role="Support")
+	tanks, dps, support = getHeroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
@@ -194,9 +192,9 @@ def Add_Player(request, pk, mapType):
 		'map': map,
 		'roster': roster,
 		'game': game,
-		'supportData': json.dumps(list(support.values('hero_name'))),
-		'dpsData': json.dumps(list(dps.values('hero_name'))),
-		'tankData': json.dumps(list(tanks.values('hero_name'))),
+		'supportData': json.dumps(support),
+		'dpsData': json.dumps(dps),
+		'tankData': json.dumps(tanks),
 		'rosterData': json.dumps(rosterData),
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)
@@ -212,9 +210,7 @@ def add_single_player(request, mapType, pk):
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
-	tanks = models.Hero.objects.filter(role="Tank")
-	dps = models.Hero.objects.filter(role="DPS")
-	support = models.Hero.objects.filter(role="Support")
+	tanks, dps, support = getHeroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if request.method == "POST":
 		form = forms.Player_Form(request.POST)
@@ -239,9 +235,53 @@ def add_single_player(request, mapType, pk):
 		'map': map,
 		'roster': roster,
 		'game': game,
-		'supportData': json.dumps(list(support.values('hero_name'))),
-		'dpsData': json.dumps(list(dps.values('hero_name'))),
-		'tankData': json.dumps(list(tanks.values('hero_name'))),
+		'supportData': json.dumps(list(support)),
+		'dpsData': json.dumps(list(dps)),
+		'tankData': json.dumps(list(tanks)),
 		'rosterData': json.dumps(rosterData),
 	}
 	return render(request, 'match_inputs/Add_Single_Player.html', context)
+
+def getHeroes(map, mapType):
+    tanks = []
+    dps = []
+    support = []
+    if mapType in ["Escort", "Hybrid"]:
+        AttackTank = map.mount_attack_tank
+        defenseTank = map.mount_defense_tank
+        
+        attackDPS1 = map.mount_attack_dps_1
+        attackDPS2 = map.mount_attack_dps_2
+        defenseDPS1 = map.mount_defense_dps_1
+        defenseDPS2 = map.mount_defense_dps_2
+        
+        attackSupport1 = map.mount_attack_support_1
+        attackSupport2 = map.mount_attack_support_2
+        defenseSupport1 = map.mount_defense_support_1
+        defenseSupport2 = map.mount_defense_support_2
+        
+        tanks.append(AttackTank)
+        tanks.append(defenseTank)
+        
+        dps.append(attackDPS1)
+        dps.append(attackDPS2)
+        dps.append(defenseDPS1)
+        dps.append(defenseDPS2)
+        
+        support.append(attackSupport1)
+        support.append(attackSupport2)
+        support.append(defenseSupport1)
+        support.append(defenseSupport2)
+    else:
+        tank = map.mount_tank
+        dps1 = map.mount_dps_1
+        dps2 = map.mount_dps_2
+        support1 = map.mount_support_1
+        support2 = map.mount_support_2
+        
+        tanks.append(tank)
+        dps.append(dps1)
+        dps.append(dps2)
+        support.append(support1)
+        support.append(support2)
+    return tanks, dps, support

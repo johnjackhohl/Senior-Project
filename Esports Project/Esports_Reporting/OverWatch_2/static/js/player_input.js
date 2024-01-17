@@ -66,8 +66,8 @@ function updateHeroes(element_num) {
 	
 	heroes.forEach(function(hero) {
 		var opt = document.createElement('option');
-		opt.value = hero.hero_name;
-		opt.textContent = hero.hero_name;
+		opt.value = hero;
+		opt.textContent = hero;
 		heroSelect.appendChild(opt);
 	});	
 }
@@ -95,8 +95,29 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 }); */
 
-var rosterSelects = document.getElementsByClassName('roster-select');
-var roleSelects = document.getElementsByClassName('role-select');
+document.addEventListener('DOMContentLoaded', function () {
+    const rosterSelects = document.getElementsByClassName('roster-select');
+    const roleSelects = document.getElementsByClassName('role-select');
 
-console.log(rosterSelects.item(0));
+    // Function to update role and attach event listener
+    const setupRosterSelect = (rosterSelect, index) => {
+        updateRole(index);
+        rosterSelect.addEventListener('change', () => updateRole(index));
+    };
 
+    // Function to update heroes and attach event listener
+    const setupRoleSelect = (roleSelect, index) => {
+        updateHeroes(index);
+        roleSelect.addEventListener('change', () => updateHeroes(index));
+    };
+
+    // Attach event listeners to all roster selects
+    for (let i = 0; i < rosterSelects.length; i++) {
+        setupRosterSelect(rosterSelects[i], i);
+    }
+
+    // Attach event listeners to all role selects
+    for (let i = 0; i < roleSelects.length; i++) {
+        setupRoleSelect(roleSelects[i], i);
+    }
+});
