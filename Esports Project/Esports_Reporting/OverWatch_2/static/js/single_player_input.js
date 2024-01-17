@@ -1,11 +1,11 @@
-function updateRole(element_num) {
-	var rosterSelect = document.getElementById('id_player-'+element_num+'-roster_id');
+
+function updateRole() {
+	var rosterSelect = document.getElementById('id_roster_id');
+	console.log(rosterSelect);
     var selectedRosterId = rosterSelect.value;
 	var roles = rosterData[selectedRosterId];
-	console.log(selectedRosterId);
-	console.log(element_num);
 
-    var roleSelect = document.getElementById('id_player-'+element_num+'-role');
+    var roleSelect = document.getElementById('id_role');
 	roleSelect.innerHTML = ''; // Clear existing options
 
 	var opt = document.createElement('option');
@@ -43,18 +43,17 @@ function updateRole(element_num) {
 	roleSelect.appendChild(opt);
 	roleSelect.appendChild(opt2);
 	roleSelect.appendChild(opt3);
-	updateHeroes(element_num);
+	updateHeroes();
 }
 
-function updateHeroes(element_num) {
-	var roleSelect = document.getElementById('id_player-'+element_num+'-role');
+function updateHeroes() {
+	var roleSelect = document.getElementById('id_role');
 	var role = roleSelect.value;
-	console.log(role);
-	console.log(element_num);
 	var heroes = [];
 	
-	var heroSelect = document.getElementById('id_player-'+element_num+'-hero');
+	var heroSelect = document.getElementById('id_hero');
 	heroSelect.innerHTML = ''; // Clear existing options
+	console.log(role);
 	
 	if (role.toLowerCase() == "tank") {
 		heroes = tankData;
@@ -69,34 +68,22 @@ function updateHeroes(element_num) {
 		opt.value = hero.hero_name;
 		opt.textContent = hero.hero_name;
 		heroSelect.appendChild(opt);
-	});	
+	});
+	
 }
 
-/* document.addEventListener('DOMContentLoaded', function () {
-	var rosterSelect = document.getElementById('id_player-0-roster_id');
-	
-	// Call updateSubMaps initially to populate sub-maps for the default selection
-	updateRole(0);
+document.addEventListener('DOMContentLoaded', function () {
+	var rosterSelect = document.getElementById('id_roster_id');
 
-	// Add event listener for change event
-	rosterSelect.addEventListener('change', (event) => {
-		updateRole(0);
-	});
+    updateRole();
+
+	rosterSelect.addEventListener('change', updateRole);
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
-	var roleSelect = document.getElementById('id_player-0-role');
+	var roleSelect = document.getElementById('id_role');
 
-	updateHeroes(0);
+	updateHeroes();
 
-	roleSelect.addEventListener('change', (event) => {
-		updateHeroes(0);
-	});
-}); */
-
-var rosterSelects = document.getElementsByClassName('roster-select');
-var roleSelects = document.getElementsByClassName('role-select');
-
-console.log(rosterSelects.item(0));
-
+	roleSelect.addEventListener('change', updateHeroes);
+});

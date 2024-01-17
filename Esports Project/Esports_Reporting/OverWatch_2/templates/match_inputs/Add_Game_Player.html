@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+
+{% load static %}
+{% comment %} <link rel="stylesheet" href="{% static 'css/match_inputs.css' %}"> {% endcomment %}
+<script src="{% static 'js/player_input.js' %}"></script>
+
+<script type="text/javascript">
+	var rosterData = {{ rosterData|safe }};
+	var tankData = {{ tankData|safe }};
+	var dpsData = {{ dpsData|safe }};
+	var supportData = {{ supportData|safe }};
+</script>
+
 <html lang="en">
 
 <head>
@@ -30,28 +42,22 @@
 
                 <div>
                     <label for="{{ form.roster_id.id_for_label }}">Player Name:</label>
-                    <select name="player-{{ forloop.counter0 }}-roster_id" id="{{ form.roster_id.id_for_label }}">
-                        {% for option in roster %}
-                            <option value="{{ option.id }}" {% if option.id == form.roster_id.value %}selected{% endif %}>{{ option.first_name }} {{ option.last_name }}</option>
-                        {% endfor %}
+                    <select name="player-{{ forloop.counter0 }}-roster_id" id="{{ form.roster_id.id_for_label }}" class="roster-select">
+						{% for player in roster %}
+							<option value="{{ player.id }}">{{ player.first_name }} {{player.last_name}}</option>
+						{% endfor %}
                     </select>
                 </div>                
 
                 <div>
                     <label for="{{ form.role.id_for_label }}">Role:</label>
-                    <select name="player-{{ forloop.counter0 }}-role" id="{{ form.role.id_for_label }}">
-                        <option value="Tank" {% if form.role.value == "Tank" %}selected{% endif %}>Tank</option>
-                        <option value="DPS" {% if form.role.value == "DPS" %}selected{% endif %}>DPS</option>
-                        <option value="Support" {% if form.role.value == "Support" %}selected{% endif %}>Support</option>
+                    <select name="player-{{ forloop.counter0 }}-role" id="{{ form.role.id_for_label }}" class='role-select'>
                     </select>
                 </div>
                 
                 <div>
                     <label for="{{ form.hero.id_for_label }}">Hero:</label>
                     <select name="player-{{ forloop.counter0 }}-hero" id="{{ form.hero.id_for_label }}">
-                        {% for option in heroes %}
-                            <option value="{{ option.hero_name }}" {% if option == form.hero.value %}selected{% endif %}>{{ option.hero_name }}</option>
-                        {% endfor %}
                     </select>
                 </div>
                 

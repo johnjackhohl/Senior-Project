@@ -2,10 +2,13 @@
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/match_inputs.css' %}">
-<script src="{% static 'js/player_input.js' %}"></script>
+<script src="{% static 'js/single_player_input.js' %}"></script>
 
 <script type="text/javascript">
 	var rosterData = {{ rosterData|safe }};
+	var tankData = {{ tankData|safe }};
+	var dpsData = {{ dpsData|safe }};
+	var supportData = {{ supportData|safe }};
 </script>
 
 <html lang="en">
@@ -32,9 +35,6 @@
 		<br>
 		<label for="id_hero">Hero:</label>
 		<select name="hero" id="id_hero">
-			{% for option in heroes %}
-				<option value="{{option.hero_name}}">{{option.hero_name}}</option>
-			{% endfor %}
 		</select>
 		<br>
         {% if game.map_type == 'Escort' or game.map_type == 'Hybrid' %}
