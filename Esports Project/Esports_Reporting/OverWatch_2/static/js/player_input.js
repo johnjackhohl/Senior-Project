@@ -72,29 +72,6 @@ function updateHeroes(element_num) {
 	});	
 }
 
-/* document.addEventListener('DOMContentLoaded', function () {
-	var rosterSelect = document.getElementById('id_player-0-roster_id');
-	
-	// Call updateSubMaps initially to populate sub-maps for the default selection
-	updateRole(0);
-
-	// Add event listener for change event
-	rosterSelect.addEventListener('change', (event) => {
-		updateRole(0);
-	});
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-	var roleSelect = document.getElementById('id_player-0-role');
-
-	updateHeroes(0);
-
-	roleSelect.addEventListener('change', (event) => {
-		updateHeroes(0);
-	});
-}); */
-
 document.addEventListener('DOMContentLoaded', function () {
     const rosterSelects = document.getElementsByClassName('roster-select');
     const roleSelects = document.getElementsByClassName('role-select');

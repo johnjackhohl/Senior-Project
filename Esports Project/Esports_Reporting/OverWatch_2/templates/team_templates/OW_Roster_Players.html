@@ -27,12 +27,12 @@
 				<ul>
 				{% for player in Roster %}
 					<li>
-						<div style="display: flex; align-items: center;">
+						<div class='roster'>
 							<span>{{ player.first_name }} {{ player.last_name }}:</span>
 							<span style="margin-right: 10px;">{{ player.role }}</span>
 							<form method="POST" action="{% url 'delete-roster-player' player.id %}">
 								{% csrf_token %}
-								<button class = 'delete-button' type="submit">Delete Player</button>
+								<button class = 'delete-button' type="submit">Deactivate Player</button>
 							</form>
 						</div>
 					</li>

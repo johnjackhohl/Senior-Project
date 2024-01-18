@@ -39,3 +39,10 @@ form .delete-button:hover {
 .teams {
     display: flex;
 }
+
+.roster {
+	flex: 1;
+	max-width: 10%;
+	padding: 10px;
+
+}
