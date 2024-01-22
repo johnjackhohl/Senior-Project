@@ -5,6 +5,15 @@ from OverWatch_2 import models
 from django.forms import formset_factory
 
 def Add_Match(request, pk):
+	"""Adds a match to the database
+
+	Args:
+		request
+		pk (int): primary key of the team that the match is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a match
+	"""
 	team = models.OW_Team.objects.get(id=pk)
 	matchTypes = models.Match_Type.objects.all()
 	if request.method == "POST":
@@ -17,6 +26,15 @@ def Add_Match(request, pk):
 	return render(request, 'match_inputs/Add_Match.html', {'form': form, 'team': team, 'matchTypes': matchTypes})
 
 def Add_Game(request, pk):
+	"""Adds a game to the database
+
+	Args:
+		request
+		pk (int): primary key of the match that the game is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a game 
+	"""
 	match = models.Match.objects.get(id=pk)
 	team = models.OW_Team.objects.get(id=match.ow_team_id.id)
 	if request.method == "POST":
@@ -37,6 +55,15 @@ def Add_Game(request, pk):
 	return render(request, 'match_inputs/Add_Game.html', {'form': form, 'match': match, 'team': team})
 
 def Add_Control(request, pk):
+	"""Adds a control map to the database
+
+	Args:
+		request
+		pk (int): primary key of the game that the control map is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a control map
+	"""
 	game = models.Game.objects.get(id=pk)
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
@@ -64,6 +91,15 @@ def Add_Control(request, pk):
 	return render(request, 'match_inputs/Add_Control_Map.html', context)
 
 def Add_Escort_Hybrid(request, pk):
+	"""Adds a escort or hybrid map to the database
+
+	Args:
+		request
+		pk (int): primary key of the game that the escort or hybrid map is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a escort or hybrid map
+	"""
 	game = models.Game.objects.get(id=pk)
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
@@ -94,6 +130,15 @@ def Add_Escort_Hybrid(request, pk):
 	return render(request, 'match_inputs/Add_Escort_Hybrid_Map.html', context)
 
 def Add_Push(request, pk):
+	"""Adds a push map to the database
+
+	Args:
+		request
+		pk (int): primary key of the game that the push map is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a push map
+	"""
 	game = models.Game.objects.get(id=pk)
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
@@ -119,6 +164,15 @@ def Add_Push(request, pk):
 	return render(request, 'match_inputs/Add_Push_Map.html', context)
 
 def Add_Flashpoint(request, pk):
+	"""Adds a flashpoint map to the database
+
+	Args:
+		request
+		pk (int): primary key of the game that the flashpoint map is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a flashpoint map
+	"""
 	game = models.Game.objects.get(id=pk)
 	tanks = models.Hero.objects.filter(role="Tank")
 	dps = models.Hero.objects.filter(role="DPS")
@@ -144,6 +198,16 @@ def Add_Flashpoint(request, pk):
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
 def Add_Player(request, pk, mapType):
+	"""Adds players to the database for a specific map, either 5 or 10 players depending on the map type
+
+	Args:
+		request
+		pk (int): primary key of the map that the player is being added for
+		mapType (string): string of the map type the player is being added too
+
+	Returns:
+		render: returns a rendered html page with the form for adding a player
+	"""
 	PlayerFormSet = formset_factory(forms.Player_Form, extra=0)
 	if mapType == "Control":
 		map = models.Control_Map.objects.get(id=pk)
@@ -155,7 +219,7 @@ def Add_Player(request, pk, mapType):
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id, is_active=True)
-	tanks, dps, support = getHeroes(map, mapType)
+	tanks, dps, support = Get_Heroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
@@ -199,7 +263,17 @@ def Add_Player(request, pk, mapType):
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)
 
-def add_single_player(request, mapType, pk):
+def Add_Single_Player(request, mapType, pk):
+	"""Adds a single player to the database for a specific map
+
+	Args:
+		request
+		mapType (string): string of the map type the player is being added too 
+		pk (int): primary key of the map that the player is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a player
+	"""
 	if mapType == "Control":
 		map = models.Control_Map.objects.get(id=pk)
 	elif mapType in ["Escort", "Hybrid"]:
@@ -210,7 +284,7 @@ def add_single_player(request, mapType, pk):
 		map = models.Flashpoint_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
-	tanks, dps, support = getHeroes(map, mapType)
+	tanks, dps, support = Get_Heroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if request.method == "POST":
 		form = forms.Player_Form(request.POST)
@@ -242,46 +316,57 @@ def add_single_player(request, mapType, pk):
 	}
 	return render(request, 'match_inputs/Add_Single_Player.html', context)
 
-def getHeroes(map, mapType):
-    tanks = []
-    dps = []
-    support = []
-    if mapType in ["Escort", "Hybrid"]:
-        AttackTank = map.mount_attack_tank
-        defenseTank = map.mount_defense_tank
-        
-        attackDPS1 = map.mount_attack_dps_1
-        attackDPS2 = map.mount_attack_dps_2
-        defenseDPS1 = map.mount_defense_dps_1
-        defenseDPS2 = map.mount_defense_dps_2
-        
-        attackSupport1 = map.mount_attack_support_1
-        attackSupport2 = map.mount_attack_support_2
-        defenseSupport1 = map.mount_defense_support_1
-        defenseSupport2 = map.mount_defense_support_2
-        
-        tanks.append(AttackTank)
-        tanks.append(defenseTank)
-        
-        dps.append(attackDPS1)
-        dps.append(attackDPS2)
-        dps.append(defenseDPS1)
-        dps.append(defenseDPS2)
-        
-        support.append(attackSupport1)
-        support.append(attackSupport2)
-        support.append(defenseSupport1)
-        support.append(defenseSupport2)
-    else:
-        tank = map.mount_tank
-        dps1 = map.mount_dps_1
-        dps2 = map.mount_dps_2
-        support1 = map.mount_support_1
-        support2 = map.mount_support_2
-        
-        tanks.append(tank)
-        dps.append(dps1)
-        dps.append(dps2)
-        support.append(support1)
-        support.append(support2)
-    return tanks, dps, support
+def Get_Heroes(map, mapType):
+	"""Gets the heroes for a specific map
+
+	Args:
+		map (model): python model of the map that the heroes are being retrieved for
+		mapType (string): string of the map type the heroes are being retrieved for
+
+	Returns:
+		tanks (list): list of the tank heroes for the map
+		dps (list): list of the dps heroes for the map
+		support (list): list of the support heroes for the map
+	"""
+	tanks = []
+	dps = []
+	support = []
+	if mapType in ["Escort", "Hybrid"]:
+		attackTank = map.mount_attack_tank
+		defenseTank = map.mount_defense_tank
+		
+		attackDPS1 = map.mount_attack_dps_1
+		attackDPS2 = map.mount_attack_dps_2
+		defenseDPS1 = map.mount_defense_dps_1
+		defenseDPS2 = map.mount_defense_dps_2
+		
+		attackSupport1 = map.mount_attack_support_1
+		attackSupport2 = map.mount_attack_support_2
+		defenseSupport1 = map.mount_defense_support_1
+		defenseSupport2 = map.mount_defense_support_2
+		
+		tanks.append(attackTank)
+		tanks.append(defenseTank)
+		
+		dps.append(attackDPS1)
+		dps.append(attackDPS2)
+		dps.append(defenseDPS1)
+		dps.append(defenseDPS2)
+		
+		support.append(attackSupport1)
+		support.append(attackSupport2)
+		support.append(defenseSupport1)
+		support.append(defenseSupport2)
+	else:
+		tank = map.mount_tank
+		dps1 = map.mount_dps_1
+		dps2 = map.mount_dps_2
+		support1 = map.mount_support_1
+		support2 = map.mount_support_2
+		
+		tanks.append(tank)
+		dps.append(dps1)
+		dps.append(dps2)
+		support.append(support1)
+		support.append(support2)
+	return tanks, dps, support

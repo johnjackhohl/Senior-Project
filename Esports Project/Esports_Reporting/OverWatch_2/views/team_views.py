@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
 
-# Create your views here.
 def OW_Rosters(request):
 	OW_Teams = forms.OW_Team.objects.all()
 	return render(request, 'team_templates/OW_Rosters.html', {"OW_Teams": OW_Teams})
