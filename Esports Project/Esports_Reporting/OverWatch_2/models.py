@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class OW_Team(models.Model):
+	"""This model is used to store Overwatch teams."""
 	id = models.BigAutoField(primary_key=True)
 	name = models.CharField(max_length=100)
 	year_fall = models.IntegerField()
@@ -9,6 +10,7 @@ class OW_Team(models.Model):
 	varsity = models.BooleanField()
 
 class Roster(models.Model):
+	"""This Model is used to store Overwatch players for the teams."""
 	id = models.BigAutoField(primary_key=True)
 	ow_team_id = models.ForeignKey(OW_Team, on_delete=models.CASCADE)
 	first_name = models.CharField(max_length=100)
@@ -17,6 +19,7 @@ class Roster(models.Model):
 	is_active = models.BooleanField(default=True)
 
 class Match(models.Model):
+	"""This model is used to store Overwatch matches."""
 	id = models.BigAutoField(primary_key=True)
 	ow_team_id = models.ForeignKey(OW_Team, on_delete=models.CASCADE)
 	match_type = models.CharField(max_length=100)
@@ -27,6 +30,7 @@ class Match(models.Model):
 	match_date = models.DateField()
 
 class Game(models.Model):
+	"""This model is used to store Overwatch games."""
 	id = models.BigAutoField(primary_key=True)
 	match_id = models.ForeignKey(Match, on_delete=models.CASCADE)
 	map_type = models.CharField(max_length=100)
@@ -46,6 +50,7 @@ class Game(models.Model):
 			return self.flashpoint_map_set.all()
 
 class Control_Map(models.Model):
+	"""This model is used to store Overwatch control maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
 	map_name = models.CharField(max_length=100) 
@@ -65,6 +70,7 @@ class Control_Map(models.Model):
 	opponent_percent = models.IntegerField()
 
 class Escort_Hybrid_Map(models.Model):
+	"""This model is used to store Overwatch escort and hybrid maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
 	is_Escort = models.BooleanField()
@@ -92,6 +98,7 @@ class Escort_Hybrid_Map(models.Model):
 	opponent_attack_support_2 = models.CharField(max_length=100)
 
 class Push_Map(models.Model):
+	"""This model is used to store Overwatch push maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
 	map_name = models.CharField(max_length=100) 
@@ -109,6 +116,7 @@ class Push_Map(models.Model):
 	opponent_support_2 = models.CharField(max_length=100)
 
 class Flashpoint_Map(models.Model):
+	"""This model is used to store Overwatch flashpoint maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
 	map_name = models.CharField(max_length=100) 
@@ -127,6 +135,7 @@ class Flashpoint_Map(models.Model):
 	opponent_support_2 = models.CharField(max_length=100)
 
 class Player(models.Model):
+	"""This model is used to store Overwatch players for the maps"""
 	id = models.BigAutoField(primary_key=True)
 	roster_id = models.ForeignKey(Roster, on_delete=models.CASCADE)
 	control_id = models.ForeignKey(Control_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="control_players")
@@ -143,22 +152,26 @@ class Player(models.Model):
 	healing = models.IntegerField(null=True, blank=True)
  
 class Map(models.Model):
+	"""This model is used to store Overwatch maps."""
 	id = models.BigAutoField(primary_key=True)
 	map_name = models.CharField(max_length=100)
 	map_type = models.CharField(max_length=100)
 	map_image = models.ImageField(upload_to='images/')
 
 class Sub_Map(models.Model):
+	"""This model is used to store Overwatch sub maps."""
 	id = models.BigAutoField(primary_key=True)
 	map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
 	sub_map_name = models.CharField(max_length=100)
 
 class Hero(models.Model):
+	"""This model is used to store Overwatch heroes."""
 	id = models.BigAutoField(primary_key=True)
 	hero_name = models.CharField(max_length=100)
 	role = models.CharField(max_length=100)
 	hero_image = models.ImageField(upload_to='images/')
 
 class Match_Type(models.Model):
+	"""This model is used to store Overwatch match types."""
 	id = models.BigAutoField(primary_key=True)
 	match_type = models.CharField(max_length=100)

@@ -2,7 +2,19 @@ from django.shortcuts import render, redirect
 from OverWatch_2 import forms
 from OverWatch_2 import models
 
+
+
+
+
 def OW_Rosters(request):
+	"""This function is used to display all Overwatch teams that have been created.
+
+	Args:
+		request
+
+	Returns:
+		render: returns a rendred html page with all Overwatch teams that have been created
+	"""
 	OW_Teams = forms.OW_Team.objects.all()
 	return render(request, 'team_templates/OW_Rosters.html', {"OW_Teams": OW_Teams})
 
@@ -23,6 +35,15 @@ def OW_Team_Roster(request, pk):
 	return render(request, 'team_templates/OW_Roster_Players.html', view)
 
 def Match_History(pk):
+	"""This function is used to get all matches that a team has played.
+
+	Args:
+		pk (int): primary key of the team to get matches for
+
+	Returns:
+		model: team model of the team that matches were requested for
+		model: match model of all matches that the team has played
+	"""
 	team = models.OW_Team.objects.get(id=pk)
 	owMatches = models.Match.objects.filter(ow_team_id=pk).prefetch_related('game_set').order_by('-id')
 
@@ -50,7 +71,16 @@ def Match_History(pk):
 
 	return team, owMatches
 
-def activate_player(request, pk):
+def Activate_Player(request, pk):
+	"""This function is used to activate a player that has been deactivated, to add to the roster again
+
+	Args:
+		request
+		pk (int): primary key of the player who is to be activated
+
+	Returns:
+		render: returns a rendered html page with a form to activate a player
+	"""
 	team = models.OW_Team.objects.get(id=pk)
 	roster = models.Roster.objects.filter(ow_team_id=pk, is_active=False)
 	if request.method == "POST":
