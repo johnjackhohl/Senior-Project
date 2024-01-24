@@ -110,20 +110,20 @@ def Map_Winrates(pk):
 	Args:
 		pk (int): primary key of the team to get winrates for
 	"""
-	# Fetch all relevant games in a single query
+	# Fetch all relevant games
 	games = models.Game.objects.filter(match_id__ow_team_id=pk).values('map_type', 'mount_win')
 
 	# Initialize a dictionary to store game counts and wins
 	map_stats = defaultdict(lambda: {'wins': 0, 'total': 0})
 
-	# Process the games to count total and wins
+	# count total and wins
 	for game in games:
 		map_type = game['map_type']
 		map_stats[map_type]['total'] += 1
 		if game['mount_win']:
 			map_stats[map_type]['wins'] += 1
 
-	# Convert defaultdict to regular dict for returning
+	# Convert defaultdict to regular dict
 	map_stats = {k: dict(v) for k, v in map_stats.items()}
 
 	# Calculate winrates
