@@ -24,15 +24,16 @@ def OW_Team_Roster(request, pk):
 	players = models.Roster.objects.filter(ow_team_id=team.id, is_active=True)
 	heroPictures = models.Hero.objects.all()
 	mapPictures = models.Map.objects.all()
-
+	map_stats = Map_Winrates(pk)
 	view = {
 		"OW_Team": team,
 		"Roster": players,
 		"Hero_Pictures": heroPictures,
 		"Matches": owMatches,
-		"Map_Pictures": mapPictures
+		"Map_Pictures": mapPictures,
+		"Map_Stats": map_stats,
 	}
-	return render(request, 'team_templates/OW_Roster_Players.html', view)
+	return render(request, 'team_templates/OW_Team_Roster.html', view)
 
 def Match_History(pk):
 	"""This function is used to get all matches that a team has played.
@@ -99,3 +100,37 @@ def Activate_Player(request, pk):
 		'team_id': team.id
 	}
 	return render(request, 'team_templates/activate_player.html', context)
+
+from collections import defaultdict
+
+def Map_Winrates(pk):
+	"""
+	This function is used to get the winrates for each map type for a team.
+
+	Args:
+		pk (int): primary key of the team to get winrates for
+	"""
+	# Fetch all relevant games in a single query
+	games = models.Game.objects.filter(match_id__ow_team_id=pk).values('map_type', 'mount_win')
+
+	# Initialize a dictionary to store game counts and wins
+	map_stats = defaultdict(lambda: {'wins': 0, 'total': 0})
+
+	# Process the games to count total and wins
+	for game in games:
+		map_type = game['map_type']
+		map_stats[map_type]['total'] += 1
+		if game['mount_win']:
+			map_stats[map_type]['wins'] += 1
+
+	# Convert defaultdict to regular dict for returning
+	map_stats = {k: dict(v) for k, v in map_stats.items()}
+
+	# Calculate winrates
+	for map_type, stats in map_stats.items():
+		map_stats[map_type]['winrate'] = stats['wins'] / stats['total'] * 100
+
+	# order the map_stats dictionary by map_type
+	map_stats = dict(sorted(map_stats.items(), key=lambda item: item[0]))
+	
+	return map_stats

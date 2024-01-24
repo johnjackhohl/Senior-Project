@@ -40,6 +40,11 @@ class Game(models.Model):
 	notes = models.TextField(null=True, blank=True)
 
 	def get_maps(self):
+		"""This function is used to get the maps for the game.
+
+		Returns:
+			self: addes the maps to the game object
+		"""
 		if self.map_type == "Control":
 			return self.control_map_set.all()
 		elif self.map_type in ["Escort", "Hybrid"]:
