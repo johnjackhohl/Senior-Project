@@ -139,6 +139,27 @@ class Flashpoint_Map(models.Model):
 	opponent_support_1 = models.CharField(max_length=100)
 	opponent_support_2 = models.CharField(max_length=100)
 
+class Clash_Map(models.Model):
+	"""This model is used to store Overwatch clash maps."""
+	id = models.BigAutoField(primary_key=True)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	map_name = models.CharField(max_length=100) 
+	mount_tank = models.CharField(max_length=100)
+	mount_dps_1 = models.CharField(max_length=100)
+	mount_dps_2 = models.CharField(max_length=100)
+	mount_support_1 = models.CharField(max_length=100)
+	mount_support_2 = models.CharField(max_length=100)
+	opponent_tank = models.CharField(max_length=100)
+	opponent_dps_1 = models.CharField(max_length=100)
+	opponent_dps_2 = models.CharField(max_length=100)
+	opponent_support_1 = models.CharField(max_length=100)
+	opponent_support_2 = models.CharField(max_length=100)
+	A_point_win = models.BooleanField()
+	B_point_win = models.BooleanField()
+	C_point_win = models.BooleanField()
+	D_point_win = models.BooleanField()
+	E_point_win = models.BooleanField()
+
 class Player(models.Model):
 	"""This model is used to store Overwatch players for the maps"""
 	id = models.BigAutoField(primary_key=True)

@@ -50,6 +50,9 @@ def Add_Game(request, pk):
 				return redirect('add-push', pk=form.instance.id)
 			if(mapType=='Flashpoint'):
 				return redirect('add-flashpoint', pk=form.instance.id)
+			if(mapType=="Clash"):
+				return redirect('add-clash', pk=form.instance.id)
+			
 	else:
 		form = forms.Game_Form()
 	return render(request, 'match_inputs/Add_Game.html', {'form': form, 'match': match, 'team': team})
@@ -197,6 +200,40 @@ def Add_Flashpoint(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
+def Add_Clash(request, pk):
+	"""Adds a clash map to the database
+
+	Args:
+		request
+		pk (int): primary key of the game that the clash map is being added for
+
+	Returns:
+		render: returns a rendered html page with the form for adding a clash map
+	"""
+	game = models.Game.objects.get(id=pk)
+	tanks = models.Hero.objects.filter(role="Tank")
+	dps = models.Hero.objects.filter(role="DPS")
+	support = models.Hero.objects.filter(role="Support")
+	maps = models.Map.objects.filter(map_type="Clash")
+	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
+	if request.method == "POST":
+		form = forms.Clash_Map_Form(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('add-player', pk=form.instance.id, mapType=game.map_type)
+	else:
+		form = forms.Clash_Map_Form()
+	context = {
+		'form': form,
+		'game': game,
+		'tanks': tanks,
+		'dps': dps,
+		'support': support,
+		'maps': maps,
+		'team': team
+	}
+	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
+
 def Add_Player(request, pk, mapType):
 	"""Adds players to the database for a specific map, either 5 or 10 players depending on the map type
 
@@ -217,6 +254,8 @@ def Add_Player(request, pk, mapType):
 		map = models.Push_Map.objects.get(id=pk)
 	elif mapType == "Flashpoint":
 		map = models.Flashpoint_Map.objects.get(id=pk)
+	elif mapType == "Clash":
+		map = models.Clash_Map.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id, is_active=True)
 	tanks, dps, support = Get_Heroes(map, mapType)
@@ -370,3 +409,4 @@ def Get_Heroes(map, mapType):
 		support.append(support1)
 		support.append(support2)
 	return tanks, dps, support
+

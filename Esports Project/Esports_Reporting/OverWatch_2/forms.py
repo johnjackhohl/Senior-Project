@@ -51,6 +51,14 @@ class Flashpoint_Map_Form(forms.ModelForm):
 		fields = ['game_id', 'map_name', 'point_number', 'mount_percent','opponent_percent', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 
 				  'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
 					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2']
+		
+class Clash_Map_Form(forms.ModelForm):
+	class Meta:
+		model = Clash_Map
+		fields = ['game_id', 'map_name', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 
+				  'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
+					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2', 'A_point_win',
+					'B_point_win', 'C_point_win', 'D_point_win', 'E_point_win']
 
 class Player_Form(forms.ModelForm):
 	class Meta:

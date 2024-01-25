@@ -36,6 +36,7 @@ urlpatterns = [
 	path('game/<int:pk>/addEscortHybrid/', match_views.Add_Escort_Hybrid, name='add-escort-hybrid'),
 	path('game/<int:pk>/addPush/', match_views.Add_Push, name='add-push'),
 	path('game/<int:pk>/addFlashpoint/', match_views.Add_Flashpoint, name='add-flashpoint'),
+    path('game/<int:pk>/addClash/', match_views.Add_Clash, name='add-clash'),
 	path('game/<str:mapType>/<int:pk>/addPlayer/', match_views.Add_Player, name='add-player'),
 	path('game/<str:mapType>/<int:pk>/addSinglePlayer/', match_views.Add_Single_Player, name='add-single-player'),
     
