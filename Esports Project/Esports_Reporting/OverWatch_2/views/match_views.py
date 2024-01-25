@@ -232,7 +232,7 @@ def Add_Clash(request, pk):
 		'maps': maps,
 		'team': team
 	}
-	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
+	return render(request, 'match_inputs/Add_Clash_Map.html', context)
 
 def Add_Player(request, pk, mapType):
 	"""Adds players to the database for a specific map, either 5 or 10 players depending on the map type

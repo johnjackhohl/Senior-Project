@@ -2,167 +2,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Match History</title>
-    <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
-    <script src="{% static 'js/accordion.js' %}" defer></script>
+	<meta charset="UTF-8">
+	<title>Match History</title>
+	<link rel="stylesheet" href="{% static 'css/accordion.css' %}">
+	<script src="{% static 'js/accordion.js' %}" defer></script>
 </head>
 <body>
-    {% if Matches %}
-        <button class="accordion">Match History</button>
-        <div class="panel">
-            {% for match in Matches %}
-                <button class="accordion">Match against {{ match.opponent|capfirst }}</button>
-                <div class="panel">
-                    <div class="match">
-                        <h3>Match Details</h3>
-                            <p>
-                                {% if "scrim" in match.match_type|lower %}
-                                    {{match.match_type|capfirst}} 
-                                {%else%}
-                                    {{match.match_type}} game
-                                {% endif %}
-                                vs {{match.opponent|capfirst}} on {{match.match_date|date:"F d, Y"}}
-                            </p>
-                            <p> {{match.mount_score}} - {{match.opponent_score}} in favor of 
-                                {% if match.mount_score > match.opponent_score %}
-                                    Mount
-                                {% else %}
-                                    {{match.opponent|capfirst}}
-                                {% endif %}
-                            </p>
-                        <div class="add-delete-buttons">
-                            <form method="POST" action="{% url 'add-game' match.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="add-button">Add Game</button>
-                            </form>
-                            <form method="POST" action="{% url 'delete-match' match.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="delete-button">Delete Match</button>
-                            </form>
-                        </div>
-                        <br>
+	{% if Matches %}
+		<button class="accordion">Match History</button>
+		<div class="panel">
+			{% for match in Matches %}
+				<button class="accordion">Match against {{ match.opponent|capfirst }}</button>
+				<div class="panel">
+					<div class="match">
+						<h3>Match Details</h3>
+							<p>
+								{% if "scrim" in match.match_type|lower %}
+									{{match.match_type|capfirst}} 
+								{%else%}
+									{{match.match_type}} game
+								{% endif %}
+								vs {{match.opponent|capfirst}} on {{match.match_date|date:"F d, Y"}}
+							</p>
+							<p> {{match.mount_score}} - {{match.opponent_score}} in favor of 
+								{% if match.mount_score > match.opponent_score %}
+									Mount
+								{% else %}
+									{{match.opponent|capfirst}}
+								{% endif %}
+							</p>
+						<div class="add-delete-buttons">
+							<form method="POST" action="{% url 'add-game' match.id %}">
+								{% csrf_token %}
+								<button type="submit" class="add-button">Add Game</button>
+							</form>
+							<form method="POST" action="{% url 'delete-match' match.id %}">
+								{% csrf_token %}
+								<button type="submit" class="delete-button">Delete Match</button>
+							</form>
+						</div>
+						<br>
 
-                        {% for game in match.game_set.all %}
-                            <button class="accordion">Game: {{ game.map_type }}</button>
-                            <div class="panel">
-                                <div class="game">
-                                    <h4>Game Details</h4>
-                                    <p>Mount Score: {{ game.mount_score }}</p>
-                                    <p>Opponent Score: {{ game.opponent_score }}</p>
-                                    
-                                    <br>
+						{% for game in match.game_set.all %}
+							<button class="accordion">Game: {{ game.map_type }}</button>
+							<div class="panel">
+								<div class="game">
+									<h4>Game Details</h4>
+									<p>Mount Score: {{ game.mount_score }}</p>
+									<p>Opponent Score: {{ game.opponent_score }}</p>
+									
+									<br>
 
-                                    <!-- Control map -->
-                                    {% if game.map_type == "Control" %}
-                                    <div class='add-delete-buttons'>
-                                        <form method='POST' action = "{% url 'add-control' game.id %}">
-                                            {% csrf_token %}
-                                            <button class = 'add-button' type="submit">Add Control Map</button>
-                                        </form>
-                                        <form method="POST" action="{% url 'delete-game' game.id %}">
-                                            {% csrf_token %}
-                                            <button class= "delete-button" type="submit">Delete Game</button>
-                                        </form>
-                                    </div>
-                                        {% for map_info in game.maps_with_players %}
-                                            {% include "team_templates/match_history_control.html" with map_info=map_info%}
-                                        {% endfor %}
+									<!-- Control map -->
+									{% if game.map_type == "Control" %}
+									<div class='add-delete-buttons'>
+										<form method='POST' action = "{% url 'add-control' game.id %}">
+											{% csrf_token %}
+											<button class = 'add-button' type="submit">Add Control Map</button>
+										</form>
+										<form method="POST" action="{% url 'delete-game' game.id %}">
+											{% csrf_token %}
+											<button class= "delete-button" type="submit">Delete Game</button>
+										</form>
+									</div>
+										{% for map_info in game.maps_with_players %}
+											{% include "team_templates/match_history_control.html" with map_info=map_info%}
+										{% endfor %}
 
-                                    <!-- Flashpoint maps-->
-                                    {% elif game.map_type == "Flashpoint" %}
-                                    <div class='add-delete-buttons'>
-                                        <form method='POST' action = "{% url 'add-flashpoint' game.id %}">
-                                            {% csrf_token %}
-                                            <button class = 'add-button' type="submit">Add Flashpoint Map</button>
-                                        </form>
-                                        <form method="POST" action="{% url 'delete-game' game.id %}">
-                                            {% csrf_token %}
-                                            <button class= "delete-button" type="submit">Delete Game</button>
-                                        </form>
-                                    </div>
-                                        {% for map_info in game.maps_with_players %}
-                                            {% include "team_templates/match_history_flashpoint.html" with map_info=map_info%}
-                                        {% endfor %}
+									<!-- Flashpoint maps-->
+									{% elif game.map_type == "Flashpoint" %}
+									<div class='add-delete-buttons'>
+										<form method='POST' action = "{% url 'add-flashpoint' game.id %}">
+											{% csrf_token %}
+											<button class = 'add-button' type="submit">Add Flashpoint Map</button>
+										</form>
+										<form method="POST" action="{% url 'delete-game' game.id %}">
+											{% csrf_token %}
+											<button class= "delete-button" type="submit">Delete Game</button>
+										</form>
+									</div>
+										{% for map_info in game.maps_with_players %}
+											{% include "team_templates/match_history_flashpoint.html" with map_info=map_info%}
+										{% endfor %}
 
-                                    <!--push map-->
-                                    {% elif game.map_type == "Push" %}
-                                        {% if game.maps_with_players|length == 0%}
-                                            <div class='add-delete-buttons'>
-                                                <form method='POST' action="{% url 'add-push' game.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'add-button' type="submit">Add Push Map</button>
-                                                </form>
-                                                <form method="POST" action="{% url 'delete-game' game.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'delete-button' type="submit">Delete Game</button>
-                                                </form>
-                                            </div>
-                                        {% endif %}
-                                        {% for map_info in game.maps_with_players %}
-                                            {% include "team_templates/match_history_push.html" with map_info=map_info%}
-                                            
-                                            <div class='add-delete-buttons'>
-                                                <form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'add-button' type="submit">Add Player to Push Map</button>
-                                                </form>
-                                                <form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'delete-button' type="submit">Delete Push Map</button>
-                                                </form>
-                                                <form method="POST" action="{% url 'delete-game' game.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'delete-button' type="submit">Delete Game</button>
-                                                </form>
-                                            </div>
-                                            {% include "team_templates/match_history_players.html" with map_info=map_info%}
-                                        {% endfor %}
+									<!--Clash map-->
+									{% elif game.map_type == "Clash" %}
+										{% if game.maps_with_players|length == 0%}
+											<div class='add-delete-buttons'>
+												<form method='POST' action="{% url 'add-clash' game.id %}">
+													{% csrf_token %}
+													<button class = 'add-button' type="submit">Add Clash Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-game' game.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Game</button>
+												</form>
+											</div>
+										{% endif %}
+										{% for map_info in game.maps_with_players %}
+											
+											{% include "team_templates/Match_History_Clash.html" with map_info=map_info%}
+											<div class='add-delete-buttons'>
+												<form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'add-button' type="submit">Add Player to Push Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Push Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-game' game.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Game</button>
+												</form>
+											</div>
+											{% include "team_templates/match_history_players.html" with map_info=map_info%}
+										{% endfor %}
 
-                                    <!--Escort Hybrid map-->
-                                    {% else %}
-                                        {% if game.maps_with_players|length == 0 %}
-                                        <div class='add-delete-buttons'>
-                                            <form method='POST' action="{% url 'add-escort-hybrid' game.id %}">
-                                                {% csrf_token %}
-                                                <button class = 'add-button' type="submit">Add {%if game.map_type == "Escort"%} Escort {%else%} Hybrid {%endif%} Map</button>
-                                            </form>
-                                            <form method="POST" action="{% url 'delete-game' game.id %}">
-                                                {% csrf_token %}
-                                                <button class = 'delete-button' type="submit">Delete Game</button>
-                                            </form>
-                                        </div>
-                                        {% endif %}
-                                        {% for map_info in game.maps_with_players %}
-                                            {% include "team_templates/match_history_escort_hybrid.html" with map_info=map_info%}
 
-                                            <div class='add-delete-buttons'>
-                                                <form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'add-button' type="submit">Add Player to {%if map_info.map.is_Escort%} Escort {%else%} Hybrid {%endif%} Map</button>
-                                                </form>
-                                                <form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'delete-button' type="submit">Delete {%if map_info.map.is_Escort%} Escort {%else%} Hybrid {%endif%} Map</button>
-                                                </form>
-                                                <form method="POST" action="{% url 'delete-game' game.id %}">
-                                                    {% csrf_token %}
-                                                    <button class = 'delete-button' type="submit">Delete Game</button>
-                                                </form>
-                                            </div>
-                                            
-                                            {% include "team_templates/match_history_players.html" with map_info=map_info%}
-                                        {% endfor %}
-                                    {% endif %} 
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>No Matches Found</p>
-    {% endif %}
+									<!--push map-->
+									{% elif game.map_type == "Push" %}
+										{% if game.maps_with_players|length == 0%}
+											<div class='add-delete-buttons'>
+												<form method='POST' action="{% url 'add-push' game.id %}">
+													{% csrf_token %}
+													<button class = 'add-button' type="submit">Add Push Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-game' game.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Game</button>
+												</form>
+											</div>
+										{% endif %}
+										{% for map_info in game.maps_with_players %}
+											{% include "team_templates/match_history_push.html" with map_info=map_info%}
+											
+											<div class='add-delete-buttons'>
+												<form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'add-button' type="submit">Add Player to Push Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Push Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-game' game.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Game</button>
+												</form>
+											</div>
+											{% include "team_templates/match_history_players.html" with map_info=map_info%}
+										{% endfor %}
+
+									<!--Escort Hybrid map-->
+									{% else %}
+										{% if game.maps_with_players|length == 0 %}
+										<div class='add-delete-buttons'>
+											<form method='POST' action="{% url 'add-escort-hybrid' game.id %}">
+												{% csrf_token %}
+												<button class = 'add-button' type="submit">Add {%if game.map_type == "Escort"%} Escort {%else%} Hybrid {%endif%} Map</button>
+											</form>
+											<form method="POST" action="{% url 'delete-game' game.id %}">
+												{% csrf_token %}
+												<button class = 'delete-button' type="submit">Delete Game</button>
+											</form>
+										</div>
+										{% endif %}
+										{% for map_info in game.maps_with_players %}
+											{% include "team_templates/match_history_escort_hybrid.html" with map_info=map_info%}
+
+											<div class='add-delete-buttons'>
+												<form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'add-button' type="submit">Add Player to {%if map_info.map.is_Escort%} Escort {%else%} Hybrid {%endif%} Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-map' game.map_type map_info.map.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete {%if map_info.map.is_Escort%} Escort {%else%} Hybrid {%endif%} Map</button>
+												</form>
+												<form method="POST" action="{% url 'delete-game' game.id %}">
+													{% csrf_token %}
+													<button class = 'delete-button' type="submit">Delete Game</button>
+												</form>
+											</div>
+											
+											{% include "team_templates/match_history_players.html" with map_info=map_info%}
+										{% endfor %}
+									{% endif %} 
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>No Matches Found</p>
+	{% endif %}
 </body>
 </html>
