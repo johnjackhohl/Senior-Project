@@ -21,7 +21,7 @@ def add_player_to_roster(request, pk):
 			return redirect('team-roster', pk=pk)
 	else:
 		form = forms.Roster_Form()
-	return render(request, 'add_templates/Add_OW_Player.html', {'form': form, 'team': team})
+	return render(request, 'add_templates/add_ow_player.html', {'form': form, 'team': team})
 
 def create_ow_team(request):
 	"""Creates a new Overwatch team.
@@ -39,7 +39,7 @@ def create_ow_team(request):
 			return redirect('rosters')
 	else:
 		form = forms.OW_Team_Form()
-	return render(request, 'add_templates/Create_OW_Team.html', {'form': form})
+	return render(request, 'add_templates/create_ow_team.html', {'form': form})
 
 def add_hero(request):
 	"""This function is used to add a new hero to the database.
@@ -58,7 +58,7 @@ def add_hero(request):
 			return redirect('rosters')
 	else:
 		form = forms.Add_Hero_Form()
-	return render(request, 'add_templates/Add_Hero.html', {'form': form})	
+	return render(request, 'add_templates/add_hero.html', {'form': form})	
 
 def add_map(request):
 	"""This function is used to add a new map to the database.
@@ -83,7 +83,7 @@ def add_map(request):
 			return redirect('rosters')
 	else:
 		form = forms.Add_Map_Form()
-	return render(request, 'add_templates/Add_Map.html', {'form': form})
+	return render(request, 'add_templates/add_map.html', {'form': form})
 
 def add_sub_map(request, pk):
 	"""This function is used to add a new sub map to the database.
@@ -115,7 +115,7 @@ def add_sub_map(request, pk):
 		'formset': formset,
 		'mapName': map_instance.map_name,
 	}
-	return render(request, 'add_templates/Add_Sub_Map.html', context)
+	return render(request, 'add_templates/add_sub_map.html', context)
 
 
 def add_match_type(request):
@@ -134,4 +134,4 @@ def add_match_type(request):
 			return redirect('rosters')
 	else:
 		form = forms.Add_Match_Type_Form()
-	return render(request, 'add_templates/Add_Match_Type.html', {'form': form})
+	return render(request, 'add_templates/add_match_type.html', {'form': form})

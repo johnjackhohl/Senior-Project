@@ -13,12 +13,21 @@ class CustomLoginView(LoginView):
 		return reverse('home')
 	
 	def dispatch(self, request, *args, **kwargs):
+		# Redirect to the home page if the user is already logged in
 		if request.user.is_authenticated:
 			return redirect('home')  # Redirect to a 'home' URL or another appropriate view
 		return super().dispatch(request, *args, **kwargs)
 
 # User Registration View
 def register(request):
+	"""Adds a new user to the database
+
+	Args:
+		request
+
+	Returns:
+		redirect: redirects back to the login page
+	"""
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
 		if form.is_valid():
@@ -30,8 +39,24 @@ def register(request):
 
 # Home Page View
 def home(request):
+	"""Renders the home page
+
+	Args:
+		request
+
+	Returns:
+		render: renders the home page
+	"""
 	return render(request, "home_page/home_page.html")
 
 def logout_view(request):
+	"""Logs the user out of the system
+
+	Args:
+		request
+
+	Returns:
+		render: generates the logout page
+	"""
 	logout(request)
 	return render(request, "login/logout.html")

@@ -26,7 +26,7 @@ def delete_hero(request):
 			'form': form,
 			'heroes': heroes
 		}
-		return render(request, 'delete_templates/Delete_Hero.html', context)
+		return render(request, 'delete_templates/delete_hero.html', context)
 
 def delete_map_name(request):
 	"""Deletes a map from the database.
@@ -55,7 +55,7 @@ def delete_map_name(request):
 			'form': form,
 			'maps' : maps
 		}
-	return render(request, 'delete_templates/Delete_Map.html', context)
+	return render(request, 'delete_templates/delete_map.html', context)
 
 def delete_match_type(request):
 	"""Deletes a match type from the database.
@@ -78,7 +78,7 @@ def delete_match_type(request):
 			'form': form,
 			'matchTypes': matchTypes
 		}
-	return render(request, 'delete_templates/Delete_Match_Type.html', context)
+	return render(request, 'delete_templates/delete_match_type.html', context)
 
 def delete_roster_player(response, pk):
 	"""Deletes a player from a roster.

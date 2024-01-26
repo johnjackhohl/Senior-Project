@@ -12,7 +12,7 @@ def ow_rosters(request):
 		render: returns a rendred html page with all Overwatch teams that have been created
 	"""
 	OW_Teams = forms.OwTeam.objects.all()
-	return render(request, 'team_templates/OW_Rosters.html', {"OW_Teams": OW_Teams})
+	return render(request, 'team_templates/ow_rosters.html', {"OW_Teams": OW_Teams})
 
 def ow_team_roster(request, pk):
 	team, owMatches = match_history(pk)
@@ -29,7 +29,7 @@ def ow_team_roster(request, pk):
 		"Map_Pictures": mapPictures,
 		"Map_Stats": map_stats,
 	}
-	return render(request, 'team_templates/OW_Team_Roster.html', view)
+	return render(request, 'team_templates/ow_team_roster.html', view)
 
 def match_history(pk):
 	"""This function is used to get all matches that a team has played.

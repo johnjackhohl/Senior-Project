@@ -101,7 +101,7 @@
 										{% endif %}
 										<p>I got here 1</p>
 										{% for map_info in game.maps_with_players %}
-											{% include "team_templates/Match_History_Clash.html" with map_info=map_info%}
+											{% include "team_templates/match_history_clash.html" with map_info=map_info%}
 											<div class='add-delete-buttons'>
 												<form method='GET' action="{% url 'add-single-player' game.map_type map_info.map.id %}">
 													{% csrf_token %}

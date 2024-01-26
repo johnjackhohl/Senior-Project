@@ -23,7 +23,7 @@ def add_match(request, pk):
 			return redirect('add-game', pk=form.instance.id)
 	else:
 		form = forms.Match_Form()
-	return render(request, 'match_inputs/Add_Match.html', {'form': form, 'team': team, 'matchTypes': matchTypes})
+	return render(request, 'match_inputs/add_match.html', {'form': form, 'team': team, 'matchTypes': matchTypes})
 
 def add_game(request, pk):
 	"""Adds a game to the database
@@ -55,7 +55,7 @@ def add_game(request, pk):
 			
 	else:
 		form = forms.Game_Form()
-	return render(request, 'match_inputs/Add_Game.html', {'form': form, 'match': match, 'team': team})
+	return render(request, 'match_inputs/add_game.html', {'form': form, 'match': match, 'team': team})
 
 def add_control(request, pk):
 	"""Adds a control map to the database
@@ -91,7 +91,7 @@ def add_control(request, pk):
 		'maps': maps,
 		'subMaps': json.dumps(sub_maps),
 	}
-	return render(request, 'match_inputs/Add_Control_Map.html', context)
+	return render(request, 'match_inputs/add_control_map.html', context)
 
 def add_escort_hybrid(request, pk):
 	"""Adds a escort or hybrid map to the database
@@ -130,7 +130,7 @@ def add_escort_hybrid(request, pk):
 		'maps': maps,
 		'is_Escort': is_Escort
 	}
-	return render(request, 'match_inputs/Add_Escort_Hybrid_Map.html', context)
+	return render(request, 'match_inputs/add_escort_hybrid_map.html', context)
 
 def add_push(request, pk):
 	"""Adds a push map to the database
@@ -164,7 +164,7 @@ def add_push(request, pk):
 		'maps': maps,
 		'team': team
 	}
-	return render(request, 'match_inputs/Add_Push_Map.html', context)
+	return render(request, 'match_inputs/add_push_map.html', context)
 
 def add_flashpoint(request, pk):
 	"""Adds a flashpoint map to the database
@@ -198,7 +198,7 @@ def add_flashpoint(request, pk):
 		'maps': maps,
 		'team': team
 	}
-	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
+	return render(request, 'match_inputs/add_flashpoint_map.html', context)
 
 def add_clash(request, pk):
 	"""Adds a clash map to the database
@@ -232,7 +232,7 @@ def add_clash(request, pk):
 		'maps': maps,
 		'team': team
 	}
-	return render(request, 'match_inputs/Add_Clash_Map.html', context)
+	return render(request, 'match_inputs/add_clash_map.html', context)
 
 def add_player(request, pk, mapType):
 	"""Adds players to the database for a specific map, either 5 or 10 players depending on the map type
@@ -302,7 +302,7 @@ def add_player(request, pk, mapType):
 		'tankData': json.dumps(tanks),
 		'rosterData': json.dumps(rosterData),
 	}
-	return render(request, 'match_inputs/Add_Game_Player.html', context)
+	return render(request, 'match_inputs/add_game_player.html', context)
 
 def add_single_player(request, mapType, pk):
 	"""Adds a single player to the database for a specific map
@@ -355,7 +355,7 @@ def add_single_player(request, mapType, pk):
 		'tankData': json.dumps(list(tanks)),
 		'rosterData': json.dumps(rosterData),
 	}
-	return render(request, 'match_inputs/Add_Single_Player.html', context)
+	return render(request, 'match_inputs/add_single_player.html', context)
 
 def get_heroes(map, mapType):
 	"""Gets the heroes for a specific map
