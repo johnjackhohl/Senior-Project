@@ -59,7 +59,7 @@ class Game(models.Model):
 class ControlMap(models.Model):
 	"""This model is used to store Overwatch control maps."""
 	id = models.BigAutoField(primary_key=True)
-	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="control_map_set")
 	map_name = models.CharField(max_length=100) 
 	map_sub_name = models.CharField(max_length=100)
 	round = models.IntegerField()
@@ -79,7 +79,7 @@ class ControlMap(models.Model):
 class EscortHybridMap(models.Model):
 	"""This model is used to store Overwatch escort and hybrid maps."""
 	id = models.BigAutoField(primary_key=True)
-	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="escort_hybrid_map_set")
 	is_Escort = models.BooleanField()
 	map_name = models.CharField(max_length=100) 
 	attack_first = models.BooleanField()
@@ -107,7 +107,7 @@ class EscortHybridMap(models.Model):
 class PushMap(models.Model):
 	"""This model is used to store Overwatch push maps."""
 	id = models.BigAutoField(primary_key=True)
-	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="push_map_set")
 	map_name = models.CharField(max_length=100) 
 	mount_distance = models.IntegerField()
 	opponent_distance = models.IntegerField()
@@ -125,7 +125,7 @@ class PushMap(models.Model):
 class FlashpointMap(models.Model):
 	"""This model is used to store Overwatch flashpoint maps."""
 	id = models.BigAutoField(primary_key=True)
-	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="flashpoint_map_set")
 	map_name = models.CharField(max_length=100) 
 	point_number = models.IntegerField()
 	mount_percent = models.IntegerField()
@@ -144,7 +144,7 @@ class FlashpointMap(models.Model):
 class ClashMap(models.Model):
 	"""This model is used to store Overwatch clash maps."""
 	id = models.BigAutoField(primary_key=True)
-	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
+	game_id = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="clash_map_set")
 	map_name = models.CharField(max_length=100) 
 	mount_tank = models.CharField(max_length=100)
 	mount_dps_1 = models.CharField(max_length=100)
@@ -190,7 +190,7 @@ class Map(models.Model):
 class SubMap(models.Model):
 	"""This model is used to store Overwatch sub maps."""
 	id = models.BigAutoField(primary_key=True)
-	map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
+	map_id = models.ForeignKey(Map, on_delete=models.CASCADE, related_name='sub_map_set')
 	sub_map_name = models.CharField(max_length=100)
 
 class Hero(models.Model):

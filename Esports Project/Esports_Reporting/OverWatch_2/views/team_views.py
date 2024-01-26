@@ -47,7 +47,6 @@ def match_history(pk):
 	for match in owMatches:
 		for game in match.game_set.all():
 			game_maps_with_players = []  # List to hold maps and their players
-			print(game.map_type)
 			maps = game.get_maps()
 			for map in maps:
 				if game.map_type == "Control":

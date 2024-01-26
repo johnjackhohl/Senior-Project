@@ -35,7 +35,7 @@ def add_game(request, pk):
 	Returns:
 		render: returns a rendered html page with the form for adding a game 
 	"""
-	match = Match.objects.get(id=pk)
+	match = models.Match.objects.get(id=pk)
 	team = models.OwTeam.objects.get(id=match.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Game_Form(request.POST)
