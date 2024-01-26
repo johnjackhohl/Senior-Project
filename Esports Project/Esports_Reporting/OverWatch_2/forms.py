@@ -3,7 +3,7 @@ from .models import *
 
 class OW_Team_Form(forms.ModelForm):
 	class Meta:
-		model = OW_Team
+		model = OwTeam
 		fields = ['name', 'year_fall', 'year_spring', 'varsity']
 
 class Roster_Form(forms.ModelForm):
@@ -23,13 +23,13 @@ class Game_Form(forms.ModelForm):
 
 class Control_Map_Form(forms.ModelForm):
 	class Meta:
-		model = Control_Map
+		model = ControlMap
 		fields = ['game_id', 'map_name', 'map_sub_name', 'round', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 'mount_support_1', 
 				  'mount_support_2', 'opponent_tank', 'opponent_dps_1', 'opponent_dps_2', 'opponent_support_1', 'opponent_support_2', 'mount_percent', 'opponent_percent']
 
 class Escort_Hybrid_Map_Form(forms.ModelForm):
 	class Meta:
-		model = Escort_Hybrid_Map
+		model = EscortHybridMap
 		fields = ['game_id', 'is_Escort', 'map_name', 'attack_first', 'mount_attack_tank', 'mount_attack_dps_1', 
 				  'mount_attack_dps_2', 'mount_attack_support_1', 'mount_attack_support_2', 'mount_defense_tank', 
 				  'mount_defense_dps_1', 'mount_defense_dps_2', 'mount_defense_support_1', 
@@ -40,21 +40,21 @@ class Escort_Hybrid_Map_Form(forms.ModelForm):
 
 class Push_Map_Form(forms.ModelForm):
 	class Meta:
-		model = Push_Map
+		model = PushMap
 		fields = ['game_id', 'map_name', 'mount_distance', 'opponent_distance', 'mount_tank', 'mount_dps_1',
 					'mount_dps_2', 'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
 					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2']
 
 class Flashpoint_Map_Form(forms.ModelForm):
 	class Meta:
-		model = Flashpoint_Map
+		model = FlashpointMap
 		fields = ['game_id', 'map_name', 'point_number', 'mount_percent','opponent_percent', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 
 				  'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
 					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2']
 		
 class Clash_Map_Form(forms.ModelForm):
 	class Meta:
-		model = Clash_Map
+		model = ClashMap
 		fields = ['game_id', 'map_name', 'mount_tank', 'mount_dps_1', 'mount_dps_2', 
 				  'mount_support_1', 'mount_support_2', 'opponent_tank', 'opponent_dps_1',
 					'opponent_dps_2', 'opponent_support_1', 'opponent_support_2', 'A_point_win',
@@ -63,7 +63,7 @@ class Clash_Map_Form(forms.ModelForm):
 class Player_Form(forms.ModelForm):
 	class Meta:
 		model = Player
-		fields = ['roster_id', 'control_id', 'push_id', 'flashpoint_id', 'escort_hybrid_id', 'hero', 'role', 'is_defense', 'kills', 'deaths', 'assists', 'damage', 'healing']
+		fields = ['roster_id', 'control_id', 'push_id', 'flashpoint_id', 'escort_hybrid_id', 'clash_id', 'hero', 'role', 'is_defense', 'kills', 'deaths', 'assists', 'damage', 'healing']
 
 class Add_Hero_Form(forms.ModelForm):
 	class Meta:
@@ -77,7 +77,7 @@ class Add_Map_Form(forms.ModelForm):
 
 class Add_Sub_Map(forms.ModelForm):
     class Meta:
-        model = Sub_Map
+        model = SubMap
         fields = ['map_id', 'sub_map_name']
         widgets = {
             'map_id': forms.HiddenInput(),
@@ -85,7 +85,7 @@ class Add_Sub_Map(forms.ModelForm):
 
 class Add_Match_Type_Form(forms.ModelForm):
 	class Meta:
-		model = Match_Type
+		model = MatchType
 		fields = ['match_type']
 
 class Delete_Map_Form(forms.Form):

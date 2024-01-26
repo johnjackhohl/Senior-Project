@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class OW_Team(models.Model):
+class OwTeam(models.Model):
 	"""This model is used to store Overwatch teams."""
 	id = models.BigAutoField(primary_key=True)
 	name = models.CharField(max_length=100)
@@ -12,7 +12,7 @@ class OW_Team(models.Model):
 class Roster(models.Model):
 	"""This Model is used to store Overwatch players for the teams."""
 	id = models.BigAutoField(primary_key=True)
-	ow_team_id = models.ForeignKey(OW_Team, on_delete=models.CASCADE)
+	ow_team_id = models.ForeignKey(OwTeam, on_delete=models.CASCADE)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	role = models.CharField(max_length=100)
@@ -21,7 +21,7 @@ class Roster(models.Model):
 class Match(models.Model):
 	"""This model is used to store Overwatch matches."""
 	id = models.BigAutoField(primary_key=True)
-	ow_team_id = models.ForeignKey(OW_Team, on_delete=models.CASCADE)
+	ow_team_id = models.ForeignKey(OwTeam, on_delete=models.CASCADE)
 	match_type = models.CharField(max_length=100)
 	opponent = models.CharField(max_length=100)
 	mount_score = models.IntegerField()
@@ -51,10 +51,12 @@ class Game(models.Model):
 			return self.escort_hybrid_map_set.all()
 		elif self.map_type == "Push":
 			return self.push_map_set.all()
+		elif self.map_type == "Clash":
+			return self.clash_map_set.all()
 		else:
 			return self.flashpoint_map_set.all()
 
-class Control_Map(models.Model):
+class ControlMap(models.Model):
 	"""This model is used to store Overwatch control maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -74,7 +76,7 @@ class Control_Map(models.Model):
 	mount_percent = models.IntegerField()
 	opponent_percent = models.IntegerField()
 
-class Escort_Hybrid_Map(models.Model):
+class EscortHybridMap(models.Model):
 	"""This model is used to store Overwatch escort and hybrid maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -102,7 +104,7 @@ class Escort_Hybrid_Map(models.Model):
 	opponent_attack_support_1 = models.CharField(max_length=100)
 	opponent_attack_support_2 = models.CharField(max_length=100)
 
-class Push_Map(models.Model):
+class PushMap(models.Model):
 	"""This model is used to store Overwatch push maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -120,7 +122,7 @@ class Push_Map(models.Model):
 	opponent_support_1 = models.CharField(max_length=100)
 	opponent_support_2 = models.CharField(max_length=100)
 
-class Flashpoint_Map(models.Model):
+class FlashpointMap(models.Model):
 	"""This model is used to store Overwatch flashpoint maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -139,7 +141,7 @@ class Flashpoint_Map(models.Model):
 	opponent_support_1 = models.CharField(max_length=100)
 	opponent_support_2 = models.CharField(max_length=100)
 
-class Clash_Map(models.Model):
+class ClashMap(models.Model):
 	"""This model is used to store Overwatch clash maps."""
 	id = models.BigAutoField(primary_key=True)
 	game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -164,10 +166,11 @@ class Player(models.Model):
 	"""This model is used to store Overwatch players for the maps"""
 	id = models.BigAutoField(primary_key=True)
 	roster_id = models.ForeignKey(Roster, on_delete=models.CASCADE)
-	control_id = models.ForeignKey(Control_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="control_players")
-	push_id = models.ForeignKey(Push_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="push_players")
-	flashpoint_id = models.ForeignKey(Flashpoint_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="flashpoint_players")
-	escort_hybrid_id = models.ForeignKey(Escort_Hybrid_Map, on_delete=models.CASCADE, null=True, blank=True, related_name="escort_hybrid_players")
+	control_id = models.ForeignKey(ControlMap, on_delete=models.CASCADE, null=True, blank=True, related_name="control_players")
+	push_id = models.ForeignKey(PushMap, on_delete=models.CASCADE, null=True, blank=True, related_name="push_players")
+	flashpoint_id = models.ForeignKey(FlashpointMap, on_delete=models.CASCADE, null=True, blank=True, related_name="flashpoint_players")
+	escort_hybrid_id = models.ForeignKey(EscortHybridMap, on_delete=models.CASCADE, null=True, blank=True, related_name="escort_hybrid_players")
+	clash_id = models.ForeignKey(ClashMap, on_delete=models.CASCADE, null=True, blank=True, related_name="clash_players")
 	role = models.CharField(max_length=100)
 	hero = models.CharField(max_length=100)
 	is_defense = models.BooleanField(default=False)
@@ -184,7 +187,7 @@ class Map(models.Model):
 	map_type = models.CharField(max_length=100)
 	map_image = models.ImageField(upload_to='images/')
 
-class Sub_Map(models.Model):
+class SubMap(models.Model):
 	"""This model is used to store Overwatch sub maps."""
 	id = models.BigAutoField(primary_key=True)
 	map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -197,7 +200,7 @@ class Hero(models.Model):
 	role = models.CharField(max_length=100)
 	hero_image = models.ImageField(upload_to='images/')
 
-class Match_Type(models.Model):
+class MatchType(models.Model):
 	"""This model is used to store Overwatch match types."""
 	id = models.BigAutoField(primary_key=True)
 	match_type = models.CharField(max_length=100)

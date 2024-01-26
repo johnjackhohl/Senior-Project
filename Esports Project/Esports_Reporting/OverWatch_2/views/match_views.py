@@ -4,7 +4,7 @@ from OverWatch_2 import forms
 from OverWatch_2 import models
 from django.forms import formset_factory
 
-def Add_Match(request, pk):
+def add_match(request, pk):
 	"""Adds a match to the database
 
 	Args:
@@ -14,8 +14,8 @@ def Add_Match(request, pk):
 	Returns:
 		render: returns a rendered html page with the form for adding a match
 	"""
-	team = models.OW_Team.objects.get(id=pk)
-	matchTypes = models.Match_Type.objects.all()
+	team = models.OwTeam.objects.get(id=pk)
+	matchTypes = models.MatchType.objects.all()
 	if request.method == "POST":
 		form = forms.Match_Form(request.POST)
 		if form.is_valid():
@@ -25,7 +25,7 @@ def Add_Match(request, pk):
 		form = forms.Match_Form()
 	return render(request, 'match_inputs/Add_Match.html', {'form': form, 'team': team, 'matchTypes': matchTypes})
 
-def Add_Game(request, pk):
+def add_game(request, pk):
 	"""Adds a game to the database
 
 	Args:
@@ -35,8 +35,8 @@ def Add_Game(request, pk):
 	Returns:
 		render: returns a rendered html page with the form for adding a game 
 	"""
-	match = models.Match.objects.get(id=pk)
-	team = models.OW_Team.objects.get(id=match.ow_team_id.id)
+	match = Match.objects.get(id=pk)
+	team = models.OwTeam.objects.get(id=match.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Game_Form(request.POST)
 		if form.is_valid():
@@ -57,7 +57,7 @@ def Add_Game(request, pk):
 		form = forms.Game_Form()
 	return render(request, 'match_inputs/Add_Game.html', {'form': form, 'match': match, 'team': team})
 
-def Add_Control(request, pk):
+def add_control(request, pk):
 	"""Adds a control map to the database
 
 	Args:
@@ -72,7 +72,7 @@ def Add_Control(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Control")
-	subMaps = models.Sub_Map.objects.all()
+	subMaps = models.SubMap.objects.all()
 	sub_maps = {map.map_name: list(map.sub_map_set.values('sub_map_name')) for map in maps}
 
 	if request.method == "POST":
@@ -93,7 +93,7 @@ def Add_Control(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Control_Map.html', context)
 
-def Add_Escort_Hybrid(request, pk):
+def add_escort_hybrid(request, pk):
 	"""Adds a escort or hybrid map to the database
 
 	Args:
@@ -132,7 +132,7 @@ def Add_Escort_Hybrid(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Escort_Hybrid_Map.html', context)
 
-def Add_Push(request, pk):
+def add_push(request, pk):
 	"""Adds a push map to the database
 
 	Args:
@@ -147,7 +147,7 @@ def Add_Push(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Push")
-	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
+	team = models.OwTeam.objects.get(id=game.match_id.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Push_Map_Form(request.POST)
 		if form.is_valid():
@@ -166,7 +166,7 @@ def Add_Push(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Push_Map.html', context)
 
-def Add_Flashpoint(request, pk):
+def add_flashpoint(request, pk):
 	"""Adds a flashpoint map to the database
 
 	Args:
@@ -181,7 +181,7 @@ def Add_Flashpoint(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Flashpoint")
-	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
+	team = models.OwTeam.objects.get(id=game.match_id.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Flashpoint_Map_Form(request.POST)
 		if form.is_valid():
@@ -200,7 +200,7 @@ def Add_Flashpoint(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Flashpoint_Map.html', context)
 
-def Add_Clash(request, pk):
+def add_clash(request, pk):
 	"""Adds a clash map to the database
 
 	Args:
@@ -215,7 +215,7 @@ def Add_Clash(request, pk):
 	dps = models.Hero.objects.filter(role="DPS")
 	support = models.Hero.objects.filter(role="Support")
 	maps = models.Map.objects.filter(map_type="Clash")
-	team = models.OW_Team.objects.get(id=game.match_id.ow_team_id.id)
+	team = models.OwTeam.objects.get(id=game.match_id.ow_team_id.id)
 	if request.method == "POST":
 		form = forms.Clash_Map_Form(request.POST)
 		if form.is_valid():
@@ -234,7 +234,7 @@ def Add_Clash(request, pk):
 	}
 	return render(request, 'match_inputs/Add_Clash_Map.html', context)
 
-def Add_Player(request, pk, mapType):
+def add_player(request, pk, mapType):
 	"""Adds players to the database for a specific map, either 5 or 10 players depending on the map type
 
 	Args:
@@ -247,18 +247,18 @@ def Add_Player(request, pk, mapType):
 	"""
 	PlayerFormSet = formset_factory(forms.Player_Form, extra=0)
 	if mapType == "Control":
-		map = models.Control_Map.objects.get(id=pk)
+		map = models.ControlMap.objects.get(id=pk)
 	elif mapType in ["Escort", "Hybrid"]:
-		map = models.Escort_Hybrid_Map.objects.get(id=pk)
+		map = models.EscortHybridMap.objects.get(id=pk)
 	elif mapType == "Push":
-		map = models.Push_Map.objects.get(id=pk)
+		map = models.PushMap.objects.get(id=pk)
 	elif mapType == "Flashpoint":
-		map = models.Flashpoint_Map.objects.get(id=pk)
+		map = models.FlashpointMap.objects.get(id=pk)
 	elif mapType == "Clash":
-		map = models.Clash_Map.objects.get(id=pk)
+		map = models.ClashMap.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id, is_active=True)
-	tanks, dps, support = Get_Heroes(map, mapType)
+	tanks, dps, support = get_heroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if game.map_type in ['Escort', 'Hybrid']:
 		initial_data = [{'is_defense': False} for _ in range(5)] + [{'is_defense': True} for _ in range(5)]
@@ -277,6 +277,8 @@ def Add_Player(request, pk, mapType):
 					player.push_id = map
 				elif mapType == "Flashpoint":
 					player.flashpoint_id = map
+				elif mapType == "Clash":
+					player.clash_id = map
 				player.save()
 
 			if request.POST.get('action') == "add_control":
@@ -302,7 +304,7 @@ def Add_Player(request, pk, mapType):
 	}
 	return render(request, 'match_inputs/Add_Game_Player.html', context)
 
-def Add_Single_Player(request, mapType, pk):
+def add_single_player(request, mapType, pk):
 	"""Adds a single player to the database for a specific map
 
 	Args:
@@ -314,16 +316,16 @@ def Add_Single_Player(request, mapType, pk):
 		render: returns a rendered html page with the form for adding a player
 	"""
 	if mapType == "Control":
-		map = models.Control_Map.objects.get(id=pk)
+		map = models.ControlMap.objects.get(id=pk)
 	elif mapType in ["Escort", "Hybrid"]:
-		map = models.Escort_Hybrid_Map.objects.get(id=pk)
+		map = models.EscortHybridMap.objects.get(id=pk)
 	elif mapType == "Push":
-		map = models.Push_Map.objects.get(id=pk)
+		map = models.PushMap.objects.get(id=pk)
 	elif mapType == "Flashpoint":
-		map = models.Flashpoint_Map.objects.get(id=pk)
+		map = models.FlashpointMap.objects.get(id=pk)
 	game = models.Game.objects.get(id=map.game_id.id)
 	roster = models.Roster.objects.filter(ow_team_id=game.match_id.ow_team_id.id)
-	tanks, dps, support = Get_Heroes(map, mapType)
+	tanks, dps, support = get_heroes(map, mapType)
 	rosterData = {player.id: player.role for player in roster}
 	if request.method == "POST":
 		form = forms.Player_Form(request.POST)
@@ -355,7 +357,7 @@ def Add_Single_Player(request, mapType, pk):
 	}
 	return render(request, 'match_inputs/Add_Single_Player.html', context)
 
-def Get_Heroes(map, mapType):
+def get_heroes(map, mapType):
 	"""Gets the heroes for a specific map
 
 	Args:

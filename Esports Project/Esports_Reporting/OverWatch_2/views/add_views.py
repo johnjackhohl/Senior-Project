@@ -3,7 +3,7 @@ from OverWatch_2 import forms
 from OverWatch_2 import models
 from django.forms import formset_factory
 
-def Add_Player_to_Roster(request, pk):
+def add_player_to_roster(request, pk):
 	"""This function is ued to add a new player to a team's roster.
 
 	Args:
@@ -13,7 +13,7 @@ def Add_Player_to_Roster(request, pk):
 	Returns:
 		render: returns a rendred html page with a form to add a player to a roster 
 	"""
-	team = models.OW_Team.objects.get(id=pk)
+	team = models.OwTeam.objects.get(id=pk)
 	if request.method == "POST":
 		form = forms.Roster_Form(request.POST)
 		if form.is_valid():
@@ -23,7 +23,7 @@ def Add_Player_to_Roster(request, pk):
 		form = forms.Roster_Form()
 	return render(request, 'add_templates/Add_OW_Player.html', {'form': form, 'team': team})
 
-def Create_OW_Team(request):
+def create_ow_team(request):
 	"""Creates a new Overwatch team.
 
 	Args:
@@ -41,7 +41,7 @@ def Create_OW_Team(request):
 		form = forms.OW_Team_Form()
 	return render(request, 'add_templates/Create_OW_Team.html', {'form': form})
 
-def Add_Hero(request):
+def add_hero(request):
 	"""This function is used to add a new hero to the database.
 
 	Args:
@@ -60,7 +60,7 @@ def Add_Hero(request):
 		form = forms.Add_Hero_Form()
 	return render(request, 'add_templates/Add_Hero.html', {'form': form})	
 
-def Add_Map(request):
+def add_map(request):
 	"""This function is used to add a new map to the database.
 
 	Args:
@@ -85,7 +85,7 @@ def Add_Map(request):
 		form = forms.Add_Map_Form()
 	return render(request, 'add_templates/Add_Map.html', {'form': form})
 
-def Add_Sub_Map(request, pk):
+def add_sub_map(request, pk):
 	"""This function is used to add a new sub map to the database.
 
 	Args:
@@ -118,7 +118,7 @@ def Add_Sub_Map(request, pk):
 	return render(request, 'add_templates/Add_Sub_Map.html', context)
 
 
-def Add_Match_Type(request):
+def add_match_type(request):
 	"""This function is used to add a new match type to the database.
 
 	Args:
