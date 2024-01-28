@@ -18,15 +18,12 @@ def ow_team_roster(request, pk):
 	team, owMatches = match_history(pk)
 	# get only players who is_active is True
 	players = models.Roster.objects.filter(ow_team_id=team.id, is_active=True)
-	heroPictures = models.Hero.objects.all()
-	mapPictures = models.Map.objects.all()
+	# get one picture from each map type
 	map_stats = map_winrates(pk)
 	view = {
 		"OW_Team": team,
 		"Roster": players,
-		"Hero_Pictures": heroPictures,
 		"Matches": owMatches,
-		"Map_Pictures": mapPictures,
 		"Map_Stats": map_stats,
 	}
 	return render(request, 'team_templates/ow_team_roster.html', view)
@@ -127,6 +124,12 @@ def map_winrates(pk):
 	# Calculate winrates
 	for map_type, stats in map_stats.items():
 		map_stats[map_type]['winrate'] = stats['wins'] / stats['total'] * 100
+
+	for type in ["Control", "Escort", "Hybrid", "Push", "Clash", "Flashpoint"]:
+		if type in map_stats:
+			map_image = models.Map.objects.filter(map_type=type).first()
+			image_url = map_image.map_image.url if map_image else None
+			map_stats[type]['image_url'] = image_url
 
 	# order the map_stats dictionary by map_type
 	map_stats = dict(sorted(map_stats.items(), key=lambda item: item[0]))

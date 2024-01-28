@@ -63,9 +63,5 @@
 			{%endfor%}
 		</ul>
 	</body>
-	<form method='GET' action="{% url 'logout' %}">
-		{% csrf_token %}
-		<button class='logout' type="submit">Logout</button>
-	</form>
 </html>
 {% endblock %}

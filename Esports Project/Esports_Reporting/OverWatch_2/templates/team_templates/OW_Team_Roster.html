@@ -1,3 +1,5 @@
+{% extends "header.html" %}
+{% block content %}
 <!DOCTYPE html>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/rosters.css' %}">
@@ -44,13 +46,19 @@
 			<div>
 				<h2>Team Stats</h2>
 				{% for map_type, stats in Map_Stats.items %}
-					<h2>{{ map_type }} Win Rate</h2>
-					<p>Total Games: {{ stats.total }}</p>
-					<p>Wins: {{ stats.wins }}</p>
-					<p>Win Rate: {{ stats.winrate }}%</p>
+					<div class='map-stats'>
+						<h2>{{ map_type }} Win Rate</h2>
+						{% if stats.image_url %}
+           					<img src="{{ stats.image_url }}" alt="{{ map_type }}">
+						{% endif %}
+						<p>Total Games: {{ stats.total }}</p>
+						<p>Wins: {{ stats.wins }}</p>
+						<p>Win Rate: {{ stats.winrate }}%</p>
+					</div>
 				{% endfor %}
 			<div/>
 			{% include "team_templates/match_history.html" with Matches=Matches %}
 		<a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
 	</body>
 </html>
+{%endblock%}
