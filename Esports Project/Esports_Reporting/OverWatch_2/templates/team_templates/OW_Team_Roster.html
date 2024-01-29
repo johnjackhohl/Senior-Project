@@ -25,39 +25,45 @@
 			</form>
 		</div>
 			{%if Roster %}
-			<h4>Roster</h4>
-				<ul>
-				{% for player in Roster %}
-					<li>
-						<div class='roster'>
-							<span>{{ player.first_name }} {{ player.last_name }}:</span>
-							<span style="margin-right: 10px;">{{ player.role }}</span>
-							<form method="POST" action="{% url 'delete-roster-player' player.id %}">
-								{% csrf_token %}
-								<button class = 'delete-button' type="submit">Deactivate Player</button>
-							</form>
-						</div>
-					</li>
-				{% endfor %}
-				</ul>
+				<h4>Roster</h4>
+				<div class='roster'>
+					{% for player in Roster %}
+							<div class='player'>
+								<span>{{ player.first_name }} {{ player.last_name }}:</span>
+								<span>{{ player.role }}</span>
+								<form method="POST" action="{% url 'delete-roster-player' player.id %}">
+									{% csrf_token %}
+									<button class = 'delete-button' type="submit">Deactivate Player</button>
+								</form>
+							</div>
+				</div>
+					{% endfor %}
 			{%else%}
 				<p>No Players on Roster</p>
 			{%endif%}
-			<div>
+			{%if Map_Stats.items%}
 				<h2>Team Stats</h2>
-				{% for map_type, stats in Map_Stats.items %}
-					<div class='map-stats'>
-						<h2>{{ map_type }} Win Rate</h2>
-						{% if stats.image_url %}
-           					<img src="{{ stats.image_url }}" alt="{{ map_type }}">
-						{% endif %}
-						<p>Total Games: {{ stats.total }}</p>
-						<p>Wins: {{ stats.wins }}</p>
-						<p>Win Rate: {{ stats.winrate }}%</p>
-					</div>
-				{% endfor %}
-			<div/>
-			{% include "team_templates/match_history.html" with Matches=Matches %}
+				<div class='all-map-stats'>
+					{% for map_type, stats in Map_Stats.items %}
+						<div class='map-stats'>
+							<h2>{{ map_type }} Win Rate</h2>
+							{% if stats.image_url %}
+								<img src="{{ stats.image_url }}" alt="{{ map_type }}">
+							{% endif %}
+							<p>Total Games: {{ stats.total }}</p>
+							<p>Wins: {{ stats.wins }}</p>
+							<p>Win Rate: {{ stats.winrate }}%</p>
+						</div>
+					{% endfor %}
+				</div>
+			{%else%}
+				<p>No Stats</p>
+			{%endif%}
+			{%if Matches %}
+				{% include "team_templates/match_history.html" with Matches=Matches %}
+			{%else%}
+				<p>No Matches</p>
+			{%endif%}
 		<a href="/Overwatch/rosters/">Back to Overwatch Teams</a>
 	</body>
 </html>

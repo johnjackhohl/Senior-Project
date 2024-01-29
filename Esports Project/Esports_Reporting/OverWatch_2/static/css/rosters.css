@@ -40,9 +40,17 @@ form .delete-button:hover {
     display: flex;
 }
 
-.roster {
-	flex: 1;
-	max-width: 10%;
-	padding: 10px;
+.player {
+	display: flex; /* Enables Flexbox for each player */
+	align-items: center; /* Aligns items vertically in the center */
+	gap: 5px; /* Adds some space between the items */
+	padding-bottom: 10px;
+  }
 
+.all-map-stats {
+	display: flex; 
+	flex-direction: row; 
+	justify-content: space-between;
+	align-items: center;
 }
+  
