@@ -40,6 +40,9 @@ urlpatterns = [
 	path('game/<str:mapType>/<int:pk>/addPlayer/', match_views.add_player, name='add-player'),
 	path('game/<str:mapType>/<int:pk>/addSinglePlayer/', match_views.add_single_player, name='add-single-player'),
     
+	# Data Paths
+	path('player/<int:pk>/', data_views.player_data, name='player-data'),
+    
 	# Logout Path
 	path('logout/', LogoutView.as_view(), name='logout'),
 ]

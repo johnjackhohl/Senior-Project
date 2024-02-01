@@ -20,6 +20,7 @@ def ow_team_roster(request, pk):
 	players = models.Roster.objects.filter(ow_team_id=team.id, is_active=True)
 	# get one picture from each map type
 	map_stats = map_winrates(pk)
+	comps = top_comps(pk)
 	view = {
 		"OW_Team": team,
 		"Roster": players,
@@ -135,3 +136,44 @@ def map_winrates(pk):
 	map_stats = dict(sorted(map_stats.items(), key=lambda item: item[0]))
 	
 	return map_stats
+
+def top_comps(pk):
+	"""This function is used to get the most used compositions for a team, and the winrate for this composition.
+
+	Args:
+		pk (_type_): _description_
+	"""
+
+	games = models.Game.objects.filter(match_id__ow_team_id=pk)
+
+	comps = defaultdict(lambda: {
+		'tank': '', 'dps1': '', 'dps2': '', 
+		'support1': '', 'support2': '', 
+		'wins': 0, 'total': 0, 'winrate': 0, 
+		'best_total': 0, 'best_winrate': 0
+	})
+
+	for game in games:
+		mapType = game.map_type
+		maps = game.get_maps()
+		for map in maps:
+			current_comp = (map.mount_tank, map.mount_dps_1, map.mount_dps_2, map.mount_support_1, map.mount_support_2)
+			
+			comps[mapType]['total'] += 1
+			if game.mount_win:
+				comps[mapType]['wins'] += 1
+
+			winrate = comps[mapType]['wins'] / comps[mapType]['total'] * 100  # Win rate as a percentage
+
+			if comps[mapType]['total'] > comps[mapType]['best_total'] or \
+			(comps[mapType]['total'] == comps[mapType]['best_total'] and winrate > comps[mapType]['best_winrate']):
+				comps[mapType]['best_total'] = comps[mapType]['total']
+				comps[mapType]['best_winrate'] = winrate
+				comps[mapType]['tank'] = map.mount_tank
+				comps[mapType]['dps1'] = map.mount_dps_1
+				comps[mapType]['dps2'] = map.mount_dps_2
+				comps[mapType]['support1'] = map.mount_support_1
+				comps[mapType]['support2'] = map.mount_support_2
+
+	print(comps)
+	return comps
