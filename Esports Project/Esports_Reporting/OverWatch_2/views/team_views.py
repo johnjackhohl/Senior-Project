@@ -26,6 +26,7 @@ def ow_team_roster(request, pk):
 		"Roster": players,
 		"Matches": owMatches,
 		"Map_Stats": map_stats,
+		"Comps": comps,
 	}
 	return render(request, 'team_templates/ow_team_roster.html', view)
 
@@ -124,7 +125,7 @@ def map_winrates(pk):
 
 	# Calculate winrates
 	for map_type, stats in map_stats.items():
-		map_stats[map_type]['winrate'] = stats['wins'] / stats['total'] * 100
+		map_stats[map_type]['winrate'] = round((stats['wins'] / stats['total'] * 100),2)
 
 	for type in ["Control", "Escort", "Hybrid", "Push", "Clash", "Flashpoint"]:
 		if type in map_stats:
@@ -146,34 +147,58 @@ def top_comps(pk):
 
 	games = models.Game.objects.filter(match_id__ow_team_id=pk)
 
-	comps = defaultdict(lambda: {
-		'tank': '', 'dps1': '', 'dps2': '', 
-		'support1': '', 'support2': '', 
-		'wins': 0, 'total': 0, 'winrate': 0, 
-		'best_total': 0, 'best_winrate': 0
-	})
+	# This will be a dictionary of dictionaries
+	comps = {}
 
 	for game in games:
 		mapType = game.map_type
 		maps = game.get_maps()
 		for map in maps:
-			current_comp = (map.mount_tank, map.mount_dps_1, map.mount_dps_2, map.mount_support_1, map.mount_support_2)
+			# Sort the DPS and Support players to standardize the composition key
+			dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
+			support_players = sorted([map.mount_support_1, map.mount_support_2])
 			
-			comps[mapType]['total'] += 1
+			# The composition key is now the tank, sorted DPS, and sorted support players
+			comp_key = (map.mount_tank, tuple(dps_players), tuple(support_players))
+
+			# Initialize the map type if not already present
+			if mapType not in comps:
+				comps[mapType] = {}
+
+			# Initialize the specific composition if not already present
+			if comp_key not in comps[mapType]:
+				comps[mapType][comp_key] = {'wins': 0, 'total': 0, 'winrate': 0}
+
+			# Increment the total and wins (if applicable)
+			comps[mapType][comp_key]['total'] += 1
 			if game.mount_win:
-				comps[mapType]['wins'] += 1
+				comps[mapType][comp_key]['wins'] += 1
+			
+			# Update the win rate
+			comps[mapType][comp_key]['winrate'] = round((comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100,2)
+	
+	# Sort the comps dictionary by map type
+	comps = dict(sorted(comps.items(), key=lambda item: item[0]))
 
-			winrate = comps[mapType]['wins'] / comps[mapType]['total'] * 100  # Win rate as a percentage
+	# Sort the compositions for each map type by total games played
+	for mapType, compDict in comps.items():
+		comps[mapType] = dict(sorted(compDict.items(), key=lambda item: item[1]['total'], reverse=True))
 
-			if comps[mapType]['total'] > comps[mapType]['best_total'] or \
-			(comps[mapType]['total'] == comps[mapType]['best_total'] and winrate > comps[mapType]['best_winrate']):
-				comps[mapType]['best_total'] = comps[mapType]['total']
-				comps[mapType]['best_winrate'] = winrate
-				comps[mapType]['tank'] = map.mount_tank
-				comps[mapType]['dps1'] = map.mount_dps_1
-				comps[mapType]['dps2'] = map.mount_dps_2
-				comps[mapType]['support1'] = map.mount_support_1
-				comps[mapType]['support2'] = map.mount_support_2
+	# delete the comps that are not the first of each map type
+	for mapType, compDict in comps.items():
+		for comp in list(compDict)[1:]:
+			del compDict[comp]
 
-	print(comps)
+	""" for map_type, compositions in comps.items():
+		print(f"Map Type: {map_type}")
+		for comp_key, stats in compositions.items():
+			tank, dps, support = comp_key
+			print(f"  Composition: Tank: {tank}, 
+		 	{% for d in dps %}DPS: {{ d }}, {% endfor %} 
+		 	{% for s in support %}Support:{{ s }}, {% endfor %
+			}"))
+			print(f"    Total Games: {stats['total']}")
+			print(f"    Wins: {stats['wins']}")
+			print(f"    Win Rate: {stats['winrate']:.2f}%")
+		print() """
 	return comps

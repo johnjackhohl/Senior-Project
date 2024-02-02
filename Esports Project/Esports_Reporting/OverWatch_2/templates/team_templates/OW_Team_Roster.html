@@ -41,24 +41,43 @@
 			{%else%}
 				<p>No Players on Roster</p>
 			{%endif%}
-			{%if Map_Stats.items%}
+			{% if Map_Stats.items %}
 				<h2>Team Stats</h2>
 				<div class='all-map-stats'>
 					{% for map_type, stats in Map_Stats.items %}
 						<div class='map-stats'>
+							<!-- Map Type Stats -->
 							<h2>{{ map_type }} Win Rate</h2>
 							{% if stats.image_url %}
 								<img src="{{ stats.image_url }}" alt="{{ map_type }}">
 							{% endif %}
-							<p>Total Games: {{ stats.total }}</p>
-							<p>Wins: {{ stats.wins }}</p>
+							<p>Wins: {{ stats.wins }}/{{stats.total}}</p>
 							<p>Win Rate: {{ stats.winrate }}%</p>
+
+							<!-- Top Compositions for Map Type -->
+							<div class="top-comps">
+								{% for comp_map_type, comp_and_stats in Comps.items%}
+									{% if comp_map_type == map_type %}
+										<h2>Top Compositions for {{ comp_map_type }}</h2>
+											{% for comp, comp_stat in comp_and_stats.items %}
+												<p>Tank: {{ comp.0 }}</p>
+												<p>DPS: {{ comp.1 }}</p>
+												<p>Support: {{ comp.2 }}</p>
+												<p>Wins: {{ comp_stat.wins }}/{{ comp_stat.total}} </p>
+												<p>Win Rate: {{ comp_stat.winrate }}%</p>
+
+											{% endfor %}
+										{% endif %}
+								{% endfor %}
+							</div>
 						</div>
 					{% endfor %}
 				</div>
-			{%else%}
-				<p>No Stats</p>
-			{%endif%}
+		{% else %}
+			<p>No Stats</p>
+		{% endif %}
+
+
 			{%if Matches %}
 				{% include "team_templates/match_history.html" with Matches=Matches %}
 			{%else%}
