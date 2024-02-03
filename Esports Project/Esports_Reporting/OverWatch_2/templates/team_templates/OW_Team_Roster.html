@@ -42,14 +42,27 @@
 				<p>No Players on Roster</p>
 			{%endif%}
 			{% if Map_Stats.items %}
-				<h2>Team Stats</h2>
 				<div class='all-map-stats'>
 					{% for map_type, stats in Map_Stats.items %}
 						<div class='map-stats'>
 							<!-- Map Type Stats -->
-							<h2>{{ map_type }} Win Rate</h2>
+							<h2>{{ map_type }}</h2>
 							{% if stats.image_url %}
-								<img src="{{ stats.image_url }}" alt="{{ map_type }}">
+								<a href="
+									{% if map_type == 'Control' %}
+										{% url 'control-stats' OW_Team.id %}
+									{% elif map_type == 'Clash' %}
+										{% url 'clash-stats' OW_Team.id %}
+									{% elif map_type == 'Push' %}
+										{% url 'push-stats' OW_Team.id %}
+									{% elif map_type == 'Flashpoint' %}
+										{% url 'flashpoint-stats' OW_Team.id %}
+									{% else %}
+										{% url 'escort-hybrid-stats' OW_Team.id map_type%}
+									{% endif %}
+								">
+									<img src="{{ stats.image_url }}" alt="{{ map_type }}">
+								</a>							
 							{% endif %}
 							<p>Wins: {{ stats.wins }}/{{stats.total}}</p>
 							<p>Win Rate: {{ stats.winrate }}%</p>
@@ -59,24 +72,24 @@
 									{% with map_type_attack=map_type|add:" (Attack)" map_type_defense=map_type|add:" (Defense)" %}
 										{% if "Escort" in comp_map_type or "Hybrid" in comp_map_type %}
 											{% if comp_map_type == map_type_attack or comp_map_type == map_type_defense %}
-												<h2>Top Compositions for {{ comp_map_type }}</h2>
+												<h3>Top Comp for {{ comp_map_type }}</h3>
 											{% if comp_info %}
-												<p>Tank: {{ comp_info.tank }}</p>
+												<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+												{% comment %} <p>Tank: {{ comp_info.tank }}</p>
 												<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-												<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-												<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }}</p>
-												<p>Win Rate: {{ comp_info.stats.winrate }}%</p>
+												<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> {% endcomment %}
+												<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
 											{% endif %}
 											{% endif %}
 										{% else %}
 											{% if comp_map_type == map_type %}
-												<h2>Top Compositions for {{ comp_map_type }}</h2>
+												<h3>Top Comp for {{ comp_map_type }}</h3>
 												{% if comp_info %}
-													<p>Tank: {{ comp_info.tank }}</p>
+													<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+													{% comment %} <p>Tank: {{ comp_info.tank }}</p>
 													<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-													<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-													<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }}</p>
-													<p>Win Rate: {{ comp_info.stats.winrate }}%</p>
+													<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> {% endcomment %}
+													<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
 												{% endif %}
 											{% endif %}
 										{% endif %}
@@ -87,9 +100,9 @@
 						</div>
 					{% endfor %}
 				</div>
-		{% else %}
-			<p>No Stats</p>
-		{% endif %}
+			{% else %}
+				<p>No Stats</p>
+			{% endif %}
 
 
 			{%if Matches %}

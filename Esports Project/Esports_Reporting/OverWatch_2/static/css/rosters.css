@@ -51,6 +51,9 @@ form .delete-button:hover {
 	display: flex; 
 	flex-direction: row; 
 	justify-content: space-between;
-	align-items: center;
+	align-items: top;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
 }
   
