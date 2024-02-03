@@ -54,21 +54,35 @@
 							<p>Wins: {{ stats.wins }}/{{stats.total}}</p>
 							<p>Win Rate: {{ stats.winrate }}%</p>
 
-							<!-- Top Compositions for Map Type -->
 							<div class="top-comps">
-								{% for comp_map_type, comp_and_stats in Comps.items%}
-									{% if comp_map_type == map_type %}
-										<h2>Top Compositions for {{ comp_map_type }}</h2>
-											{% for comp, comp_stat in comp_and_stats.items %}
-												<p>Tank: {{ comp.0 }}</p>
-												<p>DPS: {{ comp.1 }}</p>
-												<p>Support: {{ comp.2 }}</p>
-												<p>Wins: {{ comp_stat.wins }}/{{ comp_stat.total}} </p>
-												<p>Win Rate: {{ comp_stat.winrate }}%</p>
-
-											{% endfor %}
+								{% for comp_map_type, comp_info in Comps.items %}
+									{% with map_type_attack=map_type|add:" (Attack)" map_type_defense=map_type|add:" (Defense)" %}
+										{% if "Escort" in comp_map_type or "Hybrid" in comp_map_type %}
+											{% if comp_map_type == map_type_attack or comp_map_type == map_type_defense %}
+												<h2>Top Compositions for {{ comp_map_type }}</h2>
+											{% if comp_info %}
+												<p>Tank: {{ comp_info.tank }}</p>
+												<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+												<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+												<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }}</p>
+												<p>Win Rate: {{ comp_info.stats.winrate }}%</p>
+											{% endif %}
+											{% endif %}
+										{% else %}
+											{% if comp_map_type == map_type %}
+												<h2>Top Compositions for {{ comp_map_type }}</h2>
+												{% if comp_info %}
+													<p>Tank: {{ comp_info.tank }}</p>
+													<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+													<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+													<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }}</p>
+													<p>Win Rate: {{ comp_info.stats.winrate }}%</p>
+												{% endif %}
+											{% endif %}
 										{% endif %}
+									{% endwith %}
 								{% endfor %}
+
 							</div>
 						</div>
 					{% endfor %}
