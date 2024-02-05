@@ -21,12 +21,15 @@ def ow_team_roster(request, pk):
 	# get one picture from each map type
 	map_stats = map_winrates(pk)
 	comps = top_comp(pk)
+	opponent_comps = top_opponent_comps(pk)
+	print(opponent_comps)
 	view = {
 		"OW_Team": team,
 		"Roster": players,
 		"Matches": owMatches,
 		"Map_Stats": map_stats,
 		"Comps": comps,
+		"Opponent_Comps": opponent_comps
 	}
 	return render(request, 'team_templates/ow_team_roster.html', view)
 
@@ -249,7 +252,7 @@ def top_comp(pk):
 				comps[mapType][comp_key]['total'] += 1
 				if game.mount_win:
 					comps[mapType][comp_key]['wins'] += 1
-				comps[mapType][comp_key]['winrate'] = (comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100
+				comps[mapType][comp_key]['winrate'] = round((comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100,2)
 			else:
 				# For Escort and Hybrid maps
 				for comp_type, is_defense in [('attack', False), ('defense', True)]:
@@ -266,7 +269,99 @@ def top_comp(pk):
 					comps[mapType][comp_key]['total'] += 1
 					if game.mount_win:
 						comps[mapType][comp_key]['wins'] += 1
-					comps[mapType][comp_key]['winrate'] = (comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100
+					comps[mapType][comp_key]['winrate'] = round((comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100,2)
+	# Sorting and keeping only the top comp for each map type
+	top_comps = {}
+	for mapType, compDict in comps.items():
+		sorted_comps = sorted(compDict.items(), key=lambda x: (-x[1]['total'], -x[1]['winrate']))
+		if mapType in ["Escort", "Hybrid"]:
+			# For Escort and Hybrid maps, we need to keep track of the attack and defense comps separately
+			attack_comp = sorted([comp for comp in sorted_comps if not comp[1]['is_defense']], key=lambda x: (-x[1]['total'], -x[1]['winrate']))
+			defense_comp = sorted([comp for comp in sorted_comps if comp[1]['is_defense']], key=lambda x: (-x[1]['total'], -x[1]['winrate']))
+			top_comps[mapType] = {
+				'attack': attack_comp[0] if attack_comp else None,
+				'defense': defense_comp[0] if defense_comp else None
+			}
+		else:
+			top_comps[mapType] = sorted_comps[0] if sorted_comps else None
+	
+	flattened_comps = {}
+	for mapType, comp_info in top_comps.items():
+		if mapType in ["Escort", "Hybrid"]:
+			# Add attack and defense compositions separately
+			if comp_info['attack']:
+				attack_key = f"{mapType} (Attack)"
+				attack_comp = comp_info['attack'][0]
+				flattened_comps[attack_key] = {
+					'tank': attack_comp[0],
+					'dps': attack_comp[1],
+					'support': attack_comp[2],
+					'stats': comp_info['attack'][1]
+				}
+			if comp_info['defense']:
+				defense_key = f"{mapType} (Defense)"
+				defense_comp = comp_info['defense'][0]
+				flattened_comps[defense_key] = {
+					'tank': defense_comp[0],
+					'dps': defense_comp[1],
+					'support': defense_comp[2],
+					'stats': comp_info['defense'][1]
+				}
+		else:
+			if comp_info:
+				comp = comp_info[0]
+				flattened_comps[mapType] = {
+					'tank': comp[0],
+					'dps': comp[1],
+					'support': comp[2],
+					'stats': comp_info[1]
+				}
+	
+	return flattened_comps
+
+def top_opponent_comps(pk):
+	games = models.Game.objects.filter(match_id__ow_team_id=pk)
+
+	# This will be a dictionary of dictionaries
+	comps = {}
+
+	for game in games:
+		mapType = game.map_type
+		maps = game.get_maps()
+		for map in maps:
+			if mapType not in ["Escort", "Hybrid"]:
+				# For non-Escort and non-Hybrid maps
+				dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+				support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+				comp_key = (map.opponent_tank, tuple(dps_players), tuple(support_players))
+
+				if mapType not in comps:
+					comps[mapType] = {}
+
+				if comp_key not in comps[mapType]:
+					comps[mapType][comp_key] = {'wins': 0, 'total': 0, 'winrate': 0}
+				
+				comps[mapType][comp_key]['total'] += 1
+				if not game.mount_win:
+					comps[mapType][comp_key]['wins'] += 1
+				comps[mapType][comp_key]['winrate'] = round((comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100,2)
+			else:
+				# For Escort and Hybrid maps
+				for comp_type, is_defense in [('attack', False), ('defense', True)]:
+					dps_players = sorted([getattr(map, f"opponent_{comp_type}_dps_1"), getattr(map, f"opponent_{comp_type}_dps_2")])
+					support_players = sorted([getattr(map, f"opponent_{comp_type}_support_1"), getattr(map, f"opponent_{comp_type}_support_2")])
+					comp_key = (getattr(map, f"opponent_{comp_type}_tank"), tuple(dps_players), tuple(support_players), is_defense)
+					
+					if mapType not in comps:
+						comps[mapType] = {}
+
+					if comp_key not in comps[mapType]:
+						comps[mapType][comp_key] = {'wins': 0, 'total': 0, 'winrate': 0, 'is_defense': is_defense}
+					
+					comps[mapType][comp_key]['total'] += 1
+					if not game.mount_win:
+						comps[mapType][comp_key]['wins'] += 1
+					comps[mapType][comp_key]['winrate'] = round((comps[mapType][comp_key]['wins'] / comps[mapType][comp_key]['total']) * 100,2)
 	# Sorting and keeping only the top comp for each map type
 	top_comps = {}
 	for mapType, compDict in comps.items():

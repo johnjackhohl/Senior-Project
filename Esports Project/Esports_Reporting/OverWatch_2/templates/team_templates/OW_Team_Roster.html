@@ -75,9 +75,6 @@
 												<h3>Top Comp for {{ comp_map_type }}</h3>
 											{% if comp_info %}
 												<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-												{% comment %} <p>Tank: {{ comp_info.tank }}</p>
-												<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-												<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> {% endcomment %}
 												<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
 											{% endif %}
 											{% endif %}
@@ -86,9 +83,31 @@
 												<h3>Top Comp for {{ comp_map_type }}</h3>
 												{% if comp_info %}
 													<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-													{% comment %} <p>Tank: {{ comp_info.tank }}</p>
-													<p>DPS: {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-													<p>Support: {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> {% endcomment %}
+													<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
+												{% endif %}
+											{% endif %}
+										{% endif %}
+									{% endwith %}
+								{% endfor %}
+
+							</div>
+
+							<div class="top-opponent-comps">
+								{% for comp_map_type, comp_info in Opponent_Comps.items %}
+									{% with map_type_attack=map_type|add:" (Attack)" map_type_defense=map_type|add:" (Defense)" %}
+										{% if "Escort" in comp_map_type or "Hybrid" in comp_map_type %}
+											{% if comp_map_type == map_type_attack or comp_map_type == map_type_defense %}
+												<h3>Top Opponent Comp for {{ comp_map_type }}</h3>
+											{% if comp_info %}
+												<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+												<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
+											{% endif %}
+											{% endif %}
+										{% else %}
+											{% if comp_map_type == map_type %}
+												<h3>Top Opponent Comp for {{ comp_map_type }}</h3>
+												{% if comp_info %}
+													<p> {{ comp_info.tank }}, {% for dps in comp_info.dps %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.support %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 													<p>Wins: {{ comp_info.stats.wins }}/{{ comp_info.stats.total }} - {{ comp_info.stats.winrate }}%</p>
 												{% endif %}
 											{% endif %}
