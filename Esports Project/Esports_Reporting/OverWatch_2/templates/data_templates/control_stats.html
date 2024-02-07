@@ -9,6 +9,20 @@
 </head>
 <body>
 	<p>Control Map Stats</p>
-
+	<div>
+		{% for map, submap in controlMapsStats.items %}
+			<p>{{ map }}</p>
+			{% for sub_map, sub_map_stats in submap.items%}
+				<p>{{ sub_map }}</p>
+				<p>Wins: {{ sub_map_stats.wins }}/{{sub_map_stats.total}} - {{sub_map_stats.winrate}}</p>
+				{% for comp_info, comp_stats in sub_map_stats.comp.items %}
+				<p> {{ comp_info.0 }}, {% for dps in comp_info.1 %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.2 %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+				<p>Wins: {{ comp_stats.wins }}/{{ comp_stats.total }} - {{ comp_stats.winrate }}%</p>
+				{%endfor%}
+			{%endfor%}
+		{% endfor %}
+	</div>
+</body>
+</html>
 
 {% endblock %}

@@ -320,6 +320,15 @@ def top_comp(pk):
 	return flattened_comps
 
 def top_opponent_comps(pk):
+	"""This function is used to get the most used compositions for a team, and the winrate for this composition.
+
+	Args:
+		pk (int): primary key of the team to get compositions for
+
+	Returns:
+		dictonary: this dictionary contains the most used compositions for each map type, and the winrate for this composition, it is a defult dict wthin a 
+		defult dict, within a dictionary
+	"""
 	games = models.Game.objects.filter(match_id__ow_team_id=pk)
 
 	# This will be a dictionary of dictionaries
