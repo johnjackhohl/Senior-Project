@@ -13,17 +13,13 @@
 <body>
 	<p>Control Map Stats</p>
 	<div>
-		{% for map, submap in controlMapsStats.items %}
-			<button class='accordion'>{{ map }}</button>
+		{% for map_name, map_stats in controlMapsStats.items %}
+			<button class='accordion'>{{ map_name }}</button>
 			<div class = 'panel'>
-				{% for sub_map, sub_map_stats in submap.items%}
-					<button class='accordion'>{{ sub_map }}</button>
+				{% for sub_map_name, sub_map_stats in map_stats.items %}
+					<button class='accordion'>{{ sub_map_name }}</button>
 					<div class = 'panel'>
 						<p>Total Wins: {{ sub_map_stats.wins }}/{{sub_map_stats.total}} - {{sub_map_stats.winrate}}</p>
-						{% for comp_info, comp_stats in sub_map_stats.comp.items %}
-						<p>Top comp: {{ comp_info.0 }}, {% for dps in comp_info.1 %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.2 %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-						<p>Comp Wins: {{ comp_stats.wins }}/{{ comp_stats.total }} - {{ comp_stats.winrate }}%</p>
-						{%endfor%}
 					</div>
 				{%endfor%}
 			</div>
