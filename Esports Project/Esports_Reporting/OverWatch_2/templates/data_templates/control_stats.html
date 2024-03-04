@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 {% load static %}
 
+<link rel="stylesheet" href="{% static 'css/accordion.css' %}">
+<script src="{% static 'js/accordion.js' %}" defer></script>
+
 <html>
 <head>
 	<title>Control Map Stats</title>
@@ -11,17 +14,22 @@
 	<p>Control Map Stats</p>
 	<div>
 		{% for map, submap in controlMapsStats.items %}
-			<p>{{ map }}</p>
-			{% for sub_map, sub_map_stats in submap.items%}
-				<p>{{ sub_map }}</p>
-				<p>Wins: {{ sub_map_stats.wins }}/{{sub_map_stats.total}} - {{sub_map_stats.winrate}}</p>
-				{% for comp_info, comp_stats in sub_map_stats.comp.items %}
-				<p> {{ comp_info.0 }}, {% for dps in comp_info.1 %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.2 %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-				<p>Wins: {{ comp_stats.wins }}/{{ comp_stats.total }} - {{ comp_stats.winrate }}%</p>
+			<button class='accordion'>{{ map }}</button>
+			<div class = 'panel'>
+				{% for sub_map, sub_map_stats in submap.items%}
+					<button class='accordion'>{{ sub_map }}</button>
+					<div class = 'panel'>
+						<p>Total Wins: {{ sub_map_stats.wins }}/{{sub_map_stats.total}} - {{sub_map_stats.winrate}}</p>
+						{% for comp_info, comp_stats in sub_map_stats.comp.items %}
+						<p>Top comp: {{ comp_info.0 }}, {% for dps in comp_info.1 %}{{ dps }}{% if not forloop.last %}, {% endif %}{% endfor %}, {% for support in comp_info.2 %}{{ support }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+						<p>Comp Wins: {{ comp_stats.wins }}/{{ comp_stats.total }} - {{ comp_stats.winrate }}%</p>
+						{%endfor%}
+					</div>
 				{%endfor%}
-			{%endfor%}
+			</div>
 		{% endfor %}
 	</div>
+	<a href="/Overwatch/team/{{team.id}}">Back to {{team.name}}</a>
 </body>
 </html>
 

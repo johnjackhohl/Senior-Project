@@ -1,8 +1,8 @@
 from django.db.models import Q
-from django.shortcuts import render, redirect
-from OverWatch_2 import forms
+from django.shortcuts import render
 from OverWatch_2 import models
 from collections import defaultdict
+from OverWatch_2.classes import map_classes
 
 def player_data(request, pk):
 	"""This function is used to display a player's data.
@@ -30,55 +30,59 @@ def control_stats(request, pk):
 	Returns:
 		render: returns a rendred html page with a team's control map stats
 	"""
+	control_maps = []
 	matches = models.Match.objects.filter(ow_team_id = pk)
 	for match in matches:
 		games = models.Game.objects.filter(match_id = match.id)
 		for game in games:
 			if game.map_type == "Control":
-				control_maps = models.ControlMap.objects.filter(game_id = game.id)
-	controlMapsStats = get_control_maps(pk)
-	print(controlMapsStats)
+				for map in models.ControlMap.objects.filter(game_id = game.id):
+					control_maps.append(map)
+	controlMapsStats = get_control_map(control_maps, True)
+	oppComp = get_control_map(control_maps, False)
+	for map_name, map_obj in oppComp.items():
+		print(f"Map: {map_name}")
+		for sub_map_name, sub_map_obj in map_obj.sub_maps.items():
+			top_comp = sub_map_obj.top_composition()
+			if top_comp:
+				print(f"  Sub Map: {sub_map_name}, Sub_map Total: {sub_map_obj.total}, Top Comp: Tank: {top_comp.tank}, DPS: {top_comp.dps}, Support: {top_comp.support}, Total: {top_comp.total} Winrate: {top_comp.winrate}")
+
 	context = {
-		'control_maps': control_maps,
 		'controlMapsStats': controlMapsStats,
+		'team': models.OwTeam.objects.get(id=pk),
+		'oppComp': oppComp,
 	}
 	return render(request, 'data_templates/control_stats.html', context)
 
-def get_control_maps(pk):
-	controlMaps = {}
-	matches = models.Match.objects.filter(ow_team_id = pk)
-	for match in matches:
-		games = models.Game.objects.filter(match_id = match.id)
-		for game in games:
-			if game.map_type == "Control":
-				control_maps = models.ControlMap.objects.filter(game_id = game.id)
-				for map in control_maps:
-					if map.map_name not in controlMaps:
-						controlMaps[map.map_name] ={}
-					if map.map_sub_name not in controlMaps[map.map_name]:
-						controlMaps[map.map_name][map.map_sub_name] = {"total": 0, "wins": 0, "winrate": 0, "comp": {}}
-					controlMaps[map.map_name][map.map_sub_name]["total"] += 1
-					if map.mount_percent > map.opponent_percent:
-						controlMaps[map.map_name][map.map_sub_name]["wins"] += 1
-					
-					dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
-					support_players = sorted([map.mount_support_1, map.mount_support_2])
-					comp_key = (map.mount_tank, tuple(dps_players), tuple(support_players))
 
-					if comp_key not in controlMaps[map.map_name][map.map_sub_name]["comp"]:
-						controlMaps[map.map_name][map.map_sub_name]["comp"][comp_key] = {"total": 0, "wins": 0, "winrate": 0}
-					controlMaps[map.map_name][map.map_sub_name]["comp"][comp_key]["total"] += 1
-					if map.mount_percent > map.opponent_percent:
-						controlMaps[map.map_name][map.map_sub_name]["comp"][comp_key]["wins"] += 1
+def get_control_map(control_maps, mount):
+	opponent_maps = {}
+	for map in control_maps:
+		tank = map.opponent_tank
+		dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+		support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+		if mount:
+			is_win = map.mount_percent > map.opponent_percent
+		else:
+			is_win = map.opponent_percent > map.mount_percent
 
-	for map in controlMaps:
-		for sub_map in controlMaps[map]:
-			controlMaps[map][sub_map]["winrate"] = round(controlMaps[map][sub_map]["wins"] / controlMaps[map][sub_map]["total"] * 100, 2)
-		for comp in controlMaps[map][sub_map]["comp"]:
-			controlMaps[map][sub_map]["comp"][comp]["winrate"] = round(controlMaps[map][sub_map]["comp"][comp]["wins"] / controlMaps[map][sub_map]["comp"][comp]["total"] * 100, 2)
-	return controlMaps
+		if map.map_name not in opponent_maps:
+			opponent_maps[map.map_name] = map_classes.Control_Flashpoint_Map(map.map_name)
 
-						
+		# Ensure the SubMap exists
+		opponent_maps[map.map_name].add_sub_map(map.map_sub_name)
+
+		comp = map_classes.Composition(tank, dps_players, support_players)
+		comp.total += 1
+		if is_win:
+			comp.wins += 1
+
+		# Now, add the composition to the SubMap
+		opponent_maps[map.map_name].sub_maps[map.map_sub_name].add_composition(comp)
+
+	return opponent_maps
+
+
 
 
 def escort_hybrid_stats(request, pk, map_type):
