@@ -38,49 +38,45 @@ def control_stats(request, pk):
 			if game.map_type == "Control":
 				for map in models.ControlMap.objects.filter(game_id = game.id):
 					control_maps.append(map)
-	controlMapsStats = get_control_map(control_maps, True)
-	oppComp = get_control_map(control_maps, False)
-	for map_name, map_obj in oppComp.items():
-		print(f"Map: {map_name}")
-		for sub_map_name, sub_map_obj in map_obj.sub_maps.items():
-			top_comp = sub_map_obj.top_composition()
-			if top_comp:
-				print(f"  Sub Map: {sub_map_name}, Sub_map Total: {sub_map_obj.total}, Top Comp: Tank: {top_comp.tank}, DPS: {top_comp.dps}, Support: {top_comp.support}, Total: {top_comp.total} Winrate: {top_comp.winrate}")
-
+	controlMapsStats = get_control_map(control_maps)
 	context = {
 		'controlMapsStats': controlMapsStats,
 		'team': models.OwTeam.objects.get(id=pk),
-		'oppComp': oppComp,
 	}
 	return render(request, 'data_templates/control_stats.html', context)
 
 
-def get_control_map(control_maps, mount):
-	opponent_maps = {}
+def get_control_map(control_maps):
+	maps = {}
 	for map in control_maps:
-		tank = map.opponent_tank
-		dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
-		support_players = sorted([map.opponent_support_1, map.opponent_support_2])
-		if mount:
-			is_win = map.mount_percent > map.opponent_percent
-		else:
-			is_win = map.opponent_percent > map.mount_percent
+		tank = map.mount_tank
+		dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
+		support_players = sorted([map.mount_support_1, map.mount_support_2])
+		opp_tank = map.opponent_tank
+		opp_dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+		opp_support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+		is_win = map.mount_percent > map.opponent_percent
 
-		if map.map_name not in opponent_maps:
-			opponent_maps[map.map_name] = map_classes.Control_Flashpoint_Map(map.map_name)
+		if map.map_name not in maps:
+			maps[map.map_name] = map_classes.Control_Map(map.map_name)
 
 		# Ensure the SubMap exists
-		opponent_maps[map.map_name].add_sub_map(map.map_sub_name)
-
+		maps[map.map_name].add_sub_map(map.map_sub_name)
 		comp = map_classes.Composition(tank, dps_players, support_players)
+		opp_comp = map_classes.Composition(opp_tank, opp_dps_players, opp_support_players)
 		comp.total += 1
+		opp_comp.total += 1
 		if is_win:
+			maps[map.map_name].sub_maps[map.map_sub_name].mount_wins += 1
 			comp.wins += 1
+		else:
+			opp_comp.wins += 1
 
 		# Now, add the composition to the SubMap
-		opponent_maps[map.map_name].sub_maps[map.map_sub_name].add_composition(comp)
+		maps[map.map_name].sub_maps[map.map_sub_name].add_mount_composition(comp)
+		maps[map.map_name].sub_maps[map.map_sub_name].add_opponent_composition(opp_comp)
 
-	return opponent_maps
+	return maps
 
 
 

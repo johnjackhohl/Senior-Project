@@ -16,10 +16,18 @@
 		{% for map_name, map_stats in controlMapsStats.items %}
 			<button class='accordion'>{{ map_name }}</button>
 			<div class = 'panel'>
-				{% for sub_map_name, sub_map_stats in map_stats.items %}
+				{% for sub_map_name, sub_map_stats in map_stats.sub_maps.items %}
 					<button class='accordion'>{{ sub_map_name }}</button>
 					<div class = 'panel'>
-						<p>Total Wins: {{ sub_map_stats.wins }}/{{sub_map_stats.total}} - {{sub_map_stats.winrate}}</p>
+						<p>Total Wins: {{ sub_map_stats.mount_wins }}/{{sub_map_stats.total}} - {{sub_map_stats.mount_winrate}}</p>
+						<p>Top Mount Comp: {{ sub_map_stats.top_mount_composition.tank}}, {{sub_map_stats.top_mount_composition.dps.0}}, {{sub_map_stats.top_mount_composition.dps.1}}, 
+							{{sub_map_stats.top_mount_composition.support.0}}, {{sub_map_stats.top_mount_composition.support.1}} - 
+							{{sub_map_stats.top_mount_composition.wins}}/{{sub_map_stats.top_mount_composition.total}}: {{sub_map_stats.top_mount_composition.winrate}}</p>
+						<p>Top Opponent Comp: {{ sub_map_stats.top_opponent_composition.tank}}, {{sub_map_stats.top_opponent_composition.dps.0}}, {{sub_map_stats.top_opponent_composition.dps.1}}, 
+							{{sub_map_stats.top_opponent_composition.support.0}}, {{sub_map_stats.top_opponent_composition.support.1}} - 
+							{{sub_map_stats.top_opponent_composition.wins}}/{{sub_map_stats.top_opponent_composition.total}}: {{sub_map_stats.top_opponent_composition.winrate}}</p>
+						
+						
 					</div>
 				{%endfor%}
 			</div>
