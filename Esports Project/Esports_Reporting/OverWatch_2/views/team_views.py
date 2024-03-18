@@ -22,7 +22,6 @@ def ow_team_roster(request, pk):
 	map_stats = map_winrates(pk)
 	comps = top_comp(pk)
 	opponent_comps = top_opponent_comps(pk)
-	print(opponent_comps)
 	view = {
 		"OW_Team": team,
 		"Roster": players,
@@ -220,7 +219,6 @@ def top_comps(pk):
 			# Sort the compositions for each map type by total games played
 			for mapType, compDict in comps.items():
 				comps[mapType] = dict(sorted(compDict.items(), key=lambda item: item[1]['total'], reverse=True))
-	print(comps)
 	# delete the comps that are not the first of each map type
 	for mapType, compDict in comps.items():
 		for comp in list(compDict)[1:]:
