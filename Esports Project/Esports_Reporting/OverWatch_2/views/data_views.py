@@ -135,3 +135,56 @@ def get_clash_map_stats(clash_maps):
 		maps[map.map_name].add_opponent_composition(opp_comp)
 
 	return maps
+
+def flashpoint_stats(request, pk):
+	"""This function is used to display a team's flashpoint map stats
+
+	Args:
+		request 
+		pk (int): team's primary key 
+	"""
+	flashpoint_maps = []
+	matches = models.Match.objects.filter(ow_team_id = pk)
+	for match in matches:
+		games = models.Game.objects.filter(match_id = match.id)
+		for game in games:
+			if game.map_type == "Flashpoint":
+				for map in models.FlashpointMap.objects.filter(game_id = game.id):
+					flashpoint_maps.append(map)
+	flashpointMapStats = get_flashpoint_map_stats(flashpoint_maps)
+	context = {
+		'flashpointMapStats' : flashpointMapStats,
+		'team': models.OwTeam.objects.get(id=pk)
+	}
+	return render(request, 'data_templates/flashpoint_stats.html', context)
+
+def get_flashpoint_map_stats(flashpoint_maps):
+	maps = {}
+	for map in flashpoint_maps:
+		tank = map.mount_tank
+		dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
+		support_players = sorted([map.mount_support_1, map.mount_support_2])
+		opp_tank = map.opponent_tank
+		opp_dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+		opp_support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+		is_win = map.mount_percent > map.opponent_percent
+
+		if map.map_name not in maps:
+			maps[map.map_name] = map_classes.Flashpoint_Map(map.map_name)
+
+		maps[map.map_name].add_point(map.point_number)
+		comp = map_classes.Composition(tank, dps_players, support_players)
+		opp_comp = map_classes.Composition(opp_tank, opp_dps_players, opp_support_players)
+		comp.total += 1
+		opp_comp.total += 1
+		if is_win:
+			maps[map.map_name].points[map.point_number].mount_wins += 1
+			comp.wins += 1
+		else:
+			opp_comp.wins += 1
+
+		# Now, add the composition to the SubMap
+		maps[map.map_name].points[map.point_number].add_mount_composition(comp)
+		maps[map.map_name].points[map.point_number].add_opponent_composition(opp_comp)
+
+	return maps

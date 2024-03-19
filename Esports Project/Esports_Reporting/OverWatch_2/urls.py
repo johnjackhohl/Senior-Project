@@ -44,6 +44,7 @@ urlpatterns = [
 	path('player/<int:pk>/', data_views.player_data, name='player-data'),
     path('mapStats/<int:pk>/control', data_views.control_stats, name='control-stats'),
 	path('mapStats/<int:pk>/clash', data_views.clash_stats, name='clash-stats'),
+    path('mapStats/<int:pk>/flashpoint', data_views.flashpoint_stats, name='flashpoint-stats'),
     
 	# Logout Path
 	path('logout/', LogoutView.as_view(), name='logout'),
