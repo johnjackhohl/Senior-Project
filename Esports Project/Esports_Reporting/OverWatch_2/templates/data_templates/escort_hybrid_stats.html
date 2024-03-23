@@ -3,12 +3,37 @@
 <!DOCTYPE html>
 {% load static %}
 
+<link rel="stylesheet" href="{% static 'css/accordion.css' %}">
+<script src="{% static 'js/accordion.js' %}" defer></script>
+
 <html>
 <head>
 	<title>{{map_type}} Map Stats</title>
 </head>
 <body>
 	<p>{{map_type}} Map Stats</p>
-
+	<div>
+		{% for map_name, map_stats in escortHybridMapStats.items %}
+			<button class='accordion'>{{ map_name }}</button>
+			<div class = 'panel'>
+				<p>Total Wins: {{ map_stats.mount_wins }}/{{map_stats.total}} - {{map_stats.mount_winrate}}</p>
+				<p>Top Mount Attacking Comp: {{ map_stats.top_mount_attack_composition.tank}}, {{map_stats.top_mount_attack_composition.dps.0}}, {{map_stats.top_mount_attack_composition.dps.1}}, 
+					{{map_stats.top_mount_attack_composition.support.0}}, {{map_stats.top_mount_attack_composition.support.1}} - 
+					{{map_stats.top_mount_attack_composition.wins}}/{{map_stats.top_mount_attack_composition.total}}: {{map_stats.top_mount_attack_composition.winrate}}</p>
+				<p>Top Mount Defending Comp: {{ map_stats.top_mount_defense_composition.tank}}, {{map_stats.top_mount_defense_composition.dps.0}}, {{map_stats.top_mount_defense_composition.dps.1}}, 
+					{{map_stats.top_mount_defense_composition.support.0}}, {{map_stats.top_mount_defense_composition.support.1}} - 
+					{{map_stats.top_mount_defense_composition.wins}}/{{map_stats.top_mount_defense_composition.total}}: {{map_stats.top_mount_defense_composition.winrate}}</p>
+				<p>Top Opponent Attacking Comp: {{ map_stats.top_opponent_attack_composition.tank}}, {{map_stats.top_opponent_attack_composition.dps.0}}, {{map_stats.top_opponent_attack_composition.dps.1}}, 
+					{{map_stats.top_opponent_attack_composition.support.0}}, {{map_stats.top_opponent_composition.support.1}} - 
+					{{map_stats.top_opponent_attack_composition.wins}}/{{map_stats.top_opponent_attack_composition.total}}: {{map_stats.top_opponent_attack_composition.winrate}}</p>
+				<p>Top Opponent Defending Comp: {{ map_stats.top_opponent_defense_composition.tank}}, {{map_stats.top_opponent_defense_composition.dps.0}}, {{map_stats.top_opponent_defense_composition.dps.1}}, 
+					{{map_stats.top_opponent_defense_composition.support.0}}, {{map_stats.top_opponent_defense_composition.support.1}} - 
+					{{map_stats.top_opponent_defense_composition.wins}}/{{map_stats.top_opponent_defense_composition.total}}: {{map_stats.top_opponent_defense_composition.winrate}}</p>
+			</div>
+		{% endfor %}
+	</div>
+	<a href="/Overwatch/team/{{team.id}}">Back to {{team.name}}</a>
+</body>
+</html>
 
 {% endblock %}

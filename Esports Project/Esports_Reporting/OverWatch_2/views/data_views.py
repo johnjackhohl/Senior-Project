@@ -93,9 +93,6 @@ def clash_stats(request, pk):
 				for map in models.ClashMap.objects.filter(game_id = game.id):
 					clash_maps.append(map)
 	clashMapStats = get_clash_map_stats(clash_maps)
-	for map in clashMapStats:
-
-		print(clashMapStats[map].top_mount_composition.tank)
 	context = {
 		'clashMapStats' : clashMapStats,
 		'team': models.OwTeam.objects.get(id=pk)
@@ -243,61 +240,82 @@ def get_push_map_stats(push_maps):
 		maps[map.map_name].add_opponent_composition(opp_comp)
 	return maps
 
-def escort_hybrid_stats(request, pk, is_Escort):
+def escort_hybrid_stats(request, pk, map_type):
 	"""This function is used to display a team's escort and hybrid map stats
 
 	Args:
 		request 
 		pk (int): team's primary key 
 	"""
-	maps = []
+	escort_hybrid_maps = []
 	matches = models.Match.objects.filter(ow_team_id = pk)
 	for match in matches:
 		games = models.Game.objects.filter(match_id = match.id)
 		for game in games:
-			if is_Escort
-				if game.map_type == "Escort"
+			if map_type == "Escort":
+				if game.map_type == "Escort":
 					for map in models.EscortHybridMap.objects.filter(game_id = game.id):
-						maps.append(map)
+						escort_hybrid_maps.append(map)
 			else:
-				if game.map_type == "Hybrid"
+				if game.map_type == "Hybrid":
 					for map in models.EscortHybridMap.objects.filter(game_id = game.id):
-						maps.append(map)
-	escortHybridMapStats = get_escort_hybrid_map_stats(maps)
+						escort_hybrid_maps.append(map)
+	escortHybridMapStats = get_escort_hybrid_map_stats(escort_hybrid_maps)
 	context = {
+		'map_type': map_type,
 		'escortHybridMapStats' : escortHybridMapStats,
 		'team': models.OwTeam.objects.get(id=pk)
 	}
 	return render(request, 'data_templates/escort_hybrid_stats.html', context)
 
-def get_escort_hybrid_map_stats(maps):
+def get_escort_hybrid_map_stats(escort_hybrid_maps):
 	maps = {}
-	for map in maps:
-		tank = map.mount_tank
-		dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
-		support_players = sorted([map.mount_support_1, map.mount_support_2])
-		opp_tank = map.opponent_tank
-		opp_dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
-		opp_support_players = sorted([map.opponent_support_1, map.opponent_support_2])
-		is_win = map.mount_distance > map.opponent_distance
+	for map in escort_hybrid_maps:
+		mount_attack_tank = map.mount_attack_tank
+		mount_attack_dps = sorted([map.mount_attack_dps_1, map.mount_attack_dps_2])
+		mount_attack_support = sorted([map.mount_attack_support_1, map.mount_attack_support_2])
+
+		mount_defense_tank = map.mount_defense_tank
+		mount_defense_dps = sorted([map.mount_defense_dps_1, map.mount_defense_dps_2])
+		mount_defense_support = sorted([map.mount_defense_support_1, map.mount_defense_support_2])
+
+		opp_attack_tank = map.opponent_attack_tank
+		opp_attack_dps = sorted([map.opponent_attack_dps_1, map.opponent_attack_dps_2])
+		opp_attack_support = sorted([map.opponent_attack_support_1, map.opponent_attack_support_2])
+
+		opp_defense_tank = map.opponent_defense_tank
+		opp_defense_dps = sorted([map.opponent_defense_dps_1, map.opponent_defense_dps_2])
+		opp_defense_support = sorted([map.opponent_defense_support_1, map.opponent_defense_support_2])
+
+		game = models.Game.objects.get(id = map.game_id.id)
+		is_win = game.mount_score > game.opponent_score
 
 		if map.map_name not in maps:
-			maps[map.map_name] = map_classes.Push_Map(map.map_name)
+			maps[map.map_name] = map_classes.Escort_Hybrid_Map(map.map_name)
 		else:
 			maps[map.map_name].total += 1
 		
-		comp = map_classes.Composition(tank, dps_players, support_players)
-		opp_comp = map_classes.Composition(opp_tank, opp_dps_players, opp_support_players)
-		comp.total += 1
-		opp_comp.total += 1
+		mount_attack_comp = map_classes.Composition(mount_attack_tank, mount_attack_dps, mount_attack_support)
+		mount_defense_comp = map_classes.Composition(mount_defense_tank, mount_defense_dps, mount_defense_support)
+		opp_attack_comp = map_classes.Composition(opp_attack_tank, opp_attack_dps, opp_attack_support)
+		opp_defense_comp = map_classes.Composition(opp_defense_tank, opp_defense_dps, opp_defense_support)
+		
+		mount_attack_comp.total += 1
+		mount_defense_comp.total += 1
+		opp_attack_comp.total += 1
+		opp_defense_comp.total += 1
+
 		if is_win:
 			maps[map.map_name].mount_wins += 1
-			comp.wins += 1
+			mount_attack_comp.wins += 1
+			mount_defense_comp.wins += 1
 		else:
-			opp_comp.wins += 1
+			opp_attack_comp.wins += 1
+			opp_defense_comp.wins += 1
 
-		maps[map.map_name].add_mount_distance(map.mount_distance)
-		maps[map.map_name].add_opponent_distance(map.opponent_distance)
-		maps[map.map_name].add_mount_composition(comp)
-		maps[map.map_name].add_opponent_composition(opp_comp)
+		maps[map.map_name].add_mount_composition(mount_attack_comp, True)
+		maps[map.map_name].add_mount_composition(mount_defense_comp, False)
+		maps[map.map_name].add_opponent_composition(opp_attack_comp, True)
+		maps[map.map_name].add_opponent_composition(opp_defense_comp, False)
+
 	return maps

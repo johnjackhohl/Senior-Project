@@ -258,7 +258,7 @@ class Escort_Hybrid_Map:
 			self.mount_attack_compositions.append(comp)
 		else:
 			# Check if this exact composition already exists
-			for existing_comp in self.mount_compositions:
+			for existing_comp in self.mount_defense_compositions:
 				if (existing_comp.tank == comp.tank and 
 					existing_comp.dps == comp.dps and
 					existing_comp.support == comp.support):
@@ -271,7 +271,7 @@ class Escort_Hybrid_Map:
 	def add_opponent_composition(self, comp, is_attack):
 		if is_attack:
 			# Check if this exact composition already exists
-			for existing_comp in self.mount_attack_compositions:
+			for existing_comp in self.opponent_attack_compositions:
 				if (existing_comp.tank == comp.tank and 
 					existing_comp.dps == comp.dps and
 					existing_comp.support == comp.support):
@@ -282,7 +282,7 @@ class Escort_Hybrid_Map:
 			self.opponent_attack_compositions.append(comp)
 		else:
 			# Check if this exact composition already exists
-			for existing_comp in self.mount_compositions:
+			for existing_comp in self.opponent_defense_compositions:
 				if (existing_comp.tank == comp.tank and 
 					existing_comp.dps == comp.dps and
 					existing_comp.support == comp.support):
@@ -290,17 +290,27 @@ class Escort_Hybrid_Map:
 					existing_comp.wins += comp.wins
 					return
 			# If not found, add the new composition
-			self.opponent_defense_compositions_defense_compositions.append(comp)
+			self.opponent_defense_compositions.append(comp)
 	
 	@property
-	def top_mount_composition(self):
-		if self.mount_compositions:
-			return max(self.mount_compositions, key=lambda x: (x.total, x.winrate), default=None)
+	def top_mount_attack_composition(self):
+		if self.mount_attack_compositions:
+			return max(self.mount_attack_compositions, key=lambda x: (x.total, x.winrate), default=None)
+	
+	@property
+	def top_mount_defense_composition(self):
+		if self.mount_defense_compositions:
+			return max(self.mount_defense_compositions, key=lambda x: (x.total, x.winrate), default=None)
 		
 	@property
-	def top_opponent_composition(self):
-		if self.opponent_compositions:
-			return max(self.opponent_compositions, key=lambda x: (x.total, x.winrate), default=None)
+	def top_opponent_attack_composition(self):
+		if self.opponent_attack_compositions:
+			return max(self.opponent_attack_compositions, key=lambda x: (x.total, x.winrate), default=None)
+		
+	@property
+	def top_opponent_defense_composition(self):
+		if self.opponent_defense_compositions:
+			return max(self.opponent_defense_compositions, key=lambda x: (x.total, x.winrate), default=None)
 	
 	@property
 	def mount_winrate(self):

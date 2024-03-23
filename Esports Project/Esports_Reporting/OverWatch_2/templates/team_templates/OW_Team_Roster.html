@@ -58,9 +58,9 @@
 									{% elif map_type == 'Flashpoint' %}
 										{% url 'flashpoint-stats' OW_Team.id %}
 									{% elif map_type == "Escort" %}
-										{% url 'escort-hybrid-stats' OW_Team.id map_type True%}
+										{% url 'escort-hybrid-stats' OW_Team.id "Escort"%}
 									{% elif map_type == "Hybrid" %}
-										{% url 'escort-hybrid-stats' OW_Team.id map_type False%}
+										{% url 'escort-hybrid-stats' OW_Team.id "Hybrid"%}
 									{% endif %}
 								">
 									<img src="{{ stats.image_url }}" alt="{{ map_type }}">
