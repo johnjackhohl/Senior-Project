@@ -188,3 +188,116 @@ def get_flashpoint_map_stats(flashpoint_maps):
 		maps[map.map_name].points[map.point_number].add_opponent_composition(opp_comp)
 
 	return maps
+
+def push_stats(request, pk):
+	"""This function is used to display a team's push map stats
+
+	Args:
+		request 
+		pk (int): team's primary key 
+	"""
+	push_maps = []
+	matches = models.Match.objects.filter(ow_team_id = pk)
+	for match in matches:
+		games = models.Game.objects.filter(match_id = match.id)
+		for game in games:
+			if game.map_type == "Push":
+				for map in models.PushMap.objects.filter(game_id = game.id):
+					push_maps.append(map)
+	pushMapStats = get_push_map_stats(push_maps)
+	context = {
+		'pushMapStats' : pushMapStats,
+		'team': models.OwTeam.objects.get(id=pk)
+	}
+	return render(request, 'data_templates/push_stats.html', context)
+
+def get_push_map_stats(push_maps):
+	maps = {}
+	for map in push_maps:
+		tank = map.mount_tank
+		dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
+		support_players = sorted([map.mount_support_1, map.mount_support_2])
+		opp_tank = map.opponent_tank
+		opp_dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+		opp_support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+		is_win = map.mount_distance > map.opponent_distance
+
+		if map.map_name not in maps:
+			maps[map.map_name] = map_classes.Push_Map(map.map_name)
+		else:
+			maps[map.map_name].total += 1
+		
+		comp = map_classes.Composition(tank, dps_players, support_players)
+		opp_comp = map_classes.Composition(opp_tank, opp_dps_players, opp_support_players)
+		comp.total += 1
+		opp_comp.total += 1
+		if is_win:
+			maps[map.map_name].mount_wins += 1
+			comp.wins += 1
+		else:
+			opp_comp.wins += 1
+
+		maps[map.map_name].add_mount_distance(map.mount_distance)
+		maps[map.map_name].add_opponent_distance(map.opponent_distance)
+		maps[map.map_name].add_mount_composition(comp)
+		maps[map.map_name].add_opponent_composition(opp_comp)
+	return maps
+
+def escort_hybrid_stats(request, pk, is_Escort):
+	"""This function is used to display a team's escort and hybrid map stats
+
+	Args:
+		request 
+		pk (int): team's primary key 
+	"""
+	maps = []
+	matches = models.Match.objects.filter(ow_team_id = pk)
+	for match in matches:
+		games = models.Game.objects.filter(match_id = match.id)
+		for game in games:
+			if is_Escort
+				if game.map_type == "Escort"
+					for map in models.EscortHybridMap.objects.filter(game_id = game.id):
+						maps.append(map)
+			else:
+				if game.map_type == "Hybrid"
+					for map in models.EscortHybridMap.objects.filter(game_id = game.id):
+						maps.append(map)
+	escortHybridMapStats = get_escort_hybrid_map_stats(maps)
+	context = {
+		'escortHybridMapStats' : escortHybridMapStats,
+		'team': models.OwTeam.objects.get(id=pk)
+	}
+	return render(request, 'data_templates/escort_hybrid_stats.html', context)
+
+def get_escort_hybrid_map_stats(maps):
+	maps = {}
+	for map in maps:
+		tank = map.mount_tank
+		dps_players = sorted([map.mount_dps_1, map.mount_dps_2])
+		support_players = sorted([map.mount_support_1, map.mount_support_2])
+		opp_tank = map.opponent_tank
+		opp_dps_players = sorted([map.opponent_dps_1, map.opponent_dps_2])
+		opp_support_players = sorted([map.opponent_support_1, map.opponent_support_2])
+		is_win = map.mount_distance > map.opponent_distance
+
+		if map.map_name not in maps:
+			maps[map.map_name] = map_classes.Push_Map(map.map_name)
+		else:
+			maps[map.map_name].total += 1
+		
+		comp = map_classes.Composition(tank, dps_players, support_players)
+		opp_comp = map_classes.Composition(opp_tank, opp_dps_players, opp_support_players)
+		comp.total += 1
+		opp_comp.total += 1
+		if is_win:
+			maps[map.map_name].mount_wins += 1
+			comp.wins += 1
+		else:
+			opp_comp.wins += 1
+
+		maps[map.map_name].add_mount_distance(map.mount_distance)
+		maps[map.map_name].add_opponent_distance(map.opponent_distance)
+		maps[map.map_name].add_mount_composition(comp)
+		maps[map.map_name].add_opponent_composition(opp_comp)
+	return maps
