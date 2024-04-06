@@ -3,6 +3,8 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.contrib.auth import logout 
 from .forms import NewUserForm
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 # Custom Login View
 class CustomLoginView(LoginView):
@@ -60,3 +62,18 @@ def logout_view(request):
 	"""
 	logout(request)
 	return render(request, "login/logout.html")
+
+def delete_account(request):
+	"""Deletes the user account
+
+	Args:
+		request
+
+	Returns:
+		render: generates the delete account page
+	"""
+	User = get_user_model()
+	user = User.objects.get(username=request.user)
+	user.delete()
+	logout(request)
+	return redirect('login')
