@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{% static 'css/match_history_maps.css' %}">
 
 <div class="escort_hybrid_map">
+	<p> Map: {{ map_info.map.map_name }}</p>
     <div class="heroes">
         {% if map_info.map.attack_first%}
             <div class="heroes"> 

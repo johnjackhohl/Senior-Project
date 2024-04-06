@@ -29,7 +29,7 @@
 				<div class='roster'>
 					{% for player in Roster %}
 							<div class='player'>
-								<a href="/Overwatch/player/{{ player.id }}/">{{ player.first_name }} {{ player.last_name }}</a>
+								<p>{{ player.first_name }} {{ player.last_name }}</p>
 								<span>: {{ player.role }}</span>
 								<form method="POST" action="{% url 'delete-roster-player' player.id %}">
 									{% csrf_token %}
